@@ -1,0 +1,64 @@
+http://www.internic.net/domain/named.root:
+  code: 200
+  content: ";       This file holds the information on root name servers needed to\n\
+    ;       initialize cache of Internet domain name servers\n;       (e.g. reference\
+    \ this file in the \"cache  .  <file>\"\n;       configuration file of BIND domain\
+    \ name servers).\n;\n;       This file is made available by InterNIC \n;     \
+    \  under anonymous FTP as\n;           file                /domain/named.cache\n\
+    ;           on server           FTP.INTERNIC.NET\n;       -OR-               \
+    \     RS.INTERNIC.NET\n;\n;       last update:    Jan 3, 2013\n;       related\
+    \ version of root zone:   2013010300\n;\n; formerly NS.INTERNIC.NET\n;\n.    \
+    \                    3600000  IN  NS    A.ROOT-SERVERS.NET.\nA.ROOT-SERVERS.NET.\
+    \      3600000      A     198.41.0.4\nA.ROOT-SERVERS.NET.      3600000      AAAA\
+    \  2001:503:BA3E::2:30\n;\n; FORMERLY NS1.ISI.EDU\n;\n.                      \
+    \  3600000      NS    B.ROOT-SERVERS.NET.\nB.ROOT-SERVERS.NET.      3600000  \
+    \    A     192.228.79.201\n;\n; FORMERLY C.PSI.NET\n;\n.                     \
+    \   3600000      NS    C.ROOT-SERVERS.NET.\nC.ROOT-SERVERS.NET.      3600000 \
+    \     A     192.33.4.12\n;\n; FORMERLY TERP.UMD.EDU\n;\n.                    \
+    \    3600000      NS    D.ROOT-SERVERS.NET.\nD.ROOT-SERVERS.NET.      3600000\
+    \      A     199.7.91.13\nD.ROOT-SERVERS.NET.\t 3600000      AAAA  2001:500:2D::D\n\
+    ;\n; FORMERLY NS.NASA.GOV\n;\n.                        3600000      NS    E.ROOT-SERVERS.NET.\n\
+    E.ROOT-SERVERS.NET.      3600000      A     192.203.230.10\n;\n; FORMERLY NS.ISC.ORG\n\
+    ;\n.                        3600000      NS    F.ROOT-SERVERS.NET.\nF.ROOT-SERVERS.NET.\
+    \      3600000      A     192.5.5.241\nF.ROOT-SERVERS.NET.      3600000      AAAA\
+    \  2001:500:2F::F\n;\n; FORMERLY NS.NIC.DDN.MIL\n;\n.                        3600000\
+    \      NS    G.ROOT-SERVERS.NET.\nG.ROOT-SERVERS.NET.      3600000      A    \
+    \ 192.112.36.4\n;\n; FORMERLY AOS.ARL.ARMY.MIL\n;\n.                        3600000\
+    \      NS    H.ROOT-SERVERS.NET.\nH.ROOT-SERVERS.NET.      3600000      A    \
+    \ 128.63.2.53\nH.ROOT-SERVERS.NET.      3600000      AAAA  2001:500:1::803F:235\n\
+    ;\n; FORMERLY NIC.NORDU.NET\n;\n.                        3600000      NS    I.ROOT-SERVERS.NET.\n\
+    I.ROOT-SERVERS.NET.      3600000      A     192.36.148.17\nI.ROOT-SERVERS.NET.\
+    \      3600000      AAAA  2001:7FE::53\n;\n; OPERATED BY VERISIGN, INC.\n;\n.\
+    \                        3600000      NS    J.ROOT-SERVERS.NET.\nJ.ROOT-SERVERS.NET.\
+    \      3600000      A     192.58.128.30\nJ.ROOT-SERVERS.NET.      3600000    \
+    \  AAAA  2001:503:C27::2:30\n;\n; OPERATED BY RIPE NCC\n;\n.                 \
+    \       3600000      NS    K.ROOT-SERVERS.NET.\nK.ROOT-SERVERS.NET.      3600000\
+    \      A     193.0.14.129\nK.ROOT-SERVERS.NET.      3600000      AAAA  2001:7FD::1\n\
+    ;\n; OPERATED BY ICANN\n;\n.                        3600000      NS    L.ROOT-SERVERS.NET.\n\
+    L.ROOT-SERVERS.NET.      3600000      A     199.7.83.42\nL.ROOT-SERVERS.NET. \
+    \     3600000      AAAA  2001:500:3::42\n;\n; OPERATED BY WIDE\n;\n.         \
+    \               3600000      NS    M.ROOT-SERVERS.NET.\nM.ROOT-SERVERS.NET.  \
+    \    3600000      A     202.12.27.33\nM.ROOT-SERVERS.NET.      3600000      AAAA\
+    \  2001:DC3::35\n; End of File\n"
+  headers: !!python/object:httplib.HTTPMessage
+    dict: {accept-ranges: bytes, connection: close, content-length: '3048', content-type: text/plain;
+        charset=UTF-8, date: 'Wed, 30 Jan 2013 20:48:40 GMT', etag: '"c0000f-be8-4d2645f0b9600"',
+      last-modified: 'Thu, 03 Jan 2013 15:54:00 GMT', server: Apache}
+    encodingheader: null
+    fp: null
+    headers: ["Date: Wed, 30 Jan 2013 20:48:40 GMT\r\n", "Server: Apache\r\n", "Last-Modified:\
+        \ Thu, 03 Jan 2013 15:54:00 GMT\r\n", "ETag: \"c0000f-be8-4d2645f0b9600\"\r\
+        \n", "Accept-Ranges: bytes\r\n", "Content-Length: 3048\r\n", "Connection:\
+        \ close\r\n", "Content-Type: text/plain; charset=UTF-8\r\n"]
+    maintype: text
+    plist: [charset=UTF-8]
+    plisttext: ; charset=UTF-8
+    seekable: 0
+    startofbody: null
+    startofheaders: null
+    status: ''
+    subtype: plain
+    type: text/plain
+    typeheader: text/plain; charset=UTF-8
+    unixfrom: ''
+  url: http://www.internic.net/domain/named.root

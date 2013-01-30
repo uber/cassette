@@ -1,0 +1,3 @@
+*.temp.*
+*.egg-info
+*.pyc
