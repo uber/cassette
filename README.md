@@ -1,13 +1,20 @@
 cassette
 ========
 
-    def test_get_root_domains():
-        """Get the root domains."""
-  
-        with cassette.play("data/responses.yaml"):
-            r = urllib2.urlopen("http://www.internic.net/domain/named.root")
-  
-        assert "A.ROOT-SERVERS.NET" in r.read(10000)
+```python
+import urllib2
+
+import cassette
+
+
+def test_get_root_domains():
+    """Get the root domains."""
+
+    with cassette.play("data/responses.yaml"):
+        r = urllib2.urlopen("http://www.internic.net/domain/named.root")
+
+    assert "A.ROOT-SERVERS.NET" in r.read(10000)
+```
 
 * The first time you run your tests, `cassette` will store all the external
   requests response in a YAML file.
@@ -20,6 +27,27 @@ Installation
 Locally:
 
     $ python setup.py develop
+
+Usage
+=====
+
+cassette provides a `play` context:
+
+```python
+with cassette.play("./data/responses.yaml"):
+    urllib2.urlopen("http://...")
+```
+
+Any `urllib2.urlopen` request happening in this context will go through
+cassette's mocked version of `urlopen`.
+
+You can also setup the context manually:
+
+```python
+cassette.insert("./data/responses.yaml")
+urllib2.urlopen("http://...")
+caseette.eject()
+```
 
 Tests
 =====
@@ -40,8 +68,9 @@ This more of a proof-of-concept:
 
 * Only tested with `urllib2`
 * Should not work with `urllib` and `requests`
+* The format used is not compatible with `vcr` or `vcrpy`
 
 License
 =======
 
-`cassette` is available under the MIT License.
+cassette is available under the MIT License.
