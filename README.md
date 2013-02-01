@@ -28,12 +28,18 @@ Locally:
 
     $ python setup.py develop
 
+Via PyPi:
+
+    $ pip install cassette
+
 Usage
 =====
 
 cassette provides a `play` context:
 
 ```python
+import cassette
+
 with cassette.play("./data/responses.yaml"):
     urllib2.urlopen("http://...")
 ```
@@ -44,15 +50,17 @@ cassette's mocked version of `urlopen`.
 You can also setup the context manually:
 
 ```python
+import cassette
+
 cassette.insert("./data/responses.yaml")
 urllib2.urlopen("http://...")
-caseette.eject()
+cassette.eject()
 ```
 
-Tests
-=====
+Running casette tests
+=====================
 
-    $ fab test
+    $ paver test
 
 Similar libraries
 =================
@@ -64,11 +72,12 @@ Similar libraries
 Limitations
 ===========
 
-This more of a proof-of-concept:
+This package should be considered alpha:
 
 * Only tested with `urllib2`
 * Should not work with `urllib` and `requests`
 * The format used is not compatible with `vcr` or `vcrpy`
+* Only tested with Python 2.7
 
 License
 =======

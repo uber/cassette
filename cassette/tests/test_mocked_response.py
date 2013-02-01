@@ -19,7 +19,7 @@ class MockedResponseTest(unittest.TestCase):
 
         # We're patching the real urlopen, not the one that is patched
         # by cassette
-        patcher = mock.patch("cassette.old_urlopen", return_value=self.response)
+        patcher = mock.patch("cassette.cassette.old_urlopen", return_value=self.response)
         self.mocked_urlopen = patcher.start()
         self.addCleanup(patcher.stop)
 
