@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 from setuptools import setup
 
-__VERSION__ = "0.1"
+__VERSION__ = "0.1.1"
 
 
 def read_requirements(filename="requirements.txt"):
