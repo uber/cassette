@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 from setuptools import setup
 
-__VERSION__ = "0.1.2"
+__VERSION__ = "0.1.3"
 
 
 def read_requirements(filename="requirements.txt"):
@@ -17,6 +17,7 @@ setup(
     packages=["cassette"],
     keywords=["http", "tests", "mock"],
     description="Cassette is a testing tool that stores external HTTP request in YAML file.",
+    long_description = open("README.rst").read(),
     install_requires=read_requirements(),
     classifiers=[
         "Development Status :: 3 - Alpha",
