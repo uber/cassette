@@ -46,7 +46,15 @@ class CassetteLibrary(dict):
         """Write mocked responses to file."""
 
         # Get dict representation of MockedResponse objects
-        data = {k: v.as_dict() for k, v in self.items()}
+        def is_lambda(v):
+            return isinstance(v, type(lambda: None)) and v.__name__ == '<lambda>'
+
+        data = {}
+        for k, v in self.items():
+            if hasattr(k, 'get_method') and is_lambda(k.get_method):
+                k.get_method = k.get_method()
+
+            data[k] = v.as_dict()
 
         with open(self.filename, "w+") as f:
             yaml.dump(data, f)
