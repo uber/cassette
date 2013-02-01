@@ -1,5 +1,4 @@
-http://www.internic.net/domain/named.root:
-  code: 200
+GET www.internic.net:80/domain/named.root None:
   content: ";       This file holds the information on root name servers needed to\n\
     ;       initialize cache of Internet domain name servers\n;       (e.g. reference\
     \ this file in the \"cache  .  <file>\"\n;       configuration file of BIND domain\
@@ -40,25 +39,29 @@ http://www.internic.net/domain/named.root:
     \               3600000      NS    M.ROOT-SERVERS.NET.\nM.ROOT-SERVERS.NET.  \
     \    3600000      A     202.12.27.33\nM.ROOT-SERVERS.NET.      3600000      AAAA\
     \  2001:DC3::35\n; End of File\n"
-  headers: !!python/object:httplib.HTTPMessage
+  headers: {accept-ranges: bytes, connection: close, content-length: '3048', content-type: text/plain;
+      charset=UTF-8, date: 'Fri, 01 Feb 2013 23:11:26 GMT', etag: '"c20525-be8-4d2645f0b9600"',
+    last-modified: 'Thu, 03 Jan 2013 15:54:00 GMT', server: Apache}
+  msg: !!python/object:httplib.HTTPMessage
     dict: {accept-ranges: bytes, connection: close, content-length: '3048', content-type: text/plain;
-        charset=UTF-8, date: 'Wed, 30 Jan 2013 20:48:40 GMT', etag: '"c0000f-be8-4d2645f0b9600"',
+        charset=UTF-8, date: 'Fri, 01 Feb 2013 23:11:26 GMT', etag: '"c20525-be8-4d2645f0b9600"',
       last-modified: 'Thu, 03 Jan 2013 15:54:00 GMT', server: Apache}
     encodingheader: null
-    fp: null
-    headers: ["Date: Wed, 30 Jan 2013 20:48:40 GMT\r\n", "Server: Apache\r\n", "Last-Modified:\
-        \ Thu, 03 Jan 2013 15:54:00 GMT\r\n", "ETag: \"c0000f-be8-4d2645f0b9600\"\r\
-        \n", "Accept-Ranges: bytes\r\n", "Content-Length: 3048\r\n", "Connection:\
-        \ close\r\n", "Content-Type: text/plain; charset=UTF-8\r\n"]
+    fp: !!python/object/new:_io.StringIO
+      state: !!python/tuple [!!python/unicode '', '
+
+          ', 0, null]
+    headers: []
     maintype: text
-    plist: [charset=UTF-8]
-    plisttext: ; charset=UTF-8
-    seekable: 0
-    startofbody: null
-    startofheaders: null
-    status: ''
+    plist: []
+    plisttext: ''
+    seekable: 1
+    startofbody: !!python/long '0'
+    startofheaders: !!python/long '0'
+    status: EOF in headers
     subtype: plain
     type: text/plain
-    typeheader: text/plain; charset=UTF-8
+    typeheader: null
     unixfrom: ''
-  url: http://www.internic.net/domain/named.root
+  reason: OK
+  status: 200
