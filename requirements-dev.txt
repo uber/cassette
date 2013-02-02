@@ -1,0 +1,5 @@
+fabric
+PyYAML
+mock
+nose
+flake8

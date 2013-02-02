@@ -1,7 +1,7 @@
 from __future__ import absolute_import
 import contextlib
 
-from cassette.cassette import CassetteLibrary
+from cassette.cassette_library import CassetteLibrary
 from cassette.patcher import patch, unpatch
 
 cassette_library = None

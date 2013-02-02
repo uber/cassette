@@ -1,5 +1,1 @@
-paver
 PyYAML
-mock
-nose
-flake8
