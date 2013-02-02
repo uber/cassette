@@ -4,7 +4,7 @@ import httplib
 from cassette.http_connection import CassetteHTTPConnection, CassetteHTTPSConnection
 
 unpatched_HTTPConnection = httplib.HTTPConnection
-unpatched_HTTPSConnection = httplib.HTTPConnection
+unpatched_HTTPSConnection = httplib.HTTPSConnection
 
 
 def patch(cassette_library):
@@ -13,6 +13,7 @@ def patch(cassette_library):
     # Taken from vcrpy
 
     CassetteHTTPConnection._cassette_library = cassette_library
+    CassetteHTTPSConnection._cassette_library = cassette_library
 
     httplib.HTTPConnection = CassetteHTTPConnection
     httplib.HTTP._connection_class = CassetteHTTPConnection

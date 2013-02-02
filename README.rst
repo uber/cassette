@@ -73,9 +73,17 @@ You can also setup the context manually:
 Running cassette tests
 ======================
 
+Install requirements:
+
 ::
 
-    $ paver test
+    $ pip install -r requirements-dev.txt
+
+Run tests:
+
+::
+
+    $ fab test
 
 Similar libraries
 =================
@@ -87,12 +95,13 @@ Similar libraries
 Limitations
 ===========
 
-This package should be considered alpha:
+This package should be considered **alpha**:
 
 -  Only tested with ``urllib2``
 -  Should not work with ``urllib`` and ``requests``
 -  The format used is not compatible with ``vcr`` or ``vcrpy``
 -  Only tested with Python 2.7
+-  File format may change.
 
 License
 =======

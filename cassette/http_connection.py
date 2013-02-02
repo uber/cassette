@@ -1,13 +1,13 @@
 import logging
-from httplib import HTTPConnection
+import socket
+from httplib import HTTPConnection, HTTPSConnection
 
 
-class CassetteHTTPConnection(HTTPConnection):
+class CassetteConnectionMixin(object):
 
     def request(self, method, url, body=None, headers={}):
         """Send HTTP request."""
 
-        # import ipdb; ipdb.set_trace()
         self._key = self._cassette_library.create_key(self.host,
                                                       self.port,
                                                       method, url, body)
@@ -21,7 +21,7 @@ class CassetteHTTPConnection(HTTPConnection):
             return
 
         logging.debug("'%s' not in library, making HTTP request." % self._key)
-        HTTPConnection.request(self, method, url, body, headers)
+        self._baseclass.request(self, method, url, body, headers)
 
     def getresponse(self, buffering=False):
         """Return HTTP response."""
@@ -33,11 +33,31 @@ class CassetteHTTPConnection(HTTPConnection):
             return self._response
 
         response = HTTPConnection.getresponse(self)
-        # Reading back to zero
+        # If we were just returning the response here, the file
+        # descriptor would be at the end of the file, and read() would
+        # return nothing.
         response = self._cassette_library.add_response(self._key, response)
 
         return response
 
 
-class CassetteHTTPSConnection(CassetteHTTPConnection):
-    pass
+class CassetteHTTPConnection(CassetteConnectionMixin, HTTPConnection):
+
+    _baseclass = HTTPConnection
+
+    def __init__(self, *args, **kwargs):
+        HTTPConnection.__init__(self, *args, **kwargs)
+
+
+class CassetteHTTPSConnection(CassetteConnectionMixin, HTTPSConnection):
+
+    _baseclass = HTTPSConnection
+
+    def __init__(self, host, port=None, key_file=None, cert_file=None,
+                 strict=None, timeout=socket._GLOBAL_DEFAULT_TIMEOUT,
+                 source_address=None):
+        # Directly taken from httplib.
+        HTTPConnection.__init__(self, host, port, strict, timeout,
+                                source_address)
+        self.key_file = key_file
+        self.cert_file = cert_file

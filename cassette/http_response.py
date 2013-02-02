@@ -4,25 +4,20 @@ from httplib import HTTPMessage
 
 class MockedHTTPResponse(object):
 
-    attrs = ("headers", "content", "status", "reason", "msg")
+    attrs = ("headers", "content", "status", "reason", "raw_headers")
 
     @classmethod
     def from_response(cls, response):
         """Create object from true response."""
 
-        obj = cls()
-
-        obj.headers = dict(response.getheaders())
-        obj.content = response.read()
-        obj.status = response.status
-        obj.reason = response.reason
-        obj.fp = StringIO(unicode(obj.content))
-
-        obj.msg = HTTPMessage(StringIO(unicode()))
-        for k, v in obj.headers.iteritems():
-            obj.msg.addheader(k, v)
-
-        return obj
+        d = {
+            "headers": dict(response.getheaders()),
+            "content": response.read(),
+            "status": response.status,
+            "reason": response.reason,
+            "raw_headers": response.msg.headers,
+        }
+        return cls.from_dict(d)
 
     @classmethod
     def from_dict(cls, data):
@@ -34,6 +29,12 @@ class MockedHTTPResponse(object):
             setattr(obj, k, data[k])
 
         obj.fp = StringIO(unicode(obj.content))
+
+        obj.msg = HTTPMessage(StringIO(unicode()), 0)
+        for k, v in obj.headers.iteritems():
+            obj.msg.addheader(k, v)
+
+        obj.msg.headers = data["raw_headers"]
 
         return obj
 
@@ -49,3 +50,6 @@ class MockedHTTPResponse(object):
 
     def getheader(self, name):
         return self.headers[name]
+
+    def close(self):
+        pass

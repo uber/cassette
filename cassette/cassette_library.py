@@ -1,5 +1,4 @@
 from __future__ import absolute_import
-import logging
 import os
 import urllib2
 
@@ -64,7 +63,6 @@ class CassetteLibrary(dict):
 
     def has_request(self, *args):
         """Return True if library has the request."""
-        # import ipdb; ipdb.set_trace()
         return self.create_key(*args) in self
 
     def had_response(self):

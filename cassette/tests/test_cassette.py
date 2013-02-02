@@ -1,39 +1,30 @@
+"""
+Test the cassette behavior.
+"""
+
 import os
-import httplib
 import unittest
 import urllib2
 
 import mock
 
 import cassette
-from cassette.cassette import CassetteLibrary
-from cassette.patcher import unpatched_HTTPConnection
-from cassette.http_connection import CassetteHTTPConnection
+from cassette.cassette_library import CassetteLibrary
 
 
 TEMPORARY_RESPONSES_FILENAME = "./cassette/tests/data/responses.temp.yaml"
 RESPONSES_FILENAME = "./cassette/tests/data/responses.yaml"
 TEST_URL = "http://www.internic.net/domain/named.root"
-TEST_URL_HTTPS = "https://www.internic.net/domain/named.root"
+TEST_URL_HTTPS = "https://www.fortify.net/sslcheck.html"
+TEST_URL_REDIRECT = "http://google.com/"
 
 
-class TestMockedResponse(unittest.TestCase):
+class TestCassette(unittest.TestCase):
 
     def setUp(self):
-        # # Ironically, this test requires access to Internet
-        # conn = httplib.HTTPConnection("www.internic.net")
-        # conn.request("GET", "/domain/named.root")
-        # self.response = conn.getresponse()
 
-        # # We're patching the real urlopen, not the one that is patched
-        # # by cassette
-        # patcher = mock.patch.object(
-        #     CassetteHTTPConnection,
-        #     "make_true_request",
-        #     return_value=self.response)
-        # self.had_response = patcher.start()
-        # self.addCleanup(patcher.stop)
-
+        # This is a dummy method that we use to check if cassette had
+        # the response.
         patcher = mock.patch.object(CassetteLibrary, "had_response")
         self.had_response = patcher.start()
         self.addCleanup(patcher.stop)
@@ -73,7 +64,7 @@ class TestMockedResponse(unittest.TestCase):
             r = urllib2.urlopen(TEST_URL_HTTPS)
 
         self.assertFalse(self.had_response.called)
-        self.assertIn("A.ROOT-SERVERS.NET", r.read(100000))
+        self.assertIn("SSL Encryption Report", r.read(100000))
 
         self.had_response.reset_mock()
 
@@ -82,7 +73,7 @@ class TestMockedResponse(unittest.TestCase):
             r = urllib2.urlopen(TEST_URL_HTTPS)
 
         self.assertTrue(self.had_response.called)
-        self.assertIn("A.ROOT-SERVERS.NET", r.read(100000))
+        self.assertIn("SSL Encryption Report", r.read(100000))
 
     def test_flow_manual_context(self):
         """Verify the cassette behavior when setting up the context."""
@@ -121,4 +112,13 @@ class TestMockedResponse(unittest.TestCase):
             r = urllib2.urlopen(TEST_URL_HTTPS)
 
         self.assertTrue(self.had_response.called)
-        self.assertIn("A.ROOT-SERVERS.NET", r.read(100000))
+        self.assertIn("SSL Encryption Report", r.read(100000))
+
+    def test_redirects(self):
+        """Verify that cassette can handle a redirect."""
+
+        with cassette.play(RESPONSES_FILENAME):
+            r = urllib2.urlopen(TEST_URL_REDIRECT)
+
+        self.assertTrue(self.had_response.called)
+        self.assertIn("google", r.read(100000))
