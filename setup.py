@@ -5,6 +5,7 @@ from setuptools import setup
 # 1. Bump version below
 # 2. git tag -a -m "Version 0.1.5" v0.1.5
 # 3. python setup.py register sdist upload
+# 4. git push --tags
 
 __version__ = "0.1.6"
 
