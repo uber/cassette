@@ -1,12 +1,17 @@
 #!/usr/bin/env python
 from setuptools import setup
 
-__version__ = "0.1.5"
+# Release:
+# 1. Bump version below
+# 2. git tag -a -m "Version 0.1.5" v0.1.5
+# 3. python setup.py register sdist upload
+
+__version__ = "0.1.6"
 
 
 def read_long_description(filename="README.rst"):
     with open(filename) as f:
-        return f.readlines()
+        return f.read().strip()
 
 
 def read_requirements(filename="requirements.txt"):
