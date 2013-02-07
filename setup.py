@@ -1,7 +1,12 @@
 #!/usr/bin/env python
 from setuptools import setup
 
-__VERSION__ = "0.1.4"
+__version__ = "0.1.5"
+
+
+def read_long_description(filename="README.rst"):
+    with open(filename) as f:
+        return f.readlines()
 
 
 def read_requirements(filename="requirements.txt"):
@@ -10,13 +15,14 @@ def read_requirements(filename="requirements.txt"):
 
 setup(
     name="cassette",
-    version=__VERSION__,
+    version=__version__,
     author="Charles-Axel Dein",
     author_email="charles@uber.com",
     url="https://github.com/uber/cassette",
     packages=["cassette"],
     keywords=["http", "tests", "mock"],
     description="Cassette is a testing tool that stores external HTTP request in YAML file.",
+    long_description=read_long_description(),
     install_requires=read_requirements(),
     classifiers=[
         "Development Status :: 3 - Alpha",
