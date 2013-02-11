@@ -1,262 +1,227 @@
-GET google.com:80/ None:
-  content: "<HTML><HEAD><meta http-equiv=\"content-type\" content=\"text/html;charset=utf-8\"\
-    >\n<TITLE>301 Moved</TITLE></HEAD><BODY>\n<H1>301 Moved</H1>\nThe document has\
-    \ moved\n<A HREF=\"http://www.google.com/\">here</A>.\r\n</BODY></HTML>\r\n"
-  headers: {cache-control: 'public, max-age=2592000', connection: close, content-length: '219',
-    content-type: text/html; charset=UTF-8, date: 'Mon, 04 Feb 2013 19:07:35 GMT',
-    expires: 'Wed, 06 Mar 2013 19:07:35 GMT', location: 'http://www.google.com/',
-    server: gws, x-frame-options: SAMEORIGIN, x-xss-protection: 1; mode=block}
-  raw_headers: ["Location: http://www.google.com/\r\n", "Content-Type: text/html;\
-      \ charset=UTF-8\r\n", "Date: Mon, 04 Feb 2013 19:07:35 GMT\r\n", "Expires: Wed,\
-      \ 06 Mar 2013 19:07:35 GMT\r\n", "Cache-Control: public, max-age=2592000\r\n",
-    "Server: gws\r\n", "Content-Length: 219\r\n", "X-XSS-Protection: 1; mode=block\r\
-      \n", "X-Frame-Options: SAMEORIGIN\r\n", "Connection: close\r\n"]
-  reason: Moved Permanently
-  status: 301
-GET www.fortify.net:443/sslcheck.html None:
-  content: "<html>\r\n<head>\r\n  <title>Fortify - SSL Encryption Check</title>\r\n\
-    \  <link href=\"/doc.css\" rel=\"stylesheet\" type=\"text/css\">\r\n</head>\r\n\
-    \r\n<!--\r\n<frameset framespacing=\"0\" border=\"false\" frameborder=\"0\" rows=\"\
-    *,70\">\r\n\r\n  <frame name=\"main\" src=\"/cgi/ssl_2.pl\">\r\n  <frame name=\"\
-    nav\"  src=\"nav.html\" scrolling=\"no\" noresize marginwidth=\"0\">\r\n  <noframes>\r\
-    \n  <body>\r\n  <p>This page uses frames, but your browser doesn't support them.</p>\r\
-    \n  </body>\r\n  </noframes>\r\n</frameset>\r\n-->\r\n\r\n<body bgcolor=\"#ffffff\"\
-    \ text=\"#000000\" link=blue vlink=purple alink=red>\r\n\r\n<table width=100%\
-    \ border=0 cellpadding=\"0\" cellspacing=\"0\">\r\n  <tr bgcolor=\"#B47C63\">\r\
-    \n    <td height=\"20\" colspan=\"2\"></td>\r\n  </tr>\r\n  <tr bgcolor=\"black\"\
-    >\r\n    <td height=\"1\" colspan=\"2\"></td>\r\n    </tr>\r\n\r\n  <tr>\r\n \
-    \   <td><img src=\"/images/fortify_banner.jpg\" alt=\"Fortify banner\" width=400\
-    \ height=60></td>\r\n    <td align=\"right\" valign=\"middle\">\r\n\r\n<div class=\"\
-    searchbox\">\r\n\r\n<!-- Search Google -->\r\n<center>\r\n<form method=\"get\"\
-    \ action=\"http://www.google.com/custom\" target=\"_top\">\r\n<table bgcolor=\"\
-    #ffffff\">\r\n<tr><td nowrap=\"nowrap\" valign=\"top\" align=\"left\" height=\"\
-    32\">\r\n\r\n<label for=\"sbi\" style=\"display: none\">Enter your search terms</label>\r\
-    \n<input type=\"text\" name=\"q\" size=\"32\" maxlength=\"255\" value=\"\" id=\"\
-    sbi\"></input>\r\n<label for=\"sbb\" style=\"display: none\">Submit search form</label>\r\
-    \n<input type=\"submit\" name=\"sa\" value=\"Google Search\" id=\"sbb\"></input>\r\
-    \n<input type=\"hidden\" name=\"client\" value=\"pub-1206438394824617\"></input>\r\
-    \n<input type=\"hidden\" name=\"forid\" value=\"1\"></input>\r\n<input type=\"\
-    hidden\" name=\"ie\" value=\"ISO-8859-1\"></input>\r\n<input type=\"hidden\" name=\"\
-    oe\" value=\"ISO-8859-1\"></input>\r\n<input type=\"hidden\" name=\"cof\" value=\"\
-    GALT:#008000;GL:1;DIV:#336699;VLC:663399;AH:center;BGC:FFFFFF;LBGC:336699;ALC:0000FF;LC:0000FF;T:000000;GFNT:0000FF;GIMP:0000FF;FORID:1\"\
-    ></input>\r\n<input type=\"hidden\" name=\"hl\" value=\"en\"></input>\r\n</td></tr></table>\r\
-    \n</form>\r\n</center>\r\n<!-- Search Google -->\r\n\r\n</div>\r\n    </td>\r\n\
-    \  </tr>\r\n\r\n  <tr bgcolor=\"black\">\r\n    <td height=\"1\" colspan=\"2\"\
-    ></td>\r\n    </tr>\r\n  <tr valign=\"middle\" bgcolor=\"#B47C63\">\r\n    <td\
-    \ height=\"42\" colspan=\"2\">\r\n          <ul class=\"navbar\" id=\"nav-header\"\
-    >\r\n\t          <li><a href=\"intro.html\">Intro</a></li>\r\n              <li><a\
-    \ href=\"latest.html\">News</a></li>\r\n              <li><a href=\"versions.html\"\
-    >Versions</a></li>\r\n              <li><a href=\"README.html\">README</a></li>\r\
-    \n              <li><a href=\"download.html\">Download</a></li>\r\n          \
-    \    <li><a href=\"co.html\">Partners</a></li>\r\n              <li><a href=\"\
-    related.html\">Related</a></li>\r\n              <li><a href=\"contact.html\"\
-    >Contact Us</a></li>\r\n              <li><a href=\"https://www.fortify.net/sslcheck.html\"\
-    >SSL Check</a></li>\r\n          </ul>\r\n    </td>\r\n  </tr>\r\n</table>\r\n\
-    \r\n\t  \t\r\n<link href=\"/doc.css\" rel=\"stylesheet\" type=\"text/css\">\r\n\
-    <div class=\"leftbox\">\r\n\r\n<script type=\"text/javascript\"><!--\r\ngoogle_ad_client\
-    \ = \"pub-1206438394824617\";\r\n//160x600, created 1/21/08\r\ngoogle_ad_slot\
-    \ = \"9376171523\";\r\ngoogle_ad_width = 160;\r\ngoogle_ad_height = 600;\r\n//--></script>\r\
-    \n<script type=\"text/javascript\"\r\nsrc=\"http://pagead2.googlesyndication.com/pagead/show_ads.js\"\
-    >\r\n</script>\r\n\r\n</div>\r\n\r\n\r\n<br>\r\n<div class=\"bodybox\">\r\n  \
-    \  <p class=\"mainheading\">SSL Encryption Report</p>\r\n    <p>\r\n\t\t<iframe\
-    \ class=\"sslcheckbox\" src=\"/cgi/ssl_3.pl\" scrolling=\"no\" frameborder=\"\
-    0\">\r\n\t\t</iframe>\r\n</div>\r\n\t\t\r\n<br>\r\n\r\n<script type=\"text/javascript\"\
-    >\r\nvar gaJsHost = ((\"https:\" == document.location.protocol) ? \"https://ssl.\"\
-    \ : \"http://www.\");\r\ndocument.write(unescape(\"%3Cscript src='\" + gaJsHost\
-    \ + \"google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E\"));\r\
-    \n</script>\r\n<script type=\"text/javascript\">\r\nvar pageTracker = _gat._getTracker(\"\
-    UA-3414482-1\");\r\npageTracker._initData();\r\npageTracker._trackPageview();\r\
-    \n</script>\r\n</body>\r\n</html>\r\n"
-  headers: {accept-ranges: bytes, connection: close, content-type: text/html, date: 'Mon,
-      04 Feb 2013 19:07:34 GMT', server: Apache, transfer-encoding: chunked}
-  raw_headers: ["Date: Mon, 04 Feb 2013 19:07:34 GMT\r\n", "Server: Apache\r\n", "Accept-Ranges:\
-      \ bytes\r\n", "Connection: close\r\n", "Transfer-Encoding: chunked\r\n", "Content-Type:\
-      \ text/html\r\n"]
-  reason: OK
-  status: 200
-GET www.google.com:80/ None:
-  content: '<!doctype html><html itemscope="itemscope" itemtype="http://schema.org/WebPage"><head><meta
-    content="Search the world''s information, including webpages, images, videos and
-    more. Google has many special features to help you find exactly what you''re looking
-    for." name="description"><meta content="noodp" name="robots"><meta itemprop="image"
-    content="/images/google_favicon_128.png"><title>Google</title><script>(function(){
-
-    window.google={kEI:"9wYQUc_-D-fTiwKmqICoAg",getEI:function(a){for(var b;a&&(!a.getAttribute||!(b=a.getAttribute("eid")));)a=a.parentNode;return
-    b||google.kEI},https:function(){return"https:"==window.location.protocol},kEXPI:"25657,39523,4000116,4001569,4001959,4001975,4002001,4002160,4002378,4002436,4002562,4002626,4002700,4002733,4002928,4003035,4003052,4003104,4003215,4003320,4003335,4003341,4003371,4003386,4003514,4003518,4003654,4003687,4003825",kCSI:{e:"25657,39523,4000116,4001569,4001959,4001975,4002001,4002160,4002378,4002436,4002562,4002626,4002700,4002733,4002928,4003035,4003052,4003104,4003215,4003320,4003335,4003341,4003371,4003386,4003514,4003518,4003654,4003687,4003825",ei:"9wYQUc_-D-fTiwKmqICoAg"},authuser:0,ml:function(){},kHL:"en",time:function(){return(new
-    Date).getTime()},log:function(a,
-
-    b,c,i){var d=new Image,f=google.lc,e=google.li,g="";d.onerror=d.onload=d.onabort=function(){delete
-    f[e]};f[e]=d;!c&&-1==b.search("&ei=")&&(g="&ei="+google.getEI(i));c=c||"/gen_204?atyp=i&ct="+a+"&cad="+b+g+"&zx="+google.time();a=/^http:/i;a.test(c)&&google.https()?(google.ml(Error("GLMM"),!1,{src:c}),delete
-    f[e]):(d.src=c,google.li=e+1)},lc:[],li:0,Toolbelt:{},y:{},x:function(a,b){google.y[a.id]=[a,b];return!1},load:function(a,b){google.x({id:"l"+a},function(){google.load(a,b)})}};
-
-    })();
-
-    (function(){var d=!1;google.sn="webhp";google.timers={};google.startTick=function(a,b){google.timers[a]={t:{start:google.time()},bfr:!!b}};google.tick=function(a,b,h){google.timers[a]||google.startTick(a);google.timers[a].t[b]=h||google.time()};google.startTick("load",!0);
-
-    try{}catch(e){}})();
-
-    var _gjwl=location;function _gjuc(){var a=_gjwl.href.indexOf("#");if(0<=a&&(a=_gjwl.href.substring(a),0<a.indexOf("&q=")||0<=a.indexOf("#q=")))if(a=a.substring(1),-1==a.indexOf("#")){for(var
-    d=0;d<a.length;){var b=d;"&"==a.charAt(b)&&++b;var c=a.indexOf("&",b);-1==c&&(c=a.length);b=a.substring(b,c);if(0==b.indexOf("fp="))a=a.substring(0,d)+a.substring(c,a.length),c=d;else
-    if("cad=h"==b)return 0;d=c}_gjwl.href="/search?"+a+"&cad=h";return 1}return 0}
-
-    function _gjp(){(!window._gjwl.hash||!window._gjuc())&&setTimeout(_gjp,500)};
-
-    window._gjp&&_gjp();</script><style>#gbar,#guser{font-size:13px;padding-top:1px
-    !important;}#gbar{height:22px}#guser{padding-bottom:7px !important;text-align:right}.gbh,.gbd{border-top:1px
-    solid #c9d7f1;font-size:1px}.gbh{height:0;position:absolute;top:24px;width:100%}@media
-    all{.gb1{height:22;margin-right:.5em;vertical-align:top}#gbar{float:left}}a.gb1,a.gb4{text-decoration:underline
-    !important}a.gb1,a.gb4{color:#00c !important}.gbi .gb4{color:#dd8e27 !important}.gbf
-    .gb4{color:#900 !important}</style><style>.h{font-family:arial,sans-serif}body{font-family:arial,sans-serif}td{font-family:arial,sans-serif}a{font-family:arial,sans-serif}p{font-family:arial,sans-serif}body{margin:0;overflow-y:scroll}#gog{padding:3px
-    8px 0}.h{color:#36c}.q{color:#00c}.ts{border-collapse:collapse}td{line-height:.8em}.gac_m
-    td{line-height:17px}form{margin-bottom:20px}.ts td{padding:0}em{font-weight:bold;font-style:normal}.lst{height:25px;width:496px;font:18px
-    arial,sans-serif}.gsfi{font:18px arial,sans-serif}.gsfs{font:17px arial,sans-serif}.ds{display:inline-box;display:
-    inline-block;margin:3px 0 4px;margin-left:4px}input{font-family:inherit}body{background:#fff;color:black}a.gb1{color:#11c
-    !important}a.gb2{color:#11c !important}a.gb3{color:#11c !important}a.gb4{color:#11c
-    !important}.sblc{padding-top:5px}.lsbb{background:#eee;border:solid 1px;border-color:#ccc
-    #999 #999 #ccc;height:30px}a{color:#11c;text-decoration:none}a:hover{text-decoration:underline}a:active{text-decoration:underline}.fl
-    a{color:#36c}a:visited{color:#551a8b}a.gb1{text-decoration:underline}a.gb4{text-decoration:underline}a.gb3:hover{text-decoration:none}.sblc
-    a{display:block;margin:2px 0;margin-left:13px;font-size:11px}#ghead a.gb2:hover{color:#fff
-    !important}.lsbb{display:block}.ftl{display:inline-block;margin:0 12px}.lsb{background:url(/images/srpr/nav_logo80.png)
-    0 -258px repeat-x;border:none;color:#000;cursor:pointer;height:30px;margin:0;outline:0;font:15px
-    arial,sans-serif;vertical-align:top}#fll a{display:inline-block;margin:0 12px}.lsb:active{background:#ccc}.lst:focus{outline:none}#addlang
-    a{padding:0 3px}</style><script></script> </head><body dir="ltr" bgcolor="#fff"><script>(function(){var
-    src=''/images/srpr/nav_logo80.png'';var iesg=false;document.body.onload = function(){window.n
-    && window.n();if (document.images){new Image().src=src;}
-
-    if (!iesg){document.f&&document.f.q.focus();document.gbqf&&document.gbqf.q.focus();}
-
-    }
-
-    })();</script><textarea id="csi" style="display:none"></textarea><div id="mngb"><div
-    id=gbar><nobr><b class=gb1>Search</b> <a class=gb1 href="http://www.google.com/imghp?hl=en&tab=wi">Images</a>
-    <a class=gb1 href="http://maps.google.com/maps?hl=en&tab=wl">Maps</a> <a class=gb1
-    href="https://play.google.com/?hl=en&tab=w8">Play</a> <a class=gb1 href="http://www.youtube.com/?tab=w1">YouTube</a>
-    <a class=gb1 href="http://news.google.com/nwshp?hl=en&tab=wn">News</a> <a class=gb1
-    href="https://mail.google.com/mail/?tab=wm">Gmail</a> <a class=gb1 href="https://drive.google.com/?tab=wo">Drive</a>
-    <a class=gb1 style="text-decoration:none" href="http://www.google.com/intl/en/options/"><u>More</u>
-    &raquo;</a></nobr></div><div id=guser width=100%><nobr><span id=gbn class=gbi></span><span
-    id=gbf class=gbf></span><span id=gbe></span><a href="http://www.google.com/history/optout?hl=en"
-    class=gb4>Web History</a> | <a  href="/preferences?hl=en" class=gb4>Settings</a>
-    | <a target=_top id=gb_70 href="https://accounts.google.com/ServiceLogin?hl=en&continue=http://www.google.com/"
-    class=gb4>Sign in</a></nobr></div><div class=gbh style=left:0></div><div class=gbh
-    style=right:0></div></div><iframe name="wgjf" style="display:none"></iframe><center><br
-    clear="all" id="lgpd"><div id="lga"><img alt="Google" height="95" src="/intl/en_ALL/images/srpr/logo1w.png"
-    width="275" id="hplogo" onload="window.lol&&lol()" style="padding:28px 0 14px"><br><br></div><form
-    action="/search" name="f"><table cellpadding="0" cellspacing="0"><tr valign="top"><td
-    width="25%">&nbsp;</td><td align="center" nowrap="nowrap"><input name="ie" value="ISO-8859-1"
-    type="hidden"><input value="en" name="hl" type="hidden"><input name="source" type="hidden"
-    value="hp"><div class="ds" style="height:32px;margin:4px 0"><input autocomplete="off"
-    class="lst" value="" title="Google Search" maxlength="2048" name="q" size="57"
-    style="color:#000;margin:0;padding:5px 8px 0 6px;vertical-align:top"></div><br
-    style="line-height:0"><span class="ds"><span class="lsbb"><input class="lsb" value="Google
-    Search" name="btnG" type="submit"></span></span><span class="ds"><span class="lsbb"><input
-    class="lsb" value="I''m Feeling Lucky" name="btnI" type="submit" onclick="if(this.form.q.value)this.checked=1;
-    else top.location=''/doodles/''"></span></span></td><td class="fl sblc" align="left"
-    nowrap="nowrap" width="25%"><a href="/advanced_search?hl=en&amp;authuser=0">Advanced
-    search</a><a href="/language_tools?hl=en&amp;authuser=0">Language tools</a></td></tr></table><input
-    type="hidden" id="gbv" name="gbv" value="1"></form><div id="gac_scont"></div><div
-    style="font-size:83%;min-height:3.5em"><br><div id="prm"><font id="hpplink" size="-1"
-    style="behavior:url(#default#userdata)"><span style="color:red"></span>Watch &amp;
-    vote for your favorite <a href="http://www.youtube.com/adblitz" onclick="google.promos&&google.promos.link&&
-    google.promos.link.cl()">2013 Super Bowl ads</a> on YouTube</font><br/><br/><br/><script
-    type="text/javascript">(function(){var d={a:{}};d.a.localStorage={};d.a.localStorage.d=function(){try{return"object"==typeof
-    window.localStorage}catch(a){return!1}};d.a.localStorage.g=function(a){a=window.localStorage.getItem(a);return!a?"":a.toString()};d.a.localStorage.i=function(a,b){window.localStorage.setItem(a,b)};d.a.localStorage.h=function(a){window.localStorage.removeItem(a)};google.promos||(google.promos={});google.promos.ActionType={ACCEPT:"a",CANCEL:"c",DISMISS:"d",CLICK:"h",IMPRESSION:"i",NO_THANKS:"n",X_BUTTON:"x",MGMHP_ACCEPT:"ma",MGMHP_CANCEL:"mc",MGMHP_IMPRESSION:"mi",MGMHPPD_ACCEPT:"pa",MGMHPPD_CANCEL:"pc",MGMHPPD_IMPRESSION:"pi",MGMHPPD_NO_THANKS:"pn",MGMHPPD_NO_BUTTON:"px",MGMHPPD_DISMISS:"pd",PUSHDOWN_ACCEPT:"gpa",PUSHDOWN_IMPRESSION:"gpi",PUSHDOWN_NO_THANKS:"gpn",PUSHDOWN_NO_BUTTON:"gpx",PUSHDOWN_DISMISS:"gpd"};google.promos.sl=function(a,b,c,e){a=[c,"id="+a,"loc="+google.sn];a.push("oi=promoslinger");e&&a.push(e);google.log(b,a.join("&"))};google.promos.si=function(a,b,c,e){0.01>Math.random()&&google.promos.sl(a,b,e?e:google.promos.ActionType.IMPRESSION,c)};google.promos.spd=function(a,b,c){if(d.a.localStorage.d())d.a.localStorage.i(b,c);else
-    if(a)try{a.setAttribute(b,c),a.save(a.id)}catch(e){google.ml(e,!1,{cause:"PERSIST_DATA_FAIL"})}};google.promos.gpd=function(a,b){if(d.a.localStorage.d())return
-    d.a.localStorage.g(b);if(a)try{return a.load(a.id),a.getAttribute(b)}catch(c){google.ml(c,!1,{cause:"PERSIST_DATA_FAIL"})}return""};google.promos.rpd=function(a,b){if(d.a.localStorage.d())d.a.localStorage.h(b);else
-    if(a)try{a.load(a.id),a.removeAttribute(b),a.save(a.id)}catch(c){google.ml(c,!1,{cause:"PERSIST_DATA_FAIL"})}};google.promos.aeh=function(a,b,c){a.addEventListener?a.addEventListener(b,c,!1):a.attachEvent&&a.attachEvent("on"+b,c)};})();</script><script
-    type="text/javascript">(function(){var c,e,g=0,h;google.promos.link||(google.promos.link={});google.promos.link.getExtraLogData_=function(b){var
-    a=document.getElementById(h);if(a){var f=e+"_upccb",d=parseInt(google.promos.gpd(a,f)||0,10);d++;g++;google.promos.spd(a,f,d);a=[["upcc",g].join("="),["upccb",d].join("=")];b&&a.push(b);return
-    a.join("&")}};google.promos.link.cl=function(b){try{google.promos.sl(e,c,google.promos.ActionType.CLICK,google.promos.link.getExtraLogData_(b))}catch(a){google.ml(a,!1,{cause:c+"_CL"})}};google.promos.link.init=function(b,a,f){try{e=b,c=a,h=f,google.promos.si(e,c)}catch(d){google.ml(d,!1,{cause:c+"_INIT"})}};})();</script><script>(function(){var
-    sourceWebappPromoID=2146009;var payloadType=3;google.promos.link.init(sourceWebappPromoID,payloadType,''hpplink'');})();</script></div></div><span
-    id="footer"><div style="font-size:10pt"><div id="fll" style="margin:19px auto;text-align:center"><a
-    href="/intl/en/ads/">Advertising&nbsp;Programs</a><a href="/services/">Business
-    Solutions</a><a href="https://plus.google.com/116899029375914044550" rel="publisher">+Google</a><a
-    href="/intl/en/about.html">About Google</a></div></div><p style="color:#767676;font-size:8pt">&copy;
-    2012 - <a href="/intl/en/policies/">Privacy & Terms</a></p></span></center><div
-    id=xjsd></div><div id=xjsi><script>if(google.y)google.y.first=[];(function(){var
-    b;function c(a){window.setTimeout(function(){var d=document.createElement("script");d.src=a;document.getElementById("xjsd").appendChild(d)},0)}google.dljp=function(a){b=a;google.xjsi||(google.xjsu=a,c(b))};google.dlj=c;})();
-
-    if(!google.xjs){google.dstr=[];google.rein=[];window._=window._||{};window._._DumpException=function(e){throw
-    e};if(google.timers&&google.timers.load.t){google.timers.load.t.xjsls=new Date().getTime();}google.dljp(''/xjs/_/js/hp/sb_he,pcc/rt\x3dj/ver\x3dpV35sf-JYbs.en_US./d\x3d1/sv\x3d1/rs\x3dAItRSTNEQTP_SWk9M7UINF8lLf9n5A7Iig'');google.xjs=1;}google.pmc={sb:{"agen":false,"cgen":true,"client":"heirloom-hp","dh":true,"ds":"","eqch":true,"fl":true,"host":"google.com","jsonp":true,"msgs":{"lcky":"I\u0026#39;m
-    Feeling Lucky","lml":"Learn more","oskt":"Input tools","psrc":"This search was
-    removed from your \u003Ca href=\"/history\"\u003EWeb History\u003C/a\u003E","psrl":"Remove","sbit":"Search
-    by image","srch":"Google Search"},"ovr":{"l":1,"ms":1},"pq":"","qcpw":false,"scd":10,"sce":5,"stok":"Xy1HjrPu6688ayVsMsoxAbgqzT4"},hp:{},pcc:{}};google.y.first.push(function(){if(google.med){google.med(''init'');google.initHistory();google.med(''history'');}google.History&&google.History.initialize(''/'');google.hs&&google.hs.init&&google.hs.init()});if(google.j&&google.j.en&&google.j.xi){window.setTimeout(google.j.xi,0);}</script></div><script>(function(){var
-    b,c,d,e;function g(a,f){a.removeEventListener?(a.removeEventListener("load",f,!1),a.removeEventListener("error",f,!1)):(a.detachEvent("onload",f),a.detachEvent("onerror",f))}function
-    h(a){e=(new Date).getTime();++c;a=a||window.event;a=a.target||a.srcElement;g(a,h)}var
-    i=document.getElementsByTagName("img");b=i.length;
-
-    for(var j=c=0,k;j<b;++j)k=i[j],k.complete||"string"!=typeof k.src||!k.src?++c:k.addEventListener?(k.addEventListener("load",h,!1),k.addEventListener("error",h,!1)):(k.attachEvent("onload",h),k.attachEvent("onerror",h));d=b-c;
-
-    function l(){if(google.timers.load.t){google.timers.load.t.ol=(new Date).getTime();google.timers.load.t.iml=e;google.kCSI.imc=c;google.kCSI.imn=b;google.kCSI.imp=d;void
-    0!==google.stt&&(google.kCSI.stt=google.stt);google.csiReport&&google.csiReport()}}window.addEventListener?window.addEventListener("load",l,!1):window.attachEvent&&window.attachEvent("onload",l);google.timers.load.t.prt=e=(new
-    Date).getTime();})();
-
-    </script></body></html>'
-  headers: {cache-control: 'private, max-age=0', connection: close, content-type: text/html;
-      charset=ISO-8859-1, date: 'Mon, 04 Feb 2013 19:07:35 GMT', expires: '-1', p3p: 'CP="This
-      is not a P3P policy! See http://www.google.com/support/accounts/bin/answer.py?hl=en&answer=151657
-      for more info."', server: gws, set-cookie: 'PREF=ID=9ecd1141bdfae9ca:FF=0:TM=1360004855:LM=1360004855:S=fVob53n4SWcwIZH6;
-      expires=Wed, 04-Feb-2015 19:07:35 GMT; path=/; domain=.google.com, NID=67=odjnY11EV1rLAH_RLMgWx6iav9sqzV_aUFDz0udVJMAo1ERNyVWMlJqfLV0zrgLUfZPCJb5A_Twze73CZUzBuU9qXbGJXIPB5xOjmikTcDevAFSwaxISfugoqHYOUYI5;
-      expires=Tue, 06-Aug-2013 19:07:35 GMT; path=/; domain=.google.com; HttpOnly',
-    x-frame-options: SAMEORIGIN, x-xss-protection: 1; mode=block}
-  raw_headers: ["Date: Mon, 04 Feb 2013 19:07:35 GMT\r\n", "Expires: -1\r\n", "Cache-Control:\
-      \ private, max-age=0\r\n", "Content-Type: text/html; charset=ISO-8859-1\r\n",
-    "Set-Cookie: PREF=ID=9ecd1141bdfae9ca:FF=0:TM=1360004855:LM=1360004855:S=fVob53n4SWcwIZH6;\
-      \ expires=Wed, 04-Feb-2015 19:07:35 GMT; path=/; domain=.google.com\r\n", "Set-Cookie:\
-      \ NID=67=odjnY11EV1rLAH_RLMgWx6iav9sqzV_aUFDz0udVJMAo1ERNyVWMlJqfLV0zrgLUfZPCJb5A_Twze73CZUzBuU9qXbGJXIPB5xOjmikTcDevAFSwaxISfugoqHYOUYI5;\
-      \ expires=Tue, 06-Aug-2013 19:07:35 GMT; path=/; domain=.google.com; HttpOnly\r\
-      \n", "P3P: CP=\"This is not a P3P policy! See http://www.google.com/support/accounts/bin/answer.py?hl=en&answer=151657\
-      \ for more info.\"\r\n", "Server: gws\r\n", "X-XSS-Protection: 1; mode=block\r\
-      \n", "X-Frame-Options: SAMEORIGIN\r\n", "Connection: close\r\n"]
-  reason: OK
-  status: 200
-GET www.internic.net:80/domain/named.root None:
-  content: ";       This file holds the information on root name servers needed to\n\
-    ;       initialize cache of Internet domain name servers\n;       (e.g. reference\
-    \ this file in the \"cache  .  <file>\"\n;       configuration file of BIND domain\
-    \ name servers).\n;\n;       This file is made available by InterNIC \n;     \
-    \  under anonymous FTP as\n;           file                /domain/named.cache\n\
-    ;           on server           FTP.INTERNIC.NET\n;       -OR-               \
-    \     RS.INTERNIC.NET\n;\n;       last update:    Jan 3, 2013\n;       related\
-    \ version of root zone:   2013010300\n;\n; formerly NS.INTERNIC.NET\n;\n.    \
-    \                    3600000  IN  NS    A.ROOT-SERVERS.NET.\nA.ROOT-SERVERS.NET.\
-    \      3600000      A     198.41.0.4\nA.ROOT-SERVERS.NET.      3600000      AAAA\
-    \  2001:503:BA3E::2:30\n;\n; FORMERLY NS1.ISI.EDU\n;\n.                      \
-    \  3600000      NS    B.ROOT-SERVERS.NET.\nB.ROOT-SERVERS.NET.      3600000  \
-    \    A     192.228.79.201\n;\n; FORMERLY C.PSI.NET\n;\n.                     \
-    \   3600000      NS    C.ROOT-SERVERS.NET.\nC.ROOT-SERVERS.NET.      3600000 \
-    \     A     192.33.4.12\n;\n; FORMERLY TERP.UMD.EDU\n;\n.                    \
-    \    3600000      NS    D.ROOT-SERVERS.NET.\nD.ROOT-SERVERS.NET.      3600000\
-    \      A     199.7.91.13\nD.ROOT-SERVERS.NET.\t 3600000      AAAA  2001:500:2D::D\n\
-    ;\n; FORMERLY NS.NASA.GOV\n;\n.                        3600000      NS    E.ROOT-SERVERS.NET.\n\
-    E.ROOT-SERVERS.NET.      3600000      A     192.203.230.10\n;\n; FORMERLY NS.ISC.ORG\n\
-    ;\n.                        3600000      NS    F.ROOT-SERVERS.NET.\nF.ROOT-SERVERS.NET.\
-    \      3600000      A     192.5.5.241\nF.ROOT-SERVERS.NET.      3600000      AAAA\
-    \  2001:500:2F::F\n;\n; FORMERLY NS.NIC.DDN.MIL\n;\n.                        3600000\
-    \      NS    G.ROOT-SERVERS.NET.\nG.ROOT-SERVERS.NET.      3600000      A    \
-    \ 192.112.36.4\n;\n; FORMERLY AOS.ARL.ARMY.MIL\n;\n.                        3600000\
-    \      NS    H.ROOT-SERVERS.NET.\nH.ROOT-SERVERS.NET.      3600000      A    \
-    \ 128.63.2.53\nH.ROOT-SERVERS.NET.      3600000      AAAA  2001:500:1::803F:235\n\
-    ;\n; FORMERLY NIC.NORDU.NET\n;\n.                        3600000      NS    I.ROOT-SERVERS.NET.\n\
-    I.ROOT-SERVERS.NET.      3600000      A     192.36.148.17\nI.ROOT-SERVERS.NET.\
-    \      3600000      AAAA  2001:7FE::53\n;\n; OPERATED BY VERISIGN, INC.\n;\n.\
-    \                        3600000      NS    J.ROOT-SERVERS.NET.\nJ.ROOT-SERVERS.NET.\
-    \      3600000      A     192.58.128.30\nJ.ROOT-SERVERS.NET.      3600000    \
-    \  AAAA  2001:503:C27::2:30\n;\n; OPERATED BY RIPE NCC\n;\n.                 \
-    \       3600000      NS    K.ROOT-SERVERS.NET.\nK.ROOT-SERVERS.NET.      3600000\
-    \      A     193.0.14.129\nK.ROOT-SERVERS.NET.      3600000      AAAA  2001:7FD::1\n\
-    ;\n; OPERATED BY ICANN\n;\n.                        3600000      NS    L.ROOT-SERVERS.NET.\n\
-    L.ROOT-SERVERS.NET.      3600000      A     199.7.83.42\nL.ROOT-SERVERS.NET. \
-    \     3600000      AAAA  2001:500:3::42\n;\n; OPERATED BY WIDE\n;\n.         \
-    \               3600000      NS    M.ROOT-SERVERS.NET.\nM.ROOT-SERVERS.NET.  \
-    \    3600000      A     202.12.27.33\nM.ROOT-SERVERS.NET.      3600000      AAAA\
-    \  2001:DC3::35\n; End of File\n"
-  headers: {accept-ranges: bytes, connection: close, content-length: '3048', content-type: text/plain;
-      charset=UTF-8, date: 'Mon, 04 Feb 2013 19:07:34 GMT', etag: '"c20307-be8-4d2645f0b9600"',
-    last-modified: 'Thu, 03 Jan 2013 15:54:00 GMT', server: Apache}
-  raw_headers: ["Date: Mon, 04 Feb 2013 19:07:34 GMT\r\n", "Server: Apache\r\n", "Last-Modified:\
-      \ Thu, 03 Jan 2013 15:54:00 GMT\r\n", "ETag: \"c20307-be8-4d2645f0b9600\"\r\n",
-    "Accept-Ranges: bytes\r\n", "Content-Length: 3048\r\n", "Connection: close\r\n",
-    "Content-Type: text/plain; charset=UTF-8\r\n"]
-  reason: OK
-  status: 200
+GET browserspy.dk:80/password-ok.php None:
+  content: "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\"\
+    >\n<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">\n\
+    <head>\n<meta http-equiv=\"Content-Type\" content=\"text/html; charset=iso-8859-1\"\
+    \ />\n<title>HTTP Password Information - Failure - BrowserSpy.dk</title>\n<meta\
+    \ name=\"description\" content=\"Failure! Your client doesn't supports HTTP Basic\
+    \ Authentication or you provide the wrong username and/or password. Below are\
+    \ listed what you provided as login information.\" />\n<meta name=\"keywords\"\
+    \ content=\"failure,password,http,basic,authentication,protection\" />\n<link\
+    \ rel=\"icon\" href=\"http://browserspy.dk/favicon.ico\" type=\"image/x-icon\"\
+    \ />\n<link rel=\"shortcut icon\" href=\"http://browserspy.dk/favicon.ico\" type=\"\
+    image/x-icon\" />\n<link rel=\"stylesheet\" type=\"text/css\" media=\"all\" href=\"\
+    http://browserspy.dk/theme/reset.css\" />\n<link rel=\"stylesheet\" type=\"text/css\"\
+    \ media=\"all\" href=\"http://browserspy.dk/theme/default.css\" />\n<script type=\"\
+    text/javascript\" src=\"http://browserspy.dk/js/jquery.js\"></script>\n<script\
+    \ type=\"text/javascript\" src=\"http://www.google.com/coop/cse/brand?form=cse-search-box&amp;lang=en\"\
+    ></script>\n<script type=\"text/javascript\" src=\"js/jquery.browser.js\"></script>\n\
+    <script type=\"text/javascript\">\n//<![CDATA[\n\r\n\t\t\t$(document).ready(function(){\r\
+    \n\t\t\t\t$(\"a[rel=external]\").click(function(){\r\n\t\t\t\t\tpageTracker._trackPageview(\"\
+    /outgoing/\"+ $(this).attr(\"href\"));\r\n\t\t\t\t});\r\n\t\t\t});\r\n\t\t\n//]]>\n\
+    </script>\n</head>\n<body id=\"browserspydk\">\n\r\n\t\t\t<div id=\"header\">\r\
+    \n\t\t\t\t<div class=\"inner\">\r\n\t\t\t\t\t<div id=\"logo\">\r\n\t\t<a href=\"\
+    http://browserspy.dk/\" title=\"Back to BrowserSpy.dk frontpage\"><img alt=\"\
+    BrowserSpy.dk logo\" width=\"300\" height=\"53\" src=\"http://browserspy.dk/pics/logo.png\"\
+    \ /></a>\r\n\t\t\t\t\t</div>\r\n\t\t\t<div id=\"banner-header\">\n<script type=\"\
+    text/javascript\">\n//<![CDATA[\nvar google_ad_client = \"pub-3782597996216257\"\
+    ;\nvar google_ad_slot = \"7564469343\";\nvar google_ad_width = 468;\nvar google_ad_height\
+    \ = 60;\n//]]>\n</script>\n<script type=\"text/javascript\" src=\"http://pagead2.googlesyndication.com/pagead/show_ads.js\"\
+    ></script>\n</div>\n\t</div>\r\n\t\t\t\t<div class=\"clr\"></div>\r\n\t\t\t</div>\r\
+    \n\t\t\t<div id=\"menu\">\r\n\t\t\t\t<ul id=\"menutop\">\n<li class=\"active\"\
+    ><a href=\"http://browserspy.dk/\" title=\"Back to the frontpage of BrowserSpy.dk\"\
+    >Home</a></li><li><a href=\"http://browserspy.dk/about/\" title=\"What is BrowserSpy.dk\
+    \ all about?\">About</a></li><li><a href=\"http://browserspy.dk/blog/\" title=\"\
+    The BrowserSpy.dk blog with news and relevant information\">Blog</a></li><li><a\
+    \ href=\"http://browserspy.dk/contact/\" title=\"How do I contact BrowserSpy.dk\"\
+    >Contact</a></li><li><a href=\"http://browserspy.dk/donate/\" title=\"How do I\
+    \ donate money to the development of BrowserSpy.dk\">Donate</a></li><li><a href=\"\
+    http://browserspy.dk/faq/\" title=\"List of Frequently Asked Questions on BrowserSpy.dk\"\
+    >FAQ</a></li></ul>\n\r\n\t\t\t\t<div id=\"search\"><form action=\"http://browserspy.dk/search/\"\
+    \ id=\"cse-search-mini\"><div><input type=\"hidden\" name=\"cx\" value=\"003484130720911686425:b-rcd__nbbw\"\
+    \ /><input type=\"hidden\" name=\"cof\" value=\"FORID:11\" /><input type=\"hidden\"\
+    \ name=\"ie\" value=\"UTF-8\" /><input type=\"text\" name=\"q\" size=\"30\" title=\"\
+    Search the BrowserSpy.dk site\" /><input type=\"submit\" name=\"sa\" class=\"\
+    sub\" value=\"Search Site\" title=\"Do the search!\" /></div></form></div>\r\n\
+    \t\t\t</div>\r\n\t\t\t<div id=\"content\">\r\n\t\t\t\t<div id=\"left\">\r\n\t\t\
+    \t\t\t<div class=\"inner\">\r\n\t\t\t\t\t\t<div id=\"info\"><p>BrowserSpy.dk shows\
+    \ you just how much information can be retrieved from your browser just by visiting\
+    \ a page.</p><p>Available tests are listed below.</p></div>\r\n\t\t\t\t\t\t<ul\
+    \ id=\"nav\">\n<li><a href=\"http://browserspy.dk/accept.php\" title=\"What filetypes\
+    \ does your browser accept?\">Accepted Filetypes</a></li><li><a href=\"http://browserspy.dk/activex.php\"\
+    \ title=\"Does your browser support ActiveX?\">ActiveX</a></li><li><a href=\"\
+    http://browserspy.dk/adobereader.php\" title=\"Is Adobe Reader installed?\">Adobe\
+    \ Reader</a></li><li><a href=\"http://browserspy.dk/ajax.php\" title=\"Does your\
+    \ browser support XML requests and documents. XMLHttpRequest is used in Ajax based\
+    \ websites\">Ajax Support</a></li><li><a href=\"http://browserspy.dk/bandwidth.php\"\
+    \ title=\"What is your internet connection speed?\">Bandwidth</a></li><li><a href=\"\
+    http://browserspy.dk/browser.php\" title=\"What is the name and version of your\
+    \ browser?\">Browser</a></li><li><a href=\"http://browserspy.dk/capabilities.php\"\
+    \ title=\"What capabilities does your browser have?\">Capabilities</a></li><li><a\
+    \ href=\"http://browserspy.dk/colors.php\" title=\"What kind of system colors\
+    \ does your browser support?\">Colors</a></li><li><a href=\"http://browserspy.dk/component.php\"\
+    \ title=\"What Internet Explorer components can be and has been installed?\">Components</a></li><li><a\
+    \ href=\"http://browserspy.dk/connections.php\" title=\"How many connections does\
+    \ your browser supports?\">Connections</a></li><li><a href=\"http://browserspy.dk/cookie.php\"\
+    \ title=\"Does your browser support cookies and are they enabled?\">Cookies</a></li><li><a\
+    \ href=\"http://browserspy.dk/cpu.php\" title=\"What CUP does your system have?\"\
+    >CPU</a></li><li><a href=\"http://browserspy.dk/css.php\" title=\"Is CSS supported\
+    \ and what CSS media types does your browser support?\">CSS</a></li><li><a href=\"\
+    http://browserspy.dk/css-exploit.php\" title=\"Can it be detected which websites\
+    \ you have visisted?\">CSS Exploit</a></li><li><a href=\"http://browserspy.dk/cursors.php\"\
+    \ title=\"What kind of cursors does your browser support?\">Cursors</a></li><li><a\
+    \ href=\"http://browserspy.dk/date.php\" title=\"What's the date and time on your\
+    \ system?\">Date and Time</a></li><li><a href=\"http://browserspy.dk/directx.php\"\
+    \ title=\"What DirectX components are available?\">DirectX</a></li><li><a href=\"\
+    http://browserspy.dk/document.php\" title=\"Get various information about the\
+    \ current document\">Document</a></li><li><a href=\"http://browserspy.dk/donottrack.php\"\
+    \ title=\"Does your browser send the Do Not Track header?\" class=\"new\">Do No\
+    \ Track</a></li><li><a href=\"http://browserspy.dk/dotnet.php\" title=\"What .NET\
+    \ frameworks does your system have installed?\">.NET Framework</a></li><li><a\
+    \ href=\"http://browserspy.dk/mailcheck.php\" title=\"Can your email address be\
+    \ verified by spammers?\">Email Verification</a></li><li><a href=\"http://browserspy.dk/flash.php\"\
+    \ title=\"Is Adobe Flash installed?\">Flash</a></li><li><a href=\"http://browserspy.dk/fonts-flash.php\"\
+    \ title=\"What fonts does your system have installed? Detetced using Flash.\"\
+    >Fonts via Flash</a></li><li><a href=\"http://browserspy.dk/fonts-java.php\" title=\"\
+    What fonts does your system have installed? Detetced using Java.\">Fonts via Java</a></li><li><a\
+    \ href=\"http://browserspy.dk/gears.php\" title=\"Is Gears aka Google Gears installed?\"\
+    >Gears</a></li><li><a href=\"http://browserspy.dk/gecko.php\" title=\"Is your\
+    \ browser powered by the layout engine Gecko?\">Gecko</a></li><li><a href=\"http://browserspy.dk/geolocation.php\"\
+    \ title=\"Does your browser supports Geolocation?\">Geolocation</a></li><li><a\
+    \ href=\"http://browserspy.dk/googlechrome.php\" title=\"Are you running the Google\
+    \ Chrome browser? And if so what version?\">Google Chrome</a></li><li><a href=\"\
+    http://browserspy.dk/googleapps.php\" title=\"Check to see if you Google Apps\
+    \ domain is setup correctly. Checks if the MX record and the TXT record with the\
+    \ SPF is setup correctly.\">Google Apps</a></li><li><a href=\"http://browserspy.dk/gzip.php\"\
+    \ title=\"Does your browser support GZip compression?\">GZip Support</a></li><li><a\
+    \ href=\"http://browserspy.dk/headers.php\" title=\"What HTTP headers does your\
+    \ browser send?\">HTTP Headers</a></li><li><a href=\"http://browserspy.dk/http.php\"\
+    \ title=\"What HTTP headers does your browser send?\">HTTP</a></li><li><a href=\"\
+    http://browserspy.dk/images.php\" title=\"What types of images does your browser\
+    \ support?\">Images</a></li><li><a href=\"http://browserspy.dk/ip.php\" title=\"\
+    What IP address and host name have you got? Also shows you your location on a\
+    \ map.\">IP Address</a></li><li><a href=\"http://browserspy.dk/java.php\" title=\"\
+    Is Java installed?\">Java</a></li><li><a href=\"http://browserspy.dk/javascript.php\"\
+    \ title=\"Is JavaScript enabled and what versions are supported?\">JavaScript</a></li><li><a\
+    \ href=\"http://browserspy.dk/language.php\" title=\"What languages does your\
+    \ browser accept?\">Languages</a></li><li><a href=\"http://browserspy.dk/math.php\"\
+    \ title=\"What miscellaneous mathematical information are available?\">Mathematical</a></li><li><a\
+    \ href=\"http://browserspy.dk/mathml.php\" title=\"Does your browser support MathML\
+    \ language?\">MathML Support</a></li><li><a href=\"http://browserspy.dk/mimetypes.php\"\
+    \ title=\"What MIME types your browser supports?\">MIME Types</a></li><li><a href=\"\
+    http://browserspy.dk/mobile.php\" title=\"Are you using a mobile device and what's\
+    \ it's capabilities?\">Mobile</a></li><li><a href=\"http://browserspy.dk/network.php\"\
+    \ title=\"What headers your browser send when retriving this page?\">Network</a></li><li><a\
+    \ href=\"http://browserspy.dk/object.php\" title=\"What objects does your browser\
+    \ supports? Object like layers, images, forms, links, frames, anchors.\">Objects</a></li><li><a\
+    \ href=\"http://browserspy.dk/showprop.php\" title=\"Show an DOM object with all\
+    \ it's properties and values\">Object Browser</a></li><li><a href=\"http://browserspy.dk/offline.php\"\
+    \ title=\"Can your browser go offline? And can it store data?\">Online / Offline</a></li><li><a\
+    \ href=\"http://browserspy.dk/opendns.php\" title=\"Are you using the OpenDNS\
+    \ service?\">OpenDNS</a></li><li><a href=\"http://browserspy.dk/openoffice.php\"\
+    \ title=\"Is OpenOffice.org installed?\">OpenOffice.org</a></li><li><a href=\"\
+    http://browserspy.dk/opera.php\" title=\"Are you running the Opera browser? And\
+    \ if so what version?\">Opera Browser</a></li><li><a href=\"http://browserspy.dk/os.php\"\
+    \ title=\"What operating system does your system run?\">Operating System</a></li><li><a\
+    \ href=\"http://browserspy.dk/pagerank.php\" title=\"Find out the Google PageRank\
+    \ for any web page\">Google PageRank</a></li><li><a href=\"http://browserspy.dk/password.php\"\
+    \ title=\"Does your browser support HTTP password/authentication?\">HTTP Password</a></li><li><a\
+    \ href=\"http://browserspy.dk/ping.php\" title=\"Does your browser ping?\">Ping</a></li><li><a\
+    \ href=\"http://browserspy.dk/plugins.php\" title=\"What plugins does your browser\
+    \ have installed?\">Plugins</a></li><li><a href=\"http://browserspy.dk/plugs.php\"\
+    \ title=\"Find out what other plug-ins or helper components are installed?\">Plugs</a></li><li><a\
+    \ href=\"http://browserspy.dk/prefetch.php\" title=\"Does your browser support\
+    \ link prefetching?\">Prefetch</a></li><li><a href=\"http://browserspy.dk/proxy.php\"\
+    \ title=\"Do you use a proxy to connect to the internet?\">Proxy</a></li><li><a\
+    \ href=\"http://browserspy.dk/psm.php\" title=\"Does your browser use Personal\
+    \ Security Manager (PSM)?\">Personal Security Manager</a></li><li><a href=\"http://browserspy.dk/quicktime.php\"\
+    \ title=\"Is Apple QuickTime installed?\">QuickTime Player</a></li><li><a href=\"\
+    http://browserspy.dk/realplayer.php\" title=\"Is RealPlayer installed?\">RealPlayer</a></li><li><a\
+    \ href=\"http://browserspy.dk/resolution.php\" title=\"What is the resolution\
+    \ of your screen?\">Resolution</a></li><li><a href=\"http://browserspy.dk/screen.php\"\
+    \ title=\"What properties does your screen have? Including width, height, DPI,\
+    \ color depth and font smoothing\">Screen</a></li><li><a href=\"http://browserspy.dk/security.php\"\
+    \ title=\"What kind of security does your browser have?\">Security</a></li><li><a\
+    \ href=\"http://browserspy.dk/shockwave.php\" title=\"Is Adobe Shockwave installed?\"\
+    >Shockwave</a></li><li><a href=\"http://browserspy.dk/silverlight.php\" title=\"\
+    Is Microsoft Silverlight installed?\">Silverlight</a></li><li><a href=\"http://browserspy.dk/soundcard.php\"\
+    \ title=\"Is there a sounce card installed in your computer?\">Sound Card</a></li><li><a\
+    \ href=\"http://browserspy.dk/svg.php\" title=\"Does your browser support Scalable\
+    \ Vector Graphics (SVG)\">SVG</a></li><li><a href=\"http://browserspy.dk/textformat.php\"\
+    \ title=\"What text formatting does your browser support?\">Text Formatting</a></li><li><a\
+    \ href=\"http://browserspy.dk/upload.php\" title=\"Does your browser support file\
+    \ upload?\">File Upload</a></li><li><a href=\"http://browserspy.dk/useragent.php\"\
+    \ title=\"What useragent does your browser send? Is the JavaScript version of\
+    \ it the same?\">UserAgent</a></li><li><a href=\"http://browserspy.dk/vbscript.php\"\
+    \ title=\"Does your browser support VBScript (Visual Basic Script)?\">VBScript</a></li><li><a\
+    \ href=\"http://browserspy.dk/wap.php\" title=\"What WAP and/or Mobile device\
+    \ are you using?\">WAP Device</a></li><li><a href=\"http://browserspy.dk/webkit.php\"\
+    \ title=\"Is your browser using the WebKit layout engine?\">WebKit</a></li><li><a\
+    \ href=\"http://browserspy.dk/webserver.php\" title=\"What webserver software\
+    \ is a website runinng? Check websites and see what software and version it's\
+    \ running\">Web Server</a></li><li><a href=\"http://browserspy.dk/window.php\"\
+    \ title=\"Find out various information about the current window\">Window</a></li><li><a\
+    \ href=\"http://browserspy.dk/windowsmediaplayer.php\" title=\"Is Microsoft Windows\
+    \ Media Player installed?\">Windows Media Player</a></li></ul>\n\r\n\t\t\t\t\t\
+    </div>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div id=\"right\">\r\n\t\t\t\t\t<div class=\"\
+    inner\">\r\n\t\t\n<h1>HTTP Password Information - Failure</h1>\n<p class=\"error\"\
+    >\nFailure! Your client doesn't supports HTTP Basic Authentication or you provide\
+    \ the wrong username and/or password. Below are listed what you provided as login\
+    \ information.</p>\n\n<table class=\"bspy\">\n<thead>\n<tr>\n<th>Test</th>\n<th>Result</th>\n\
+    </tr>\n</thead>\n<tbody>\n<tr class=\"odd\">\n<td class=\"property\">You provided\
+    \ username</td>\n<td class=\"value\"></td>\n</tr>\n<tr class=\"even\">\n<td class=\"\
+    property\">You provided password</td>\n<td class=\"value\"></td>\n</tr>\n<tr class=\"\
+    odd\">\n<td class=\"property\">Correct username is</td>\n<td class=\"value\">test</td>\n\
+    </tr>\n<tr class=\"even\">\n<td class=\"property\">Correct password is</td>\n\
+    <td class=\"value\">test</td>\n</tr>\n<tr class=\"odd\">\n<td class=\"value\"\
+    \ colspan=\"2\"><a href=\"password.php\">Test again</a></td>\n</tr>\n\n</tbody>\n\
+    </table>\n<div id=\"banner-links\">\n<script type=\"text/javascript\">\n//<![CDATA[\n\
+    var google_ad_client = \"pub-3782597996216257\";\nvar google_ad_slot = \"1933464528\"\
+    ;\nvar google_ad_width = 468;\nvar google_ad_height = 15;\n//]]>\n</script>\n\
+    <script type=\"text/javascript\" src=\"http://pagead2.googlesyndication.com/pagead/show_ads.js\"\
+    ></script>\n</div>\n<script type=\"text/javascript\">\n//<![CDATA[\n\n\t\tfunction\
+    \ doClear() {\n\t\t\tif ($.browser.msie) {\n\t\t\t\tvar tmp = document.execCommand(\"\
+    ClearAuthenticationCache\");\n\t\t\t} else {\n\t\t\t\t$.ajax({\n\t\t\t\t\turl:\
+    \ \"http://browserspy.dk/\",\n\t\t\t\t\tcache: false,\n\t\t\t\t\tusername: \"\
+    logoff\",\n\t\t\t\t\tpassword: \"logoff\",\n\t\t\t\t});\n\t\t\t}\n\t\t\talert(\"\
+    Authentication cache succesfully flushed! If you press Reload you should be presented\
+    \ with login dialog again.\");\n\t\t}\n\t//]]>\n</script>\n<h2>How to clear the\
+    \ authentication cache</h2>\n<p>\nIf you want the username/password dialog to\
+    \ show again, you have to <a href=\"javascript:doClear()\">clear the authentication\
+    \ cache</a>.\n</p>\n\n<div id=\"related\">\n<h2>Related links and further reading...</h2>\n\
+    <ul>\n<li><a href=\"security.php\" title=\"Security Information - BrowserSpy.dk\"\
+    >More security information</a></li>\n<li><a href=\"http://en.wikipedia.org/wiki/Basic_access_authentication\"\
+    \ title=\"Basic access authentication - Wikipedia, the free encyclopedia\" rel=\"\
+    external\">Basic access authentication at Wikipedia</a></li>\n<li><a href=\"http://httpd.apache.org/docs/2.0/howto/auth.html\"\
+    \ title=\"Authentication, Authorization and Access Control - Apache HTTP Server\"\
+    \ rel=\"external\">Authentication, Authorization and Access Control in Apache\
+    \ web server</a></li>\n\n</ul></div>\n\r\n\t\t\t\t\t\t<div id=\"navtop\">[ <a\
+    \ href=\"#header\" title=\"Go to the top of the page\">Top of page</a> ]</div><div\
+    \ id=\"share\"><script type=\"text/javascript\" src=\"http://w.sharethis.com/button/sharethis.js#publisher=5d9dfc37-7972-470c-beee-b2235e3e55d9&amp;type=website&amp;style=horizontal\"\
+    ></script>\n</div><div id=\"banner-content\">\n<script type=\"text/javascript\"\
+    >\n//<![CDATA[\nvar google_ad_client = \"pub-3782597996216257\";\nvar google_ad_slot\
+    \ = \"9894692284\";\nvar google_ad_width = 728;\nvar google_ad_height = 90;\n\
+    //]]>\n</script>\n<script type=\"text/javascript\" src=\"http://pagead2.googlesyndication.com/pagead/show_ads.js\"\
+    ></script>\n</div>\n\t\t</div>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div id=\"footer\"\
+    >\r\n\t\t\t\t\t<p><a href=\"http://browserspy.dk/copyright/\" title=\"Copyright\
+    \ - BrowserSpy.dk\">Copyright</a> &copy; 1999-2013 <a href=\"http://browserspy.dk/contact/\"\
+    \ title=\"Contact - BrowserSpy.dk\">Henrik Gemal</a>. All Rights Reserved. <a\
+    \ href=\"http://browserspy.dk/sitemap/\" title=\"Sitemap - BrowserSpy.dk\">Sitemap</a></p>\r\
+    \n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t<script type=\"text/javascript\">\n//<![CDATA[\n\
+    var gaJsHost = ((\"https:\" == document.location.protocol) ? \"https://ssl.\"\
+    \ : \"http://www.\");\ndocument.write(unescape(\"%3Cscript src='\" + gaJsHost\
+    \ + \"google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E\"));\n\
+    //]]>\n</script>\n<script type=\"text/javascript\">\n//<![CDATA[\ntry {\nvar pageTracker\
+    \ = _gat._getTracker(\"UA-73153-14\");\npageTracker._initData();\npageTracker._trackPageview();\n\
+    } catch(err) {}\n//]]>\n</script>\n\n</body>\n</html>\n<!-- GSite site: browserspy.dk\
+    \ -->\n<!-- GSite time: 0.02914 -->\n"
+  headers: {cache-control: 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0',
+    connection: close, content-type: text/html, date: 'Sun, 10 Feb 2013 02:46:30 GMT',
+    expires: 'Mon, 26 Jul 1997 05:00:00 GMT', pragma: no-cache, server: Apache, transfer-encoding: chunked,
+    www-authenticate: Basic realm="BrowserSpy.dk - HTTP Password Test"}
+  raw_headers: ["Date: Sun, 10 Feb 2013 02:46:30 GMT\r\n", "Server: Apache\r\n", "WWW-Authenticate:\
+      \ Basic realm=\"BrowserSpy.dk - HTTP Password Test\"\r\n", "Expires: Mon, 26\
+      \ Jul 1997 05:00:00 GMT\r\n", "Cache-Control: no-store, no-cache, must-revalidate,\
+      \ post-check=0, pre-check=0\r\n", "Pragma: no-cache\r\n", "Connection: close\r\
+      \n", "Transfer-Encoding: chunked\r\n", "Content-Type: text/html\r\n"]
+  reason: Authorization Required
+  status: 401

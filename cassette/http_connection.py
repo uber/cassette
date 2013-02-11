@@ -21,6 +21,7 @@ class CassetteConnectionMixin(object):
             return
 
         logging.debug("'%s' not in library, making HTTP request." % self._key)
+
         self._baseclass.request(self, method, url, body, headers)
 
     def getresponse(self, buffering=False):

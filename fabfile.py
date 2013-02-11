@@ -6,7 +6,7 @@ def test(args=""):
     """Run the test suite."""
 
     clean()
-    local("flake8 . --ignore=E501,E702")
+    local("flake8 . --ignore=E501,E702,W806,W402,W802,E128")
     local("nosetests")
 
 

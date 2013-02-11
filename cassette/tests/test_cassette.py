@@ -2,11 +2,20 @@
 Test the cassette behavior.
 """
 
+# TODO Test patching behavior
+# with a new url after it has been
+# supposidly unpatched
+
+# TODO test auth
+
+
 import os
 import unittest
 import urllib2
+import base64
 
 import mock
+import yaml
 
 import cassette
 from cassette.cassette_library import CassetteLibrary
@@ -17,6 +26,9 @@ RESPONSES_FILENAME = "./cassette/tests/data/responses.yaml"
 TEST_URL = "http://www.internic.net/domain/named.root"
 TEST_URL_HTTPS = "https://www.fortify.net/sslcheck.html"
 TEST_URL_REDIRECT = "http://google.com/"
+TEST_OTHER_URL = "https://www.twitter.com"
+TEST_BASIC_AUTH = "http://browserspy.dk/password-ok.php"
+TEST_BASIC_AUTH2 = "http://127.0.0.1:10001"
 
 
 class TestCassette(unittest.TestCase):
@@ -122,3 +134,27 @@ class TestCassette(unittest.TestCase):
 
         self.assertTrue(self.had_response.called)
         self.assertIn("google", r.read(100000))
+
+    # def test_basic_auth_manual(self):
+    #     request = urllib2.Request(TEST_BASIC_AUTH)
+    #     base64string = base64.encodestring('%s:%s' % ('test', 'test')).replace('\n', '')
+    #     request.add_header("Authorization", "Basic %s" % base64string)
+    #     with cassette.play(RESPONSES_FILENAME):
+    #         res = urllib2.urlopen(request)
+    #     self.assertTrue(res.code, 200)
+
+    def test_basic_auth_handler(self):
+        passman = urllib2.HTTPPasswordMgrWithDefaultRealm()
+        passman.add_password(None, TEST_BASIC_AUTH, 'test', 'test')
+        authhandler = urllib2.HTTPBasicAuthHandler(passman)
+        opener = urllib2.build_opener(authhandler)
+        urllib2.install_opener(opener)
+
+        # urllib2.urlopen(TEST_BASIC_AUTH)
+
+        with cassette.play(RESPONSES_FILENAME):
+            urllib2.urlopen(TEST_BASIC_AUTH)
+        self.assertTrue(res.code, 200)
+
+    # def test_unpatcher_after_basic(self):
+    #     res = urllib2.urlopen(TEST_OTHER_URL)
