@@ -1,11 +1,12 @@
 #!/usr/bin/env python
-from setuptools import setup
+from setuptools import setup, find_packages
 
 # Release:
-# 1. Bump version below
-# 2. git tag -a -m "Version 0.1.5" v0.1.5
-# 3. python setup.py register sdist upload
-# 4. git push --tags
+# 1. Run tests
+# 2. Bump version below
+# 3. git tag -a -m "Version 0.1.5" v0.1.5
+# 4. python setup.py register sdist upload
+# 5. git push --tags
 
 __version__ = "0.1.6"
 
@@ -25,7 +26,7 @@ setup(
     author="Charles-Axel Dein",
     author_email="charles@uber.com",
     url="https://github.com/uber/cassette",
-    packages=["cassette"],
+    packages=find_packages(),
     keywords=["http", "tests", "mock"],
     description="Cassette is a testing tool that stores external HTTP request in YAML file.",
     long_description=read_long_description(),
