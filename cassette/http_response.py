@@ -1,8 +1,10 @@
 from io import StringIO
 from httplib import HTTPMessage
 
+from cassette.mocked_response import MockedResponse
 
-class MockedHTTPResponse(object):
+
+class MockedHTTPResponse(MockedResponse):
 
     attrs = ("headers", "content", "status", "reason", "raw_headers")
 
@@ -28,7 +30,8 @@ class MockedHTTPResponse(object):
         for k in cls.attrs:
             setattr(obj, k, data[k])
 
-        obj.fp = StringIO(unicode(obj.content))
+        # obj.content = obj.content.decode("utf-8")
+        obj.fp = StringIO(unicode(obj.content, "utf-8"))
 
         obj.msg = HTTPMessage(StringIO(unicode()), 0)
         for k, v in obj.headers.iteritems():
@@ -37,10 +40,6 @@ class MockedHTTPResponse(object):
         obj.msg.headers = data["raw_headers"]
 
         return obj
-
-    def to_dict(self):
-        """Return dict representation."""
-        return {k: getattr(self, k) for k in self.attrs}
 
     def read(self, chunked=None):
         return self.fp.read()

@@ -1,14 +1,19 @@
 from __future__ import absolute_import
+import urllib2
 import httplib
 
+from cassette.urlopen import CassetteURLOpen
 from cassette.http_connection import CassetteHTTPConnection, CassetteHTTPSConnection
 
+unpatched_urlopen = urllib2.urlopen
 unpatched_HTTPConnection = httplib.HTTPConnection
 unpatched_HTTPSConnection = httplib.HTTPSConnection
 
 
 def patch(cassette_library):
     """Replace standard library."""
+
+    urllib2.urlopen = CassetteURLOpen(cassette_library)
 
     # Taken from vcrpy
 
@@ -23,6 +28,8 @@ def patch(cassette_library):
 
 def unpatch():
     """Unpatch standard library."""
+
+    urllib2.urlopen = unpatched_urlopen
 
     # Taken from vcrpy
 

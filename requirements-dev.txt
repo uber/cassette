@@ -3,3 +3,4 @@ PyYAML
 mock
 nose
 flake8
+flask

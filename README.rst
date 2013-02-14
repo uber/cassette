@@ -79,10 +79,11 @@ Install requirements:
 
     $ pip install -r requirements-dev.txt
 
-Run tests:
+Start the test server and run tests:
 
 ::
 
+    $ fab serve_test_server
     $ fab test
 
 Similar libraries
@@ -101,7 +102,7 @@ This package should be considered **alpha**:
 -  Should not work with ``urllib`` and ``requests``
 -  The format used is not compatible with ``vcr`` or ``vcrpy``
 -  Only tested with Python 2.7
--  File format may change.
+-  File format **WILL** change.
 
 License
 =======

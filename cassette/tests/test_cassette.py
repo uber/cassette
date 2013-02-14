@@ -1,7 +1,9 @@
+# -*- coding: utf8 -*-
 """
 Test the cassette behavior.
 """
 
+import httplib
 import os
 import unittest
 import urllib2
@@ -15,8 +17,9 @@ from cassette.cassette_library import CassetteLibrary
 TEMPORARY_RESPONSES_FILENAME = "./cassette/tests/data/responses.temp.yaml"
 RESPONSES_FILENAME = "./cassette/tests/data/responses.yaml"
 TEST_URL = "http://www.internic.net/domain/named.root"
+TEST_URL = "http://127.0.0.1:5000/index"
 TEST_URL_HTTPS = "https://www.fortify.net/sslcheck.html"
-TEST_URL_REDIRECT = "http://google.com/"
+TEST_URL_REDIRECT = "http://127.0.0.1:5000/will_redirect"
 
 
 class TestCassette(unittest.TestCase):
@@ -37,43 +40,77 @@ class TestCassette(unittest.TestCase):
         if os.path.exists(TEMPORARY_RESPONSES_FILENAME):
             os.remove(TEMPORARY_RESPONSES_FILENAME)
 
-    def test_flow(self):
-        """Verify the cassette behavior."""
+    #
+    # Testing the whole flow with a temporary response file.
+    #
+
+    def check_urllib2_flow(self, url, expected_content,
+                           allow_incomplete_match=False):
+        """Verify the urllib2 flow."""
 
         # First run
         with cassette.play(TEMPORARY_RESPONSES_FILENAME):
-            r = urllib2.urlopen(TEST_URL)
+            r = urllib2.urlopen(url)  # 1st run
 
-        self.assertFalse(self.had_response.called)
-        self.assertIn("A.ROOT-SERVERS.NET", r.read(100000))
+        self.assertEqual(self.had_response.called, False)
+        if allow_incomplete_match:
+            self.assertIn(expected_content, r.read())
+        else:
+            self.assertEqual(r.read(), expected_content)
 
         self.had_response.reset_mock()
 
         # Second run
         with cassette.play(TEMPORARY_RESPONSES_FILENAME):
-            r = urllib2.urlopen(TEST_URL)
+            r = urllib2.urlopen(url)  # 2nd run
 
-        self.assertTrue(self.had_response.called)
-        self.assertIn("A.ROOT-SERVERS.NET", r.read(100000))
+        self.assertEqual(self.had_response.called, True)
+        if allow_incomplete_match:
+            self.assertIn(expected_content, r.read())
+        else:
+            self.assertEqual(r.read(), expected_content)
+
+        return r
+
+    def test_flow(self):
+        """Verify that cassette works when using urllib2.urlopen."""
+        self.check_urllib2_flow(TEST_URL, "hello world")
+
+    def test_flow_redirected(self):
+        """Verify that cassette works when redirected."""
+        self.check_urllib2_flow(TEST_URL_REDIRECT, "hello world redirected")
+
+    def test_flow_httplib(self):
+        """Verify that cassette works when using httplib directly."""
+
+        # First run
+        with cassette.play(TEMPORARY_RESPONSES_FILENAME):
+            conn = httplib.HTTPConnection("127.0.0.1", 5000)
+            conn.request("GET", "/index")
+            r = conn.getresponse()
+
+        self.assertEqual(r.status, 200)
+        self.assertEqual(r.reason, "OK")
+        self.assertEqual(r.read(), "hello world")
+        self.assertEqual(self.had_response.called, False)
+
+        self.had_response.reset_mock()
+
+        # Second run
+        with cassette.play(TEMPORARY_RESPONSES_FILENAME):
+            conn = httplib.HTTPConnection("127.0.0.1", 5000)
+            conn.request("GET", "/index")
+            r = conn.getresponse()
+
+        self.assertEqual(r.status, 200)
+        self.assertEqual(r.reason, "OK")
+        self.assertEqual(r.read(), "hello world")
+        self.assertEqual(self.had_response.called, True)
 
     def test_flow_https(self):
         """Verify the cassette behavior for HTTPS."""
-
-        # First run
-        with cassette.play(TEMPORARY_RESPONSES_FILENAME):
-            r = urllib2.urlopen(TEST_URL_HTTPS)
-
-        self.assertFalse(self.had_response.called)
-        self.assertIn("SSL Encryption Report", r.read(100000))
-
-        self.had_response.reset_mock()
-
-        # Second run
-        with cassette.play(TEMPORARY_RESPONSES_FILENAME):
-            r = urllib2.urlopen(TEST_URL_HTTPS)
-
-        self.assertTrue(self.had_response.called)
-        self.assertIn("SSL Encryption Report", r.read(100000))
+        self.check_urllib2_flow(TEST_URL_HTTPS, "SSL Encryption Report",
+                                allow_incomplete_match=True)
 
     def test_flow_manual_context(self):
         """Verify the cassette behavior when setting up the context."""
@@ -83,8 +120,8 @@ class TestCassette(unittest.TestCase):
         r = urllib2.urlopen(TEST_URL)
         cassette.eject()
 
-        self.assertFalse(self.had_response.called)
-        self.assertIn("A.ROOT-SERVERS.NET", r.read(100000))
+        self.assertEqual(self.had_response.called, False)
+        self.assertEqual(r.read(), "hello world")
 
         self.had_response.reset_mock()
 
@@ -93,32 +130,54 @@ class TestCassette(unittest.TestCase):
         r = urllib2.urlopen(TEST_URL)
         cassette.eject()
 
-        self.assertTrue(self.had_response.called)
-        self.assertIn("A.ROOT-SERVERS.NET", r.read(100000))
+        self.assertEqual(self.had_response.called, True)
+        self.assertEqual(r.read(), "hello world")
+
+    def test_flow_get_non_ascii_page(self):
+        """Verify that cassette can store a non-ascii page."""
+        self.check_urllib2_flow(
+            url="http://127.0.0.1:5000/non-ascii-content",
+            expected_content=u"Le Mexicain l'avait achetée en viager "
+            u"à un procureur à la retraite. Après trois mois, "
+            u"l'accident bête. Une affaire.")
+
+    #
+    # Verifying that cassette can read from an existing file.
+    #
+
+    def check_read_from_file_flow(self, url, expected_content,
+                                  allow_incomplete_match=False):
+        """Verify the flow when reading from an existing file."""
+
+        with cassette.play(RESPONSES_FILENAME):
+            r = urllib2.urlopen(url)
+
+        self.assertEqual(self.had_response.called, True)
+        if allow_incomplete_match:
+            self.assertIn(expected_content, r.read())
+        else:
+            self.assertEqual(r.read(), expected_content)
+
+        return r
 
     def test_read_file(self):
         """Verify that cassette can read a file."""
-
-        with cassette.play(RESPONSES_FILENAME):
-            r = urllib2.urlopen(TEST_URL)
-
-        self.assertTrue(self.had_response.called)
-        self.assertIn("A.ROOT-SERVERS.NET", r.read(100000))
+        self.check_read_from_file_flow(TEST_URL, "hello world")
 
     def test_read_file_https(self):
         """Verify that cassette can read a file for an HTTPS request."""
-
-        with cassette.play(RESPONSES_FILENAME):
-            r = urllib2.urlopen(TEST_URL_HTTPS)
-
-        self.assertTrue(self.had_response.called)
-        self.assertIn("SSL Encryption Report", r.read(100000))
+        self.check_read_from_file_flow(TEST_URL_HTTPS, "SSL Encryption Report",
+                                       allow_incomplete_match=True)
 
     def test_redirects(self):
         """Verify that cassette can handle a redirect."""
+        self.check_read_from_file_flow(TEST_URL_REDIRECT, "hello world redirected")
 
-        with cassette.play(RESPONSES_FILENAME):
-            r = urllib2.urlopen(TEST_URL_REDIRECT)
+    def test_non_ascii_content(self):
+        """Verify that cassette can handle non-ascii content."""
 
-        self.assertTrue(self.had_response.called)
-        self.assertIn("google", r.read(100000))
+        self.check_read_from_file_flow(
+            url="http://127.0.0.1:5000/non-ascii-content",
+            expected_content=u"Le Mexicain l'avait achetée en viager "
+            u"à un procureur à la retraite. Après trois mois, "
+            u"l'accident bête. Une affaire.")
