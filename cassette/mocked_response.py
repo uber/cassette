@@ -13,3 +13,7 @@ class MockedResponse(object):
     @classmethod
     def from_response(self, response):
         raise NotImplementedError
+
+    def rewind(self):
+        """Make sure the file description is at the start."""
+        pass

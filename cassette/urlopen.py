@@ -25,7 +25,8 @@ class CassetteURLOpen(object):
 
         if key in self._cassette_library:
             self._cassette_library.had_response()
-            return self._cassette_library[key]
+            response = self._cassette_library[key]
+            return response.rewind()
 
         else:
             # We need to unpatch, otherwise we would be using our mocked

@@ -16,7 +16,6 @@ from cassette.cassette_library import CassetteLibrary
 
 TEMPORARY_RESPONSES_FILENAME = "./cassette/tests/data/responses.temp.yaml"
 RESPONSES_FILENAME = "./cassette/tests/data/responses.yaml"
-TEST_URL = "http://www.internic.net/domain/named.root"
 TEST_URL = "http://127.0.0.1:5000/index"
 TEST_URL_HTTPS = "https://www.fortify.net/sslcheck.html"
 TEST_URL_REDIRECT = "http://127.0.0.1:5000/will_redirect"
@@ -163,6 +162,18 @@ class TestCassette(unittest.TestCase):
     def test_read_file(self):
         """Verify that cassette can read a file."""
         self.check_read_from_file_flow(TEST_URL, "hello world")
+
+    def test_read_twice(self):
+        """Verify that response are not empty."""
+
+        url = TEST_URL
+        expected_content = "hello world"
+
+        with cassette.play(RESPONSES_FILENAME):
+            r = urllib2.urlopen(url)
+            self.assertEqual(r.read(), expected_content)
+            r = urllib2.urlopen(url)
+            self.assertEqual(r.read(), expected_content)
 
     def test_read_file_https(self):
         """Verify that cassette can read a file for an HTTPS request."""

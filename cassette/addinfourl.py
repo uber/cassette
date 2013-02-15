@@ -17,11 +17,7 @@ class MockedAddInfoURL(urllib.addinfourl, MockedResponse):
         constructor signature.
         """
 
-        try:
-            fp = io.StringIO(unicode(content))
-        except UnicodeDecodeError:
-            # FIXME: far too naive
-            fp = io.StringIO(unicode(content, "utf-8"))
+        fp = cls.create_file_descriptor(content)
 
         # In urllib, constructor defined as
         # __init__(self, fp, headers, url, code=None)
@@ -48,3 +44,20 @@ class MockedAddInfoURL(urllib.addinfourl, MockedResponse):
         :param dict data:
         """
         return cls.create_fake(**data)
+
+    @staticmethod
+    def create_file_descriptor(content):
+
+        try:
+            fp = io.StringIO(unicode(content))
+        except UnicodeDecodeError:
+            # FIXME: far too naive
+            # Are you sure it's not a binary file?
+            fp = io.StringIO(unicode(content, "utf-8"))
+
+        return fp
+
+    def rewind(self):
+        self.fp = self.create_file_descriptor(self.content)
+        self.read = self.fp.read
+        return self
