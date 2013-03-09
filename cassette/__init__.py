@@ -1,10 +1,12 @@
 from __future__ import absolute_import
 import contextlib
+import logging
 
 from cassette.cassette_library import CassetteLibrary
 from cassette.patcher import patch, unpatch
 
 cassette_library = None
+logging.getLogger("cassette").addHandler(logging.NullHandler())
 
 
 def insert(filename):

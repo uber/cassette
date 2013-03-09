@@ -1,23 +1,47 @@
-from fabric.api import local, task
+import sys
+import urllib2
 
-from setup import __version__ as current_version
+from fabric.api import local, task
+from fabric.colors import magenta, green
+
+from cassette.tests.test_cassette import TEST_URL
+
+
+@task
+def check_test_server():
+    """Verify that test server is running."""
+
+    try:
+        urllib2.urlopen(TEST_URL)
+
+    except urllib2.URLError:
+        print magenta("\nTest server is not running. Run `fab serve_test_server`.")
+        sys.exit(1)
 
 
 @task
 def test(args=""):
     """Run the test suite."""
 
+    check_test_server()
     clean()
+
+    print green("\nRunning tests")
+
     local("flake8 --ignore=E501,E702 .")
     local("nosetests %s" % args)
 
 
 @task
-def clean():
-    """Remove all .pyc files"""
+def t(args="-x"):
+    """Run the test suite in fast mode."""
+    test(args)
 
-    # Ignore hidden files and folder
-    local("find . \( ! -regex '.*/\..*/..*' \) -type f -name '*.pyc' -exec rm '{}' +")
+
+@task
+def clean():
+    """Remove all .py[co] files"""
+    local("find . -name '*.py[co]' -delete")
 
 
 @task
@@ -31,7 +55,6 @@ def release():
     """Release a version."""
 
     test()
-    print "Current version is: %s" % current_version
     print "Do the following:"
 
     steps = (

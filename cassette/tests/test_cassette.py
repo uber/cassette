@@ -4,8 +4,10 @@ Test the cassette behavior.
 """
 
 import httplib
+import json
 import os
 import unittest
+import urllib
 import urllib2
 
 import mock
@@ -16,9 +18,73 @@ from cassette.cassette_library import CassetteLibrary
 
 TEMPORARY_RESPONSES_FILENAME = "./cassette/tests/data/responses.temp.yaml"
 RESPONSES_FILENAME = "./cassette/tests/data/responses.yaml"
+TEST_HOST = "http://127.0.0.1:5000/"
 TEST_URL = "http://127.0.0.1:5000/index"
-TEST_URL_HTTPS = "https://www.fortify.net/sslcheck.html"
+TEST_URL_HTTPS = "https://httpbin.org/ip"
 TEST_URL_REDIRECT = "http://127.0.0.1:5000/will_redirect"
+
+
+# Taken from requests
+def to_key_val_list(value):
+    """Take an object and test to see if it can be represented as a
+    dictionary. If it can be, return a list of tuples, e.g.,
+
+    ::
+
+    >>> to_key_val_list([('key', 'val')])
+    [('key', 'val')]
+    >>> to_key_val_list({'key': 'val'})
+    [('key', 'val')]
+    >>> to_key_val_list('string')
+    Traceback (most recent call last):
+        ...
+    ValueError: cannot encode objects that are not 2-tuples
+    """
+
+    if value is None:
+        return None
+
+    if isinstance(value, (str, bytes, bool, int)):
+        raise ValueError('cannot encode objects that are not 2-tuples')
+
+    if isinstance(value, dict):
+        value = value.items()
+
+    return list(value)
+
+
+def _encode_params(data):
+    """Encode parameters in a piece of data.
+
+    Will successfully encode parameters when passed as a dict or a list of
+    2-tuples. Order is retained if data is a list of 2-tuples but abritrary
+    if parameters are supplied as a dict.
+    """
+
+    if isinstance(data, (str, bytes)):
+        return data
+    elif hasattr(data, 'read'):
+        return data
+    elif hasattr(data, '__iter__'):
+        result = []
+        for k, vs in to_key_val_list(data):
+            if isinstance(vs, basestring) or not hasattr(vs, '__iter__'):
+                vs = [vs]
+            for v in vs:
+                if v is not None:
+                    result.append(
+                        (k.encode('utf-8') if isinstance(k, str) else k,
+                         v.encode('utf-8') if isinstance(v, str) else v))
+        return urllib.urlencode(result, doseq=True)
+
+
+def url_for(endpoint):
+    """Return full URL for endpoint."""
+    return TEST_HOST + endpoint
+
+#
+# Testing the whole flow with a temporary response file.
+#
 
 
 class TestCassette(unittest.TestCase):
@@ -27,7 +93,7 @@ class TestCassette(unittest.TestCase):
 
         # This is a dummy method that we use to check if cassette had
         # the response.
-        patcher = mock.patch.object(CassetteLibrary, "had_response")
+        patcher = mock.patch.object(CassetteLibrary, "_had_response")
         self.had_response = patcher.start()
         self.addCleanup(patcher.stop)
 
@@ -39,35 +105,43 @@ class TestCassette(unittest.TestCase):
         if os.path.exists(TEMPORARY_RESPONSES_FILENAME):
             os.remove(TEMPORARY_RESPONSES_FILENAME)
 
-    #
-    # Testing the whole flow with a temporary response file.
-    #
-
-    def check_urllib2_flow(self, url, expected_content,
-                           allow_incomplete_match=False):
+    def check_urllib2_flow(self, url, expected_content=None,
+                           allow_incomplete_match=False,
+                           data=None):
         """Verify the urllib2 flow."""
+
+        if not url.startswith("http"):
+            url = url_for(url)
 
         # First run
         with cassette.play(TEMPORARY_RESPONSES_FILENAME):
-            r = urllib2.urlopen(url)  # 1st run
+            r = urllib2.urlopen(url, data)  # 1st run
 
         self.assertEqual(self.had_response.called, False)
-        if allow_incomplete_match:
-            self.assertIn(expected_content, r.read())
-        else:
-            self.assertEqual(r.read(), expected_content)
+        if expected_content:
+            if allow_incomplete_match:
+                self.assertIn(expected_content, r.read())
+            else:
+                self.assertEqual(r.read(), expected_content)
 
         self.had_response.reset_mock()
 
         # Second run
         with cassette.play(TEMPORARY_RESPONSES_FILENAME):
-            r = urllib2.urlopen(url)  # 2nd run
+            r = urllib2.urlopen(url, data)  # 2nd run
 
         self.assertEqual(self.had_response.called, True)
-        if allow_incomplete_match:
-            self.assertIn(expected_content, r.read())
-        else:
-            self.assertEqual(r.read(), expected_content)
+        if expected_content:
+            if allow_incomplete_match:
+                self.assertIn(expected_content, r.read())
+            else:
+                self.assertEqual(r.read(), expected_content)
+
+        if r.headers["Content-Type"] == "application/json":
+            try:
+                r.json = json.loads(r.read())
+            except ValueError:
+                pass
 
         return r
 
@@ -108,7 +182,7 @@ class TestCassette(unittest.TestCase):
 
     def test_flow_https(self):
         """Verify the cassette behavior for HTTPS."""
-        self.check_urllib2_flow(TEST_URL_HTTPS, "SSL Encryption Report",
+        self.check_urllib2_flow(TEST_URL_HTTPS, "origin",
                                 allow_incomplete_match=True)
 
     def test_flow_manual_context(self):
@@ -140,9 +214,35 @@ class TestCassette(unittest.TestCase):
             u"à un procureur à la retraite. Après trois mois, "
             u"l'accident bête. Une affaire.")
 
-    #
-    # Verifying that cassette can read from an existing file.
-    #
+    def test_flow_get_with_array_args(self):
+        """Verify that cassette can store array args."""
+
+        param = {
+            "dict1": {"dict2": "dict3", "dict4": "dict5"},
+            "array": ["item1", "item2"],
+            "int": 1,
+            "param": "1",
+        }
+
+        url = "/get?"
+        url += _encode_params(param)
+        r = self.check_urllib2_flow(url=url)
+        self.assertEqual(r.json["args"]["param"], "1")
+
+#
+# Verify that cassette can read from an existing file.
+#
+
+
+class TestCassetteFile(unittest.TestCase):
+
+    def setUp(self):
+
+        # This is a dummy method that we use to check if cassette had
+        # the response.
+        patcher = mock.patch.object(CassetteLibrary, "_had_response")
+        self.had_response = patcher.start()
+        self.addCleanup(patcher.stop)
 
     def check_read_from_file_flow(self, url, expected_content,
                                   allow_incomplete_match=False):
@@ -159,9 +259,22 @@ class TestCassette(unittest.TestCase):
 
         return r
 
-    def test_read_file(self):
-        """Verify that cassette can read a file."""
+    def test_flow_urlopen(self):
+        """Verify that cassette can read a file when using urlopen."""
         self.check_read_from_file_flow(TEST_URL, "hello world")
+
+    def test_flow_httplib(self):
+        """Verify that cassette can read a file when using httplib."""
+
+        with cassette.play(RESPONSES_FILENAME):
+            conn = httplib.HTTPConnection("127.0.0.1", 5000)
+            conn.request("GET", "/index")
+            r = conn.getresponse()
+
+        self.assertEqual(r.status, 200)
+        self.assertEqual(r.reason, "OK")
+        self.assertEqual(r.read(), "hello world")
+        self.assertEqual(self.had_response.called, True)
 
     def test_read_twice(self):
         """Verify that response are not empty."""
@@ -177,7 +290,7 @@ class TestCassette(unittest.TestCase):
 
     def test_read_file_https(self):
         """Verify that cassette can read a file for an HTTPS request."""
-        self.check_read_from_file_flow(TEST_URL_HTTPS, "SSL Encryption Report",
+        self.check_read_from_file_flow(TEST_URL_HTTPS, "origin",
                                        allow_incomplete_match=True)
 
     def test_redirects(self):

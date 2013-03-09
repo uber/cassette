@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from flask import Flask, redirect, url_for
+from flask import Flask, redirect, url_for, request, jsonify
 
 app = Flask(__name__)
 
@@ -24,6 +24,11 @@ def will_redirect():
 @app.route("/redirected")
 def redirected():
     return "hello world redirected"
+
+
+@app.route("/get")
+def get():
+    return jsonify(args=request.args)
 
 if __name__ == "__main__":
     app.run()

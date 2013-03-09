@@ -2,25 +2,27 @@ import logging
 import socket
 from httplib import HTTPConnection, HTTPSConnection
 
+log = logging.getLogger("cassette")
+
 
 class CassetteConnectionMixin(object):
 
     def request(self, method, url, body=None, headers={}):
         """Send HTTP request."""
 
-        self._key = self._cassette_library.create_key(self.host,
-                                                      self.port,
-                                                      method, url, body)
-        if self._cassette_library.has_request(self.host,
-                                              self.port,
-                                              method, url, body):
-            self._response = self._cassette_library[self._key]
-
-            # This is only for testing purposes
-            self._cassette_library.had_response()
+        lib = self._cassette_library
+        self._cassette_name = lib.cassette_name_for_httplib_connection(
+            host=self.host,
+            port=self.port,
+            method=method,
+            url=url,
+            body=body
+        )
+        if self._cassette_name in lib:
+            self._response = lib[self._cassette_name]
             return
 
-        logging.debug("'%s' not in library, making HTTP request." % self._key)
+        log.warning("Making external HTTP request: %s" % self._cassette_name)
         self._baseclass.request(self, method, url, body, headers)
 
     def getresponse(self, buffering=False):
@@ -32,11 +34,13 @@ class CassetteConnectionMixin(object):
         if hasattr(self, "_response"):
             return self._response
 
+        lib = self._cassette_library
         response = HTTPConnection.getresponse(self)
+
         # If we were just returning the response here, the file
         # descriptor would be at the end of the file, and read() would
         # return nothing.
-        response = self._cassette_library.add_response(self._key, response)
+        response = lib.add_response(self._cassette_name, response)
 
         return response
 

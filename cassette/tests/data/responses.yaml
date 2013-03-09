@@ -1,13 +1,31 @@
-urlopen:http://127.0.0.1:5000/index:
+httplib:GET 127.0.0.1:5000//index None:
+  content: hello world
+  headers: {content-length: '11', content-type: text/html; charset=utf-8, date: 'Tue,
+      12 Mar 2013 19:43:10 GMT', server: Werkzeug/0.8.3 Python/2.7.2}
+  raw_headers: ["Content-Type: text/html; charset=utf-8\r\n", "Content-Length: 11\r\
+      \n", "Server: Werkzeug/0.8.3 Python/2.7.2\r\n", "Date: Tue, 12 Mar 2013 19:43:10\
+      \ GMT\r\n"]
+  reason: OK
+  status: 200
+httplib:GET 127.0.0.1:5000/index None:
+  content: hello world
+  headers: {content-length: '11', content-type: text/html; charset=utf-8, date: 'Tue,
+      12 Mar 2013 22:34:25 GMT', server: Werkzeug/0.8.3 Python/2.7.2}
+  raw_headers: ["Content-Type: text/html; charset=utf-8\r\n", "Content-Length: 11\r\
+      \n", "Server: Werkzeug/0.8.3 Python/2.7.2\r\n", "Date: Tue, 12 Mar 2013 22:34:25\
+      \ GMT\r\n"]
+  reason: OK
+  status: 200
+urlopen:GET http://127.0.0.1:5000/index:
   code: 200
   content: hello world
   headers: !!python/object:httplib.HTTPMessage
-    dict: {content-length: '11', content-type: text/html; charset=utf-8, date: 'Thu,
-        14 Feb 2013 21:16:59 GMT', server: Werkzeug/0.8.3 Python/2.7.2}
+    dict: {content-length: '11', content-type: text/html; charset=utf-8, date: 'Tue,
+        12 Mar 2013 19:43:10 GMT', server: Werkzeug/0.8.3 Python/2.7.2}
     encodingheader: null
     fp: null
     headers: ["Content-Type: text/html; charset=utf-8\r\n", "Content-Length: 11\r\n",
-      "Server: Werkzeug/0.8.3 Python/2.7.2\r\n", "Date: Thu, 14 Feb 2013 21:16:59\
+      "Server: Werkzeug/0.8.3 Python/2.7.2\r\n", "Date: Tue, 12 Mar 2013 19:43:10\
         \ GMT\r\n"]
     maintype: text
     plist: [charset=utf-8]
@@ -21,17 +39,17 @@ urlopen:http://127.0.0.1:5000/index:
     typeheader: text/html; charset=utf-8
     unixfrom: ''
   url: http://127.0.0.1:5000/index
-urlopen:http://127.0.0.1:5000/non-ascii-content:
+urlopen:GET http://127.0.0.1:5000/non-ascii-content:
   code: 200
   content: !!python/str "Le Mexicain l'avait achet\xE9e en viager \xE0 un procureur\
     \ \xE0 la retraite. Apr\xE8s trois mois, l'accident b\xEAte. Une affaire."
   headers: !!python/object:httplib.HTTPMessage
-    dict: {content-length: '120', content-type: text/html; charset=utf-8, date: 'Thu,
-        14 Feb 2013 21:16:59 GMT', server: Werkzeug/0.8.3 Python/2.7.2}
+    dict: {content-length: '120', content-type: text/html; charset=utf-8, date: 'Tue,
+        12 Mar 2013 19:43:10 GMT', server: Werkzeug/0.8.3 Python/2.7.2}
     encodingheader: null
     fp: null
     headers: ["Content-Type: text/html; charset=utf-8\r\n", "Content-Length: 120\r\
-        \n", "Server: Werkzeug/0.8.3 Python/2.7.2\r\n", "Date: Thu, 14 Feb 2013 21:16:59\
+        \n", "Server: Werkzeug/0.8.3 Python/2.7.2\r\n", "Date: Tue, 12 Mar 2013 19:43:10\
         \ GMT\r\n"]
     maintype: text
     plist: [charset=utf-8]
@@ -45,16 +63,16 @@ urlopen:http://127.0.0.1:5000/non-ascii-content:
     typeheader: text/html; charset=utf-8
     unixfrom: ''
   url: http://127.0.0.1:5000/non-ascii-content
-urlopen:http://127.0.0.1:5000/will_redirect:
+urlopen:GET http://127.0.0.1:5000/will_redirect:
   code: 200
   content: hello world redirected
   headers: !!python/object:httplib.HTTPMessage
-    dict: {content-length: '22', content-type: text/html; charset=utf-8, date: 'Thu,
-        14 Feb 2013 21:16:59 GMT', server: Werkzeug/0.8.3 Python/2.7.2}
+    dict: {content-length: '22', content-type: text/html; charset=utf-8, date: 'Tue,
+        12 Mar 2013 19:43:15 GMT', server: Werkzeug/0.8.3 Python/2.7.2}
     encodingheader: null
     fp: null
     headers: ["Content-Type: text/html; charset=utf-8\r\n", "Content-Length: 22\r\n",
-      "Server: Werkzeug/0.8.3 Python/2.7.2\r\n", "Date: Thu, 14 Feb 2013 21:16:59\
+      "Server: Werkzeug/0.8.3 Python/2.7.2\r\n", "Date: Tue, 12 Mar 2013 19:43:15\
         \ GMT\r\n"]
     maintype: text
     plist: [charset=utf-8]
@@ -68,78 +86,26 @@ urlopen:http://127.0.0.1:5000/will_redirect:
     typeheader: text/html; charset=utf-8
     unixfrom: ''
   url: http://127.0.0.1:5000/redirected
-urlopen:https://www.fortify.net/sslcheck.html:
+urlopen:GET https://httpbin.org/ip:
   code: 200
-  content: "<html>\r\n<head>\r\n  <title>Fortify - SSL Encryption Check</title>\r\n\
-    \  <link href=\"/doc.css\" rel=\"stylesheet\" type=\"text/css\">\r\n</head>\r\n\
-    \r\n<!--\r\n<frameset framespacing=\"0\" border=\"false\" frameborder=\"0\" rows=\"\
-    *,70\">\r\n\r\n  <frame name=\"main\" src=\"/cgi/ssl_2.pl\">\r\n  <frame name=\"\
-    nav\"  src=\"nav.html\" scrolling=\"no\" noresize marginwidth=\"0\">\r\n  <noframes>\r\
-    \n  <body>\r\n  <p>This page uses frames, but your browser doesn't support them.</p>\r\
-    \n  </body>\r\n  </noframes>\r\n</frameset>\r\n-->\r\n\r\n<body bgcolor=\"#ffffff\"\
-    \ text=\"#000000\" link=blue vlink=purple alink=red>\r\n\r\n<table width=100%\
-    \ border=0 cellpadding=\"0\" cellspacing=\"0\">\r\n  <tr bgcolor=\"#B47C63\">\r\
-    \n    <td height=\"20\" colspan=\"2\"></td>\r\n  </tr>\r\n  <tr bgcolor=\"black\"\
-    >\r\n    <td height=\"1\" colspan=\"2\"></td>\r\n    </tr>\r\n\r\n  <tr>\r\n \
-    \   <td><img src=\"/images/fortify_banner.jpg\" alt=\"Fortify banner\" width=400\
-    \ height=60></td>\r\n    <td align=\"right\" valign=\"middle\">\r\n\r\n<div class=\"\
-    searchbox\">\r\n\r\n<!-- Search Google -->\r\n<center>\r\n<form method=\"get\"\
-    \ action=\"http://www.google.com/custom\" target=\"_top\">\r\n<table bgcolor=\"\
-    #ffffff\">\r\n<tr><td nowrap=\"nowrap\" valign=\"top\" align=\"left\" height=\"\
-    32\">\r\n\r\n<label for=\"sbi\" style=\"display: none\">Enter your search terms</label>\r\
-    \n<input type=\"text\" name=\"q\" size=\"32\" maxlength=\"255\" value=\"\" id=\"\
-    sbi\"></input>\r\n<label for=\"sbb\" style=\"display: none\">Submit search form</label>\r\
-    \n<input type=\"submit\" name=\"sa\" value=\"Google Search\" id=\"sbb\"></input>\r\
-    \n<input type=\"hidden\" name=\"client\" value=\"pub-1206438394824617\"></input>\r\
-    \n<input type=\"hidden\" name=\"forid\" value=\"1\"></input>\r\n<input type=\"\
-    hidden\" name=\"ie\" value=\"ISO-8859-1\"></input>\r\n<input type=\"hidden\" name=\"\
-    oe\" value=\"ISO-8859-1\"></input>\r\n<input type=\"hidden\" name=\"cof\" value=\"\
-    GALT:#008000;GL:1;DIV:#336699;VLC:663399;AH:center;BGC:FFFFFF;LBGC:336699;ALC:0000FF;LC:0000FF;T:000000;GFNT:0000FF;GIMP:0000FF;FORID:1\"\
-    ></input>\r\n<input type=\"hidden\" name=\"hl\" value=\"en\"></input>\r\n</td></tr></table>\r\
-    \n</form>\r\n</center>\r\n<!-- Search Google -->\r\n\r\n</div>\r\n    </td>\r\n\
-    \  </tr>\r\n\r\n  <tr bgcolor=\"black\">\r\n    <td height=\"1\" colspan=\"2\"\
-    ></td>\r\n    </tr>\r\n  <tr valign=\"middle\" bgcolor=\"#B47C63\">\r\n    <td\
-    \ height=\"42\" colspan=\"2\">\r\n          <ul class=\"navbar\" id=\"nav-header\"\
-    >\r\n\t          <li><a href=\"intro.html\">Intro</a></li>\r\n              <li><a\
-    \ href=\"latest.html\">News</a></li>\r\n              <li><a href=\"versions.html\"\
-    >Versions</a></li>\r\n              <li><a href=\"README.html\">README</a></li>\r\
-    \n              <li><a href=\"download.html\">Download</a></li>\r\n          \
-    \    <li><a href=\"co.html\">Partners</a></li>\r\n              <li><a href=\"\
-    related.html\">Related</a></li>\r\n              <li><a href=\"contact.html\"\
-    >Contact Us</a></li>\r\n              <li><a href=\"https://www.fortify.net/sslcheck.html\"\
-    >SSL Check</a></li>\r\n          </ul>\r\n    </td>\r\n  </tr>\r\n</table>\r\n\
-    \r\n\t  \t\r\n<link href=\"/doc.css\" rel=\"stylesheet\" type=\"text/css\">\r\n\
-    <div class=\"leftbox\">\r\n\r\n<script type=\"text/javascript\"><!--\r\ngoogle_ad_client\
-    \ = \"pub-1206438394824617\";\r\n//160x600, created 1/21/08\r\ngoogle_ad_slot\
-    \ = \"9376171523\";\r\ngoogle_ad_width = 160;\r\ngoogle_ad_height = 600;\r\n//--></script>\r\
-    \n<script type=\"text/javascript\"\r\nsrc=\"http://pagead2.googlesyndication.com/pagead/show_ads.js\"\
-    >\r\n</script>\r\n\r\n</div>\r\n\r\n\r\n<br>\r\n<div class=\"bodybox\">\r\n  \
-    \  <p class=\"mainheading\">SSL Encryption Report</p>\r\n    <p>\r\n\t\t<iframe\
-    \ class=\"sslcheckbox\" src=\"/cgi/ssl_3.pl\" scrolling=\"no\" frameborder=\"\
-    0\">\r\n\t\t</iframe>\r\n</div>\r\n\t\t\r\n<br>\r\n\r\n<script type=\"text/javascript\"\
-    >\r\nvar gaJsHost = ((\"https:\" == document.location.protocol) ? \"https://ssl.\"\
-    \ : \"http://www.\");\r\ndocument.write(unescape(\"%3Cscript src='\" + gaJsHost\
-    \ + \"google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E\"));\r\
-    \n</script>\r\n<script type=\"text/javascript\">\r\nvar pageTracker = _gat._getTracker(\"\
-    UA-3414482-1\");\r\npageTracker._initData();\r\npageTracker._trackPageview();\r\
-    \n</script>\r\n</body>\r\n</html>\r\n"
+  content: "{\n  \"origin\": \"10.188.10.218\"\n}"
   headers: !!python/object:httplib.HTTPMessage
-    dict: {accept-ranges: bytes, connection: close, content-type: text/html, date: 'Thu,
-        14 Feb 2013 21:17:07 GMT', server: Apache, transfer-encoding: chunked}
+    dict: {connection: close, content-length: '31', content-type: application/json,
+      date: 'Tue, 12 Mar 2013 19:43:15 GMT', server: gunicorn/0.16.1}
     encodingheader: null
     fp: null
-    headers: ["Date: Thu, 14 Feb 2013 21:17:07 GMT\r\n", "Server: Apache\r\n", "Accept-Ranges:\
-        \ bytes\r\n", "Connection: close\r\n", "Transfer-Encoding: chunked\r\n", "Content-Type:\
-        \ text/html\r\n"]
-    maintype: text
+    headers: ["Server: gunicorn/0.16.1\r\n", "Date: Tue, 12 Mar 2013 19:43:15 GMT\r\
+        \n", "Content-Type: application/json\r\n", "Content-Length: 31\r\n", "Connection:\
+        \ close\r\n"]
+    maintype: application
     plist: []
     plisttext: ''
     seekable: 0
     startofbody: null
     startofheaders: null
     status: ''
-    subtype: html
-    type: text/html
-    typeheader: text/html
+    subtype: json
+    type: application/json
+    typeheader: application/json
     unixfrom: ''
-  url: https://www.fortify.net/sslcheck.html
+  url: https://httpbin.org/ip
