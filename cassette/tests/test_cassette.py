@@ -17,8 +17,12 @@ from cassette.cassette_library import CassetteLibrary
 TEMPORARY_RESPONSES_FILENAME = "./cassette/tests/data/responses.temp.yaml"
 RESPONSES_FILENAME = "./cassette/tests/data/responses.yaml"
 TEST_URL = "http://127.0.0.1:5000/index"
-TEST_URL_HTTPS = "https://www.fortify.net/sslcheck.html"
+TEST_URL_HTTPS = "https://httpbin.org/ip"
 TEST_URL_REDIRECT = "http://127.0.0.1:5000/will_redirect"
+
+#
+# Testing the whole flow with a temporary response file.
+#
 
 
 class TestCassette(unittest.TestCase):
@@ -27,7 +31,7 @@ class TestCassette(unittest.TestCase):
 
         # This is a dummy method that we use to check if cassette had
         # the response.
-        patcher = mock.patch.object(CassetteLibrary, "had_response")
+        patcher = mock.patch.object(CassetteLibrary, "_had_response")
         self.had_response = patcher.start()
         self.addCleanup(patcher.stop)
 
@@ -38,10 +42,6 @@ class TestCassette(unittest.TestCase):
 
         if os.path.exists(TEMPORARY_RESPONSES_FILENAME):
             os.remove(TEMPORARY_RESPONSES_FILENAME)
-
-    #
-    # Testing the whole flow with a temporary response file.
-    #
 
     def check_urllib2_flow(self, url, expected_content,
                            allow_incomplete_match=False):
@@ -108,7 +108,7 @@ class TestCassette(unittest.TestCase):
 
     def test_flow_https(self):
         """Verify the cassette behavior for HTTPS."""
-        self.check_urllib2_flow(TEST_URL_HTTPS, "SSL Encryption Report",
+        self.check_urllib2_flow(TEST_URL_HTTPS, "origin",
                                 allow_incomplete_match=True)
 
     def test_flow_manual_context(self):
@@ -140,9 +140,20 @@ class TestCassette(unittest.TestCase):
             u"à un procureur à la retraite. Après trois mois, "
             u"l'accident bête. Une affaire.")
 
-    #
-    # Verifying that cassette can read from an existing file.
-    #
+#
+# Verify that cassette can read from an existing file.
+#
+
+
+class TestCassetteFile(unittest.TestCase):
+
+    def setUp(self):
+
+        # This is a dummy method that we use to check if cassette had
+        # the response.
+        patcher = mock.patch.object(CassetteLibrary, "_had_response")
+        self.had_response = patcher.start()
+        self.addCleanup(patcher.stop)
 
     def check_read_from_file_flow(self, url, expected_content,
                                   allow_incomplete_match=False):
@@ -159,9 +170,22 @@ class TestCassette(unittest.TestCase):
 
         return r
 
-    def test_read_file(self):
-        """Verify that cassette can read a file."""
+    def test_flow_urlopen(self):
+        """Verify that cassette can read a file when using urlopen."""
         self.check_read_from_file_flow(TEST_URL, "hello world")
+
+    def test_flow_httplib(self):
+        """Verify that cassette can read a file when using httplib."""
+
+        with cassette.play(RESPONSES_FILENAME):
+            conn = httplib.HTTPConnection("127.0.0.1", 5000)
+            conn.request("GET", "/index")
+            r = conn.getresponse()
+
+        self.assertEqual(r.status, 200)
+        self.assertEqual(r.reason, "OK")
+        self.assertEqual(r.read(), "hello world")
+        self.assertEqual(self.had_response.called, True)
 
     def test_read_twice(self):
         """Verify that response are not empty."""
@@ -177,7 +201,7 @@ class TestCassette(unittest.TestCase):
 
     def test_read_file_https(self):
         """Verify that cassette can read a file for an HTTPS request."""
-        self.check_read_from_file_flow(TEST_URL_HTTPS, "SSL Encryption Report",
+        self.check_read_from_file_flow(TEST_URL_HTTPS, "origin",
                                        allow_incomplete_match=True)
 
     def test_redirects(self):

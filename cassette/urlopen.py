@@ -1,4 +1,8 @@
+import logging
+
 from cassette import unpatched
+
+log = logging.getLogger("cassette")
 
 
 class CassetteURLOpen(object):
@@ -9,31 +13,20 @@ class CassetteURLOpen(object):
     def __call__(self, url, data=None, timeout=None):
         """Fake urlopen function."""
 
-        if isinstance(url, basestring):
-            # The goal here is not assume anything else (e.g. we could
-            # be pretty certain that if there's no data, the method is
-            # "GET").
-            key = self._cassette_library.create_key_for_urlopen(
-                url=url, data=data)
+        lib = self._cassette_library
+        cassette_name = lib.cassette_name_for_urlopen(url, data)
+
+        if cassette_name in lib:
+            response = lib[cassette_name]
+            response = response.rewind()
 
         else:
-            # url is a Request object
-            key = self._cassette_library.create_key_for_urlopen(
-                method=url.get_method(),
-                url=url.get_full_url(),
-                data=url.get_data())
-
-        if key in self._cassette_library:
-            self._cassette_library.had_response()
-            response = self._cassette_library[key]
-            return response.rewind()
-
-        else:
+            log.warning("Making external HTTP request: %s" % cassette_name)
             # We need to unpatch, otherwise we would be using our mocked
             # httplib.
-            with unpatched.unpatched_httplib_context(self._cassette_library):
-                r = self._cassette_library.add_response(
-                    key,
+            with unpatched.unpatched_httplib_context(lib):
+                response = lib.add_response(
+                    cassette_name,
                     unpatched.get_unpatched_urlopen()(url, data, timeout))
 
-            return r
+        return response
