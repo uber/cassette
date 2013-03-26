@@ -63,7 +63,7 @@ def release():
         "Run `git status`",
         "Run `git commit -am 'Bump version'`",
         "Run `git tag -a -m 'Version $version' v$version`",
-        "Run `git push --tags`",
+        "Run `git push --tags && git push`",
         "Run `python setup.py register sdist upload`",
     )
 

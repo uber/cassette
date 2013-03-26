@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 from setuptools import setup, find_packages
 
-__version__ = "0.1.9"
+__version__ = "0.1.10"
 
 
 def read_long_description(filename="README.rst"):
