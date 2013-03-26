@@ -63,9 +63,12 @@ class CassetteLibrary(object):
 
         :param str filename: filename to file holding fake response
         """
+        memo = {}
 
         self.filename = os.path.abspath(filename)
-        self.data = self.load_file()
+        if not memo.get('data'):
+            memo['data'] = self.load_file()
+        self.data = memo['data']
 
     def add_response(self, cassette_name, response):
         """Add a new response to the mocked response.
@@ -102,7 +105,6 @@ class CassetteLibrary(object):
 
     def load_file(self):
         """Load MockedResponses from YAML file."""
-
         data = {}
 
         if not os.path.exists(self.filename):
