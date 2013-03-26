@@ -4,7 +4,7 @@ import contextlib
 from cassette.cassette_library import CassetteLibrary
 from cassette.patcher import patch, unpatch
 
-cassette_library = None
+cassette_library = {}
 
 
 def insert(filename):
@@ -12,10 +12,9 @@ def insert(filename):
 
     :param filename: path to .yaml where requests and responses will be stored.
     """
-    global cassette_library
-
-    cassette_library = CassetteLibrary(filename)
-    patch(cassette_library)
+    if not 'lib' in cassette_library:
+        cassette_library['lib'] = CassetteLibrary(filename)
+    patch(cassette_library['lib'])
 
 
 def eject():
