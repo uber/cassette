@@ -23,7 +23,8 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Cassette 0.1.10 documentation" href="#" /> 
+    <link rel="top" title="Cassette 0.1.10 documentation" href="#" />
+    <link rel="next" title="Usage" href="usage.html" /> 
   </head>
   <body>
     <div class="related">
@@ -32,6 +33,12 @@
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="usage.html" title="Usage"
+             accesskey="N">next</a> |</li>
         <li><a href="#">Cassette 0.1.10 documentation</a> &raquo;</li> 
       </ul>
     </div>  
@@ -44,45 +51,48 @@
   <div class="section" id="welcome-to-cassette-s-documentation">
 <h1>Welcome to Cassette&#8217;s documentation!<a class="headerlink" href="#welcome-to-cassette-s-documentation" title="Permalink to this headline">¶</a></h1>
 <p>Cassette stores your app&#8217;s HTTP request and replay them.</p>
-<p>Contents:</p>
+<div class="section" id="contents">
+<h2>Contents<a class="headerlink" href="#contents" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
-<ul class="simple">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api.html#module-cassette">cassette module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#module-cassette.cassette_library">cassette_library module</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="development.html#running-cassette-tests">Running cassette tests</a></li>
+</ul>
+</li>
 </ul>
 </div>
+</div>
+<div class="section" id="quickstart">
+<h2>Quickstart<a class="headerlink" href="#quickstart" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li>The first time you run your tests, <tt class="docutils literal"><span class="pre">cassette</span></tt> will store all the
 external requests response in a YAML file.</li>
 <li>Next time you run your tests, <tt class="docutils literal"><span class="pre">cassette</span></tt> will fetch those responses
 from the YAML file. You can now run your tests while being offline.</li>
 </ul>
-<div class="section" id="usage">
-<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
-<p>cassette provides a <tt class="docutils literal"><span class="pre">play</span></tt> context:</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">cassette</span>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">urllib2</span>
 
-<span class="k">with</span> <span class="n">cassette</span><span class="o">.</span><span class="n">play</span><span class="p">(</span><span class="s">&quot;./data/responses.yaml&quot;</span><span class="p">):</span>
-    <span class="n">urllib2</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="s">&quot;http://...&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>Any <tt class="docutils literal"><span class="pre">urllib2.urlopen</span></tt> request happening in this context will go
-through cassette&#8217;s mocked version of <tt class="docutils literal"><span class="pre">urlopen</span></tt>.</p>
-<p>You can also setup the context manually:</p>
-<div class="code python highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">cassette</span>
+<span class="kn">import</span> <span class="nn">cassette</span>
 
-<span class="n">cassette</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="s">&quot;./data/responses.yaml&quot;</span><span class="p">)</span>
-<span class="n">urllib2</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="s">&quot;http://...&quot;</span><span class="p">)</span>
-<span class="n">cassette</span><span class="o">.</span><span class="n">eject</span><span class="p">()</span>
+<span class="k">with</span> <span class="n">cassette</span><span class="o">.</span><span class="n">play</span><span class="p">(</span><span class="s">&quot;data/responses.yaml&quot;</span><span class="p">):</span>
+
+    <span class="c"># If the request is not already stored in responses.yaml, cassette</span>
+    <span class="c"># will request the URL and store its response in the file.</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="n">urllib2</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="s">&quot;http://www.internic.net/domain/named.root&quot;</span><span class="p">)</span>
+
+    <span class="c"># This time, the request response must be in the file. The external</span>
+    <span class="c"># request is not made. cassette retrieves the response from the</span>
+    <span class="c"># file.</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="n">urllib2</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="s">&quot;http://www.internic.net/domain/named.root&quot;</span><span class="p">)</span>
+
+<span class="k">assert</span> <span class="s">&quot;A.ROOT-SERVERS.NET&quot;</span> <span class="ow">in</span> <span class="n">r</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">10000</span><span class="p">)</span>
 </pre></div>
-</div>
-</div>
-<div class="section" id="running-cassette-tests">
-<h2>Running cassette tests<a class="headerlink" href="#running-cassette-tests" title="Permalink to this headline">¶</a></h2>
-<p>Install requirements:</p>
-<div class="highlight-python"><pre>$ pip install -r requirements-dev.txt</pre>
-</div>
-<p>Start the test server and run tests:</p>
-<div class="highlight-python"><pre>$ fab serve_test_server
-$ fab test</pre>
 </div>
 </div>
 <div class="section" id="similar-libraries">
@@ -123,8 +133,10 @@ can store only one request per YAML file...</li>
   <h3><a href="#">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Welcome to Cassette&#8217;s documentation!</a><ul>
-<li><a class="reference internal" href="#usage">Usage</a></li>
-<li><a class="reference internal" href="#running-cassette-tests">Running cassette tests</a></li>
+<li><a class="reference internal" href="#contents">Contents</a><ul>
+</ul>
+</li>
+<li><a class="reference internal" href="#quickstart">Quickstart</a></li>
 <li><a class="reference internal" href="#similar-libraries">Similar libraries</a></li>
 <li><a class="reference internal" href="#limitations">Limitations</a></li>
 </ul>
@@ -132,6 +144,9 @@ can store only one request per YAML file...</li>
 <li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
 </ul>
 
+  <h4>Next topic</h4>
+  <p class="topless"><a href="usage.html"
+                        title="next chapter">Usage</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="_sources/index.txt"
@@ -160,6 +175,12 @@ can store only one request per YAML file...</li>
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="usage.html" title="Usage"
+             >next</a> |</li>
         <li><a href="#">Cassette 0.1.10 documentation</a> &raquo;</li> 
       </ul>
     </div>
