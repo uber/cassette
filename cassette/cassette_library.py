@@ -60,16 +60,22 @@ class CassetteLibrary(object):
 
     """
     The CassetteLibrary holds the stored requests and manage them.
+
+    :param str filename: filename to use when storing and replaying requests.
+
     """
 
     def __init__(self, filename):
-        """Create a CassetteLibrary object.
-
-        :param str filename: filename to file holding fake response
-        """
-
         self.filename = os.path.abspath(filename)
-        self.data = self.load_file()
+
+    @property
+    def data(self):
+        """Lazily loaded data."""
+
+        if not hasattr(self, "_data"):
+            self._data = self.load_file()
+
+        return self._data
 
     def add_response(self, cassette_name, response):
         """Add a new response to the mocked response.

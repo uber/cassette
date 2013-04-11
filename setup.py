@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 from setuptools import setup, find_packages
 
-__version__ = "0.1.10"
-
 
 def read_long_description(filename="README.rst"):
     with open(filename) as f:
@@ -15,14 +13,14 @@ def read_requirements(filename="requirements.txt"):
 
 setup(
     name="cassette",
-    version=__version__,
+    version="0.1.10",
     author="Charles-Axel Dein",
     author_email="charles@uber.com",
     url="https://github.com/uber/cassette",
     license="MIT",
     packages=find_packages(),
     keywords=["http", "tests", "mock"],
-    description="Cassette is a testing tool that stores external HTTP request in YAML file.",
+    description="Cassette stores and replays HTTP requests made in your Python app.",
     long_description=read_long_description(),
     install_requires=read_requirements(),
     zip_safe=False,

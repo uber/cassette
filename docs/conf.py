@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+# flake8: noqa
 #
 # Cassette documentation build configuration file, created by
 # sphinx-quickstart on Thu Apr 11 10:52:01 2013.

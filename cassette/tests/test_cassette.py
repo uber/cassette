@@ -6,17 +6,17 @@ Test the cassette behavior.
 import httplib
 import json
 import os
-import unittest
 import urllib
 import urllib2
 
 import mock
 
 import cassette
+from cassette.tests.base import TestCase
+from cassette.tests.base import TEMPORARY_RESPONSES_FILENAME
 from cassette.cassette_library import CassetteLibrary
 
 
-TEMPORARY_RESPONSES_FILENAME = "./cassette/tests/data/responses.temp.yaml"
 RESPONSES_FILENAME = "./cassette/tests/data/responses.yaml"
 TEST_HOST = "http://127.0.0.1:5000/"
 TEST_URL = "http://127.0.0.1:5000/index"
@@ -87,7 +87,7 @@ def url_for(endpoint):
 #
 
 
-class TestCassette(unittest.TestCase):
+class TestCassette(TestCase):
 
     def setUp(self):
 
@@ -234,7 +234,7 @@ class TestCassette(unittest.TestCase):
 #
 
 
-class TestCassetteFile(unittest.TestCase):
+class TestCassetteFile(TestCase):
 
     def setUp(self):
 

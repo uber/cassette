@@ -51,27 +51,6 @@ def serve_test_server():
 
 
 @task
-def release():
-    """Release a version."""
-
-    test()
-    print "Do the following:"
-
-    steps = (
-        "Bump version in setup.py",
-        "Run `version='0.1.x'",
-        "Run `git status`",
-        "Run `git commit -am 'Bump version'`",
-        "Run `git tag -a -m 'Version $version' v$version`",
-        "Run `git push --tags && git push`",
-        "Run `python setup.py register sdist upload`",
-    )
-
-    for i, step in enumerate(steps):
-        print "%d. %s" % (i, step)
-
-
-@task
 def docs():
     """Generate documentation."""
 
@@ -88,3 +67,19 @@ def push_docs():
     with lcd("../cassette-docs/html"):
         local("git commit -am 'Update documentation'")
         local("git push")
+
+
+@task
+def release():
+    """Prepare a release."""
+
+    print green("\nRunning prerelease")
+    test()
+    docs()
+    local("prerelease")
+
+    print green("\nReleasing...")
+    local("release")
+    local("git push --tags")
+    local("git push")
+    push_docs()
