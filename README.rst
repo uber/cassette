@@ -1,7 +1,7 @@
 Cassette
 ========
 
-Cassette stores your app's HTTP request and replay them.
+Cassette stores and replays HTTP requests made in your Python app
 
 .. code:: python
 

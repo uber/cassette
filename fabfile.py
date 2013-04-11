@@ -85,6 +85,6 @@ def push_docs():
     """Generate and push the docs."""
 
     docs()
-    with lcd("../cassette-docs"):
+    with lcd("../cassette-docs/html"):
         local("git commit -am 'Update documentation'")
         local("git push")
