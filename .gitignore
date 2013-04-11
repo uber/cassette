@@ -25,3 +25,6 @@ pip-log.txt
 
 # Temporary cassette libraries
 *.temp.*
+
+# Doc
+docs/_build

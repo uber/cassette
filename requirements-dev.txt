@@ -1,6 +1,6 @@
 fabric
-PyYAML
-mock
+mock==1.0.1
 nose
 flake8
 flask
+sphinx==1.2b1

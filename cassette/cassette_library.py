@@ -58,6 +58,10 @@ class CassetteName(unicode):
 
 class CassetteLibrary(object):
 
+    """
+    The CassetteLibrary holds the stored requests and manage them.
+    """
+
     def __init__(self, filename):
         """Create a CassetteLibrary object.
 

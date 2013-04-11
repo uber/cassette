@@ -1,7 +1,7 @@
 import sys
 import urllib2
 
-from fabric.api import local, task
+from fabric.api import local, task, lcd
 from fabric.colors import magenta, green
 
 from cassette.tests.test_cassette import TEST_URL
@@ -69,3 +69,22 @@ def release():
 
     for i, step in enumerate(steps):
         print "%d. %s" % (i, step)
+
+
+@task
+def docs():
+    """Generate documentation."""
+
+    local("python setup.py develop")
+    with lcd("./docs"):
+        local("make html")
+
+
+@task
+def push_docs():
+    """Generate and push the docs."""
+
+    docs()
+    with lcd("../cassette-docs"):
+        local("git commit -am 'Update documentation'")
+        local("git push")
