@@ -8,6 +8,8 @@ Welcome to Cassette's documentation!
 
 Cassette stores and replays HTTP requests made in your Python app.
 
+Latest documentation: `uber.github.io/cassette/ <http://uber.github.io/cassette/>`_
+
 Contents
 --------
 

@@ -1,7 +1,7 @@
 Cassette
 ========
 
-Cassette stores and replays HTTP requests made in your Python app
+Cassette stores and replays HTTP requests made in your Python app.
 
 .. code:: python
 
@@ -32,7 +32,7 @@ Installation
 Documentation
 -------------
 
-Latest documentation: `uber.github.io/cassette/ http://uber.github.io/cassette/`__
+Latest documentation: `uber.github.io/cassette/ <http://uber.github.io/cassette/>`_
 
 
 License
