@@ -1,0 +1,88 @@
+.. Cassette documentation master file, created by
+   sphinx-quickstart on Thu Apr 11 10:52:01 2013.
+   You can adapt this file completely to your liking, but it should at least
+   contain the root `toctree` directive.
+
+Welcome to Cassette's documentation!
+====================================
+
+Cassette stores your app's HTTP request and replay them.
+
+Contents:
+
+.. toctree::
+   :maxdepth: 2
+
+*  The first time you run your tests, ``cassette`` will store all the
+   external requests response in a YAML file.
+*  Next time you run your tests, ``cassette`` will fetch those responses
+   from the YAML file. You can now run your tests while being offline.
+
+
+Usage
+-----
+
+cassette provides a ``play`` context:
+
+.. code:: python
+
+    import cassette
+
+    with cassette.play("./data/responses.yaml"):
+        urllib2.urlopen("http://...")
+
+Any ``urllib2.urlopen`` request happening in this context will go
+through cassette's mocked version of ``urlopen``.
+
+You can also setup the context manually:
+
+.. code:: python
+
+    import cassette
+
+    cassette.insert("./data/responses.yaml")
+    urllib2.urlopen("http://...")
+    cassette.eject()
+
+Running cassette tests
+----------------------
+
+Install requirements:
+
+::
+
+    $ pip install -r requirements-dev.txt
+
+Start the test server and run tests:
+
+::
+
+    $ fab serve_test_server
+    $ fab test
+
+Similar libraries
+-----------------
+
+-  `vcrpy <https://github.com/kevin1024/vcrpy>`__: great library but you
+   can store only one request per YAML file...
+-  `vcr <https://github.com/myronmarston/vcr>`__: in Ruby
+
+Limitations
+-----------
+
+This package should be considered **alpha**:
+
+-  Only tested with ``urllib2``
+-  Should not work with ``urllib`` and ``requests``
+-  The format used is not compatible with ``vcr`` or ``vcrpy``
+-  Only tested with Python 2.7
+-  File format **WILL** change.
+
+
+
+Indices and tables
+==================
+
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`

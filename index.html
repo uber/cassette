@@ -1,0 +1,171 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Welcome to Cassette’s documentation! &mdash; Cassette 0.1.10 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1.10',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Cassette 0.1.10 documentation" href="#" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li><a href="#">Cassette 0.1.10 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="welcome-to-cassette-s-documentation">
+<h1>Welcome to Cassette&#8217;s documentation!<a class="headerlink" href="#welcome-to-cassette-s-documentation" title="Permalink to this headline">¶</a></h1>
+<p>Cassette stores your app&#8217;s HTTP request and replay them.</p>
+<p>Contents:</p>
+<div class="toctree-wrapper compound">
+<ul class="simple">
+</ul>
+</div>
+<ul class="simple">
+<li>The first time you run your tests, <tt class="docutils literal"><span class="pre">cassette</span></tt> will store all the
+external requests response in a YAML file.</li>
+<li>Next time you run your tests, <tt class="docutils literal"><span class="pre">cassette</span></tt> will fetch those responses
+from the YAML file. You can now run your tests while being offline.</li>
+</ul>
+<div class="section" id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<p>cassette provides a <tt class="docutils literal"><span class="pre">play</span></tt> context:</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">cassette</span>
+
+<span class="k">with</span> <span class="n">cassette</span><span class="o">.</span><span class="n">play</span><span class="p">(</span><span class="s">&quot;./data/responses.yaml&quot;</span><span class="p">):</span>
+    <span class="n">urllib2</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="s">&quot;http://...&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Any <tt class="docutils literal"><span class="pre">urllib2.urlopen</span></tt> request happening in this context will go
+through cassette&#8217;s mocked version of <tt class="docutils literal"><span class="pre">urlopen</span></tt>.</p>
+<p>You can also setup the context manually:</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">cassette</span>
+
+<span class="n">cassette</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="s">&quot;./data/responses.yaml&quot;</span><span class="p">)</span>
+<span class="n">urllib2</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="s">&quot;http://...&quot;</span><span class="p">)</span>
+<span class="n">cassette</span><span class="o">.</span><span class="n">eject</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="running-cassette-tests">
+<h2>Running cassette tests<a class="headerlink" href="#running-cassette-tests" title="Permalink to this headline">¶</a></h2>
+<p>Install requirements:</p>
+<div class="highlight-python"><pre>$ pip install -r requirements-dev.txt</pre>
+</div>
+<p>Start the test server and run tests:</p>
+<div class="highlight-python"><pre>$ fab serve_test_server
+$ fab test</pre>
+</div>
+</div>
+<div class="section" id="similar-libraries">
+<h2>Similar libraries<a class="headerlink" href="#similar-libraries" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference external" href="https://github.com/kevin1024/vcrpy">vcrpy</a>: great library but you
+can store only one request per YAML file...</li>
+<li><a class="reference external" href="https://github.com/myronmarston/vcr">vcr</a>: in Ruby</li>
+</ul>
+</div>
+<div class="section" id="limitations">
+<h2>Limitations<a class="headerlink" href="#limitations" title="Permalink to this headline">¶</a></h2>
+<p>This package should be considered <strong>alpha</strong>:</p>
+<ul class="simple">
+<li>Only tested with <tt class="docutils literal"><span class="pre">urllib2</span></tt></li>
+<li>Should not work with <tt class="docutils literal"><span class="pre">urllib</span></tt> and <tt class="docutils literal"><span class="pre">requests</span></tt></li>
+<li>The format used is not compatible with <tt class="docutils literal"><span class="pre">vcr</span></tt> or <tt class="docutils literal"><span class="pre">vcrpy</span></tt></li>
+<li>Only tested with Python 2.7</li>
+<li>File format <strong>WILL</strong> change.</li>
+</ul>
+</div>
+</div>
+<div class="section" id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><a class="reference internal" href="genindex.html"><em>Index</em></a></li>
+<li><a class="reference internal" href="py-modindex.html"><em>Module Index</em></a></li>
+<li><a class="reference internal" href="search.html"><em>Search Page</em></a></li>
+</ul>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="#">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Welcome to Cassette&#8217;s documentation!</a><ul>
+<li><a class="reference internal" href="#usage">Usage</a></li>
+<li><a class="reference internal" href="#running-cassette-tests">Running cassette tests</a></li>
+<li><a class="reference internal" href="#similar-libraries">Similar libraries</a></li>
+<li><a class="reference internal" href="#limitations">Limitations</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/index.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li><a href="#">Cassette 0.1.10 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, Charles-Axel Dein.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+    </div>
+  </body>
+</html>
