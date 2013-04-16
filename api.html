@@ -1,0 +1,244 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>API &mdash; Cassette 0.1.11 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1.11',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Cassette 0.1.11 documentation" href="index.html" />
+    <link rel="next" title="Development" href="development.html" />
+    <link rel="prev" title="Usage" href="usage.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="development.html" title="Development"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="usage.html" title="Usage"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Cassette 0.1.11 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="api">
+<h1>API<a class="headerlink" href="#api" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-cassette">
+<span id="cassette-module"></span><h2>cassette module<a class="headerlink" href="#module-cassette" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="cassette.eject">
+<tt class="descclassname">cassette.</tt><tt class="descname">eject</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/cassette.html#eject"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cassette.eject" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove cassette, unpatching HTTP requests.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="cassette.insert">
+<tt class="descclassname">cassette.</tt><tt class="descname">insert</tt><big>(</big><em>filename</em><big>)</big><a class="reference internal" href="_modules/cassette.html#insert"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cassette.insert" title="Permalink to this definition">¶</a></dt>
+<dd><p>Setup cassette.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filename</strong> &#8211; path to .yaml where requests and responses will be stored.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cassette.play">
+<tt class="descclassname">cassette.</tt><tt class="descname">play</tt><big>(</big><em>*args</em>, <em>**kwds</em><big>)</big><a class="reference internal" href="_modules/cassette.html#play"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cassette.play" title="Permalink to this definition">¶</a></dt>
+<dd><p>Use cassette.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-cassette.cassette_library">
+<span id="cassette-library-module"></span><h2>cassette_library module<a class="headerlink" href="#module-cassette.cassette_library" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="cassette.cassette_library.CassetteLibrary">
+<em class="property">class </em><tt class="descclassname">cassette.cassette_library.</tt><tt class="descname">CassetteLibrary</tt><big>(</big><em>filename</em><big>)</big><a class="reference internal" href="_modules/cassette/cassette_library.html#CassetteLibrary"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cassette.cassette_library.CassetteLibrary" title="Permalink to this definition">¶</a></dt>
+<dd><p>The CassetteLibrary holds the stored requests and manage them.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filename</strong> (<em>str</em>) &#8211; filename to use when storing and replaying requests.</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="cassette.cassette_library.CassetteLibrary.add_response">
+<tt class="descname">add_response</tt><big>(</big><em>cassette_name</em>, <em>response</em><big>)</big><a class="reference internal" href="_modules/cassette/cassette_library.html#CassetteLibrary.add_response"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cassette.cassette_library.CassetteLibrary.add_response" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a new response to the mocked response.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>cassette_name</strong> (<em>str</em>) &#8211; </li>
+<li><strong>response</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cassette.cassette_library.CassetteLibrary.cassette_name_for_httplib_connection">
+<tt class="descname">cassette_name_for_httplib_connection</tt><big>(</big><em>host</em>, <em>port</em>, <em>method</em>, <em>url</em>, <em>body</em><big>)</big><a class="reference internal" href="_modules/cassette/cassette_library.html#CassetteLibrary.cassette_name_for_httplib_connection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cassette.cassette_library.CassetteLibrary.cassette_name_for_httplib_connection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a cassette name from an httplib request.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cassette.cassette_library.CassetteLibrary.cassette_name_for_urlopen">
+<tt class="descname">cassette_name_for_urlopen</tt><big>(</big><em>url_or_request</em>, <em>data</em><big>)</big><a class="reference internal" href="_modules/cassette/cassette_library.html#CassetteLibrary.cassette_name_for_urlopen"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cassette.cassette_library.CassetteLibrary.cassette_name_for_urlopen" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a cassette name from a urlopen request.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cassette.cassette_library.CassetteLibrary.data">
+<tt class="descname">data</tt><a class="headerlink" href="#cassette.cassette_library.CassetteLibrary.data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Lazily loaded data.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cassette.cassette_library.CassetteLibrary.load_file">
+<tt class="descname">load_file</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/cassette/cassette_library.html#CassetteLibrary.load_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cassette.cassette_library.CassetteLibrary.load_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load MockedResponses from YAML file.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cassette.cassette_library.CassetteLibrary.write_to_file">
+<tt class="descname">write_to_file</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/cassette/cassette_library.html#CassetteLibrary.write_to_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cassette.cassette_library.CassetteLibrary.write_to_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write mocked responses to file.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cassette.cassette_library.CassetteName">
+<em class="property">class </em><tt class="descclassname">cassette.cassette_library.</tt><tt class="descname">CassetteName</tt><a class="reference internal" href="_modules/cassette/cassette_library.html#CassetteName"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cassette.cassette_library.CassetteName" title="Permalink to this definition">¶</a></dt>
+<dd><p>A CassetteName represents an unique way to retrieve the cassette
+from the library.</p>
+<dl class="classmethod">
+<dt id="cassette.cassette_library.CassetteName.from_httplib_connection">
+<em class="property">classmethod </em><tt class="descname">from_httplib_connection</tt><big>(</big><em>host</em>, <em>port</em>, <em>method</em>, <em>url</em>, <em>body</em><big>)</big><a class="reference internal" href="_modules/cassette/cassette_library.html#CassetteName.from_httplib_connection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cassette.cassette_library.CassetteName.from_httplib_connection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an object from an httplib request.</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="cassette.cassette_library.CassetteName.from_urlopen_request">
+<em class="property">classmethod </em><tt class="descname">from_urlopen_request</tt><big>(</big><em>request</em>, <em>data=None</em><big>)</big><a class="reference internal" href="_modules/cassette/cassette_library.html#CassetteName.from_urlopen_request"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cassette.cassette_library.CassetteName.from_urlopen_request" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an object from a urlopen request.</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="cassette.cassette_library.CassetteName.from_urlopen_url">
+<em class="property">classmethod </em><tt class="descname">from_urlopen_url</tt><big>(</big><em>url</em>, <em>data</em><big>)</big><a class="reference internal" href="_modules/cassette/cassette_library.html#CassetteName.from_urlopen_url"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cassette.cassette_library.CassetteName.from_urlopen_url" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an object from a urlopen url.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">API</a><ul>
+<li><a class="reference internal" href="#module-cassette">cassette module</a></li>
+<li><a class="reference internal" href="#module-cassette.cassette_library">cassette_library module</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="usage.html"
+                        title="previous chapter">Usage</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="development.html"
+                        title="next chapter">Development</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/api.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="development.html" title="Development"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="usage.html" title="Usage"
+             >previous</a> |</li>
+        <li><a href="index.html">Cassette 0.1.11 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, Charles-Axel Dein.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+    </div>
+  </body>
+</html>

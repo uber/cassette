@@ -1,0 +1,257 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>cassette.cassette_library &mdash; Cassette 0.1.11 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.1.11',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="Cassette 0.1.11 documentation" href="../../index.html" />
+    <link rel="up" title="cassette" href="../cassette.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">Cassette 0.1.11 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Module code</a> &raquo;</li>
+          <li><a href="../cassette.html" accesskey="U">cassette</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for cassette.cassette_library</h1><div class="highlight"><pre>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">urllib2</span>
+
+<span class="kn">import</span> <span class="nn">yaml</span>
+
+<span class="kn">from</span> <span class="nn">cassette.http_response</span> <span class="kn">import</span> <span class="n">MockedHTTPResponse</span>
+<span class="kn">from</span> <span class="nn">cassette.addinfourl</span> <span class="kn">import</span> <span class="n">MockedAddInfoURL</span>
+
+<span class="n">old_urlopen</span> <span class="o">=</span> <span class="n">urllib2</span><span class="o">.</span><span class="n">urlopen</span>
+<span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s">&quot;cassette&quot;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="CassetteName"><a class="viewcode-back" href="../../api.html#cassette.cassette_library.CassetteName">[docs]</a><span class="k">class</span> <span class="nc">CassetteName</span><span class="p">(</span><span class="nb">unicode</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A CassetteName represents an unique way to retrieve the cassette</span>
+<span class="sd">    from the library.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="CassetteName.from_urlopen_url"><a class="viewcode-back" href="../../api.html#cassette.cassette_library.CassetteName.from_urlopen_url">[docs]</a>    <span class="k">def</span> <span class="nf">from_urlopen_url</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Create an object from a urlopen url.&quot;&quot;&quot;</span>
+        <span class="n">req</span> <span class="o">=</span> <span class="n">urllib2</span><span class="o">.</span><span class="n">Request</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">cls</span><span class="o">.</span><span class="n">from_urlopen_request</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>
+</div>
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="CassetteName.from_urlopen_request"><a class="viewcode-back" href="../../api.html#cassette.cassette_library.CassetteName.from_urlopen_request">[docs]</a>    <span class="k">def</span> <span class="nf">from_urlopen_request</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Create an object from a urlopen request.&quot;&quot;&quot;</span>
+
+        <span class="c"># From Python source code, urllib2.py:382</span>
+        <span class="k">if</span> <span class="n">data</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">request</span><span class="o">.</span><span class="n">add_data</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+        <span class="n">data</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">get_data</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">data</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
+
+        <span class="n">template_vars</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+            <span class="n">method</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">get_method</span><span class="p">(),</span>
+            <span class="n">url</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">get_full_url</span><span class="p">(),</span>
+            <span class="n">data</span><span class="o">=</span><span class="n">data</span>
+        <span class="p">)</span>
+
+        <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;urlopen:{method} {url} {data}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="n">template_vars</span><span class="p">)</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">name</span>
+</div>
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="CassetteName.from_httplib_connection"><a class="viewcode-back" href="../../api.html#cassette.cassette_library.CassetteName.from_httplib_connection">[docs]</a>    <span class="k">def</span> <span class="nf">from_httplib_connection</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">body</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Create an object from an httplib request.&quot;&quot;&quot;</span>
+
+        <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;httplib:{method} {host}:{port}{url} {body}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="nb">locals</span><span class="p">())</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">name</span>
+
+</div></div>
+<div class="viewcode-block" id="CassetteLibrary"><a class="viewcode-back" href="../../api.html#cassette.cassette_library.CassetteLibrary">[docs]</a><span class="k">class</span> <span class="nc">CassetteLibrary</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Create a CassetteLibrary object.</span>
+
+<span class="sd">        :param str filename: filename to file holding fake response</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_file</span><span class="p">()</span>
+
+<div class="viewcode-block" id="CassetteLibrary.add_response"><a class="viewcode-back" href="../../api.html#cassette.cassette_library.CassetteLibrary.add_response">[docs]</a>    <span class="k">def</span> <span class="nf">add_response</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cassette_name</span><span class="p">,</span> <span class="n">response</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Add a new response to the mocked response.</span>
+
+<span class="sd">        :param str cassette_name:</span>
+<span class="sd">        :param response:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">cassette_name</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&quot;No cassette name provided.&quot;</span><span class="p">)</span>
+
+        <span class="c"># Choose the class based on the response class</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="s">&quot;getheaders&quot;</span><span class="p">):</span>
+            <span class="c"># It&#39;s an httplib.HTTPResponse</span>
+            <span class="n">mock_response_class</span> <span class="o">=</span> <span class="n">MockedHTTPResponse</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">mock_response_class</span> <span class="o">=</span> <span class="n">MockedAddInfoURL</span>
+
+        <span class="n">mocked</span> <span class="o">=</span> <span class="n">mock_response_class</span><span class="o">.</span><span class="n">from_response</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">cassette_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">mocked</span>
+        <span class="c"># TODO: would be probably more efficient to write the file only</span>
+        <span class="c"># on certain occasion.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">write_to_file</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">mocked</span>
+</div>
+<div class="viewcode-block" id="CassetteLibrary.write_to_file"><a class="viewcode-back" href="../../api.html#cassette.cassette_library.CassetteLibrary.write_to_file">[docs]</a>    <span class="k">def</span> <span class="nf">write_to_file</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Write mocked responses to file.&quot;&quot;&quot;</span>
+
+        <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">,</span> <span class="s">&quot;w+&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">yaml</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="CassetteLibrary.load_file"><a class="viewcode-back" href="../../api.html#cassette.cassette_library.CassetteLibrary.load_file">[docs]</a>    <span class="k">def</span> <span class="nf">load_file</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Load MockedResponses from YAML file.&quot;&quot;&quot;</span>
+
+        <span class="n">data</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">):</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&quot;File &#39;</span><span class="si">%s</span><span class="s">&#39; does not exist.&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">data</span>
+
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">content</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">content</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">k</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">&quot;urlopen:&quot;</span><span class="p">):</span>
+                <span class="n">mock_response_class</span> <span class="o">=</span> <span class="n">MockedAddInfoURL</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">mock_response_class</span> <span class="o">=</span> <span class="n">MockedHTTPResponse</span>
+
+            <span class="n">data</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">mock_response_class</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">data</span>
+</div>
+<div class="viewcode-block" id="CassetteLibrary.cassette_name_for_urlopen"><a class="viewcode-back" href="../../api.html#cassette.cassette_library.CassetteLibrary.cassette_name_for_urlopen">[docs]</a>    <span class="k">def</span> <span class="nf">cassette_name_for_urlopen</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url_or_request</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Create a cassette name from a urlopen request.&quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">url_or_request</span><span class="p">,</span> <span class="nb">basestring</span><span class="p">):</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">CassetteName</span><span class="o">.</span><span class="n">from_urlopen_url</span><span class="p">(</span><span class="n">url_or_request</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c"># url is a urllib2.Request object</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">CassetteName</span><span class="o">.</span><span class="n">from_urlopen_request</span><span class="p">(</span><span class="n">url_or_request</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">name</span>
+</div>
+<div class="viewcode-block" id="CassetteLibrary.cassette_name_for_httplib_connection"><a class="viewcode-back" href="../../api.html#cassette.cassette_library.CassetteLibrary.cassette_name_for_httplib_connection">[docs]</a>    <span class="k">def</span> <span class="nf">cassette_name_for_httplib_connection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span>
+                                             <span class="n">url</span><span class="p">,</span> <span class="n">body</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Create a cassette name from an httplib request.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">CassetteName</span><span class="o">.</span><span class="n">from_httplib_connection</span><span class="p">(</span>
+            <span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">body</span><span class="p">)</span>
+</div>
+    <span class="k">def</span> <span class="nf">_had_response</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Mark that the library already the response.</span>
+
+<span class="sd">        This is for testing purposes (it&#39;s complicated to patch the unpatched</span>
+<span class="sd">        version of urllib2/httplib).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span>
+
+    <span class="k">def</span> <span class="nf">__contains__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cassette_name</span><span class="p">):</span>
+        <span class="n">contains</span> <span class="o">=</span> <span class="n">cassette_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span>
+
+        <span class="k">if</span> <span class="n">contains</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_had_response</span><span class="p">()</span>  <span class="c"># For testing purposes</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&quot;Library has &#39;</span><span class="si">%s</span><span class="s">&#39;&quot;</span> <span class="o">%</span> <span class="n">cassette_name</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s">&quot;Library does not have &#39;</span><span class="si">%s</span><span class="s">&#39;&quot;</span> <span class="o">%</span> <span class="n">cassette_name</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">contains</span>
+
+    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cassette_name</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">cassette_name</span><span class="p">]</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">Cassette 0.1.11 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Module code</a> &raquo;</li>
+          <li><a href="../cassette.html" >cassette</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, Charles-Axel Dein.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+    </div>
+  </body>
+</html>
