@@ -190,7 +190,7 @@ class TestCassette(TestCase):
 
         # First run
         cassette.insert(TEMPORARY_RESPONSES_FILENAME)
-        r = urllib2.urlopen(TEST_URL)
+        r = urllib2.urlopen(TEST_URL + '?manual')
         cassette.eject()
 
         self.assertEqual(self.had_response.called, False)
@@ -200,7 +200,7 @@ class TestCassette(TestCase):
 
         # Second run
         cassette.insert(TEMPORARY_RESPONSES_FILENAME)
-        r = urllib2.urlopen(TEST_URL)
+        r = urllib2.urlopen(TEST_URL + '?manual')
         cassette.eject()
 
         self.assertEqual(self.had_response.called, True)

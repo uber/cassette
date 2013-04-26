@@ -2,6 +2,7 @@ from __future__ import absolute_import
 import logging
 import os
 import urllib2
+import hashlib
 
 import yaml
 
@@ -10,6 +11,12 @@ from cassette.addinfourl import MockedAddInfoURL
 
 old_urlopen = urllib2.urlopen
 log = logging.getLogger("cassette")
+
+
+def _hash(content):
+    m = hashlib.md5()
+    m.update(content)
+    return m.digest()
 
 
 class CassetteName(unicode):
@@ -57,7 +64,6 @@ class CassetteName(unicode):
 
 
 class CassetteLibrary(object):
-
     """
     The CassetteLibrary holds the stored requests and manage them.
 
@@ -65,8 +71,11 @@ class CassetteLibrary(object):
 
     """
 
+    cache = {}
+
     def __init__(self, filename):
         self.filename = os.path.abspath(filename)
+        self.is_dirty = False
 
     @property
     def data(self):
@@ -97,30 +106,54 @@ class CassetteLibrary(object):
 
         mocked = mock_response_class.from_response(response)
         self.data[cassette_name] = mocked
-        # TODO: would be probably more efficient to write the file only
-        # on certain occasion.
-        self.write_to_file()
+
+        # Mark the cassette changes as dirty for ejection
+        self.is_dirty = True
 
         return mocked
+
+    def save_to_cache(self, file_hash, data):
+        CassetteLibrary.cache[self.filename] = {
+            'hash': file_hash,
+            'data': data
+        }
 
     def write_to_file(self):
         """Write mocked responses to file."""
 
+        # Serialize the items via YAML
         data = {k: v.to_dict() for k, v in self.data.items()}
+        yaml_str = yaml.dump(data)
+
+        # Save the changes to file
         with open(self.filename, "w+") as f:
-            yaml.dump(data, f)
+            f.write(yaml_str)
+
+        # Update our hash
+        self.save_to_cache(file_hash=_hash(yaml_str), data=self.data)
 
     def load_file(self):
         """Load MockedResponses from YAML file."""
 
         data = {}
+        filename = self.filename
 
-        if not os.path.exists(self.filename):
-            log.info("File '%s' does not exist." % self.filename)
+        if not os.path.exists(filename):
+            log.info("File '%s' does not exist." % filename)
             return data
 
-        with open(self.filename) as f:
-            content = yaml.load(f)
+        # Open and read in the file
+        with open(filename) as f:
+            yaml_str = f.read()
+        yaml_hash = _hash(yaml_str)
+
+        # If the contents are cached, return them
+        cached_result = CassetteLibrary.cache.get(filename, None)
+        if cached_result and cached_result['hash'] == yaml_hash:
+            return cached_result['data']
+
+        # Otherwise, parse the contents
+        content = yaml.load(yaml_str)
 
         for k, v in content.items():
             if k.startswith("urlopen:"):
@@ -129,6 +162,9 @@ class CassetteLibrary(object):
                 mock_response_class = MockedHTTPResponse
 
             data[k] = mock_response_class.from_dict(v)
+
+        # Cache the file for later
+        self.save_to_cache(file_hash=yaml_hash, data=data)
 
         return data
 
@@ -148,6 +184,10 @@ class CassetteLibrary(object):
         """Create a cassette name from an httplib request."""
         return CassetteName.from_httplib_connection(
             host, port, method, url, body)
+
+    def rewind(self):
+        for k, v in self.data.items():
+            v.rewind()
 
     def _had_response(self):
         """Mark that the library already the response.
@@ -170,4 +210,7 @@ class CassetteLibrary(object):
         return contains
 
     def __getitem__(self, cassette_name):
-        return self.data[cassette_name]
+        req = self.data[cassette_name]
+        if req:
+            req.rewind()
+        return req
