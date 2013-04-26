@@ -1,7 +1,7 @@
 Changelog for Cassette
 ======================
 
-0.1.11 (unreleased)
+0.1.12 (2013-04-26)
 -------------------
 
 - Add performance tests (courtesy of @twolfson)
