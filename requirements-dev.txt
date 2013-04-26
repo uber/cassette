@@ -4,5 +4,4 @@ nose
 flake8
 flask
 sphinx==1.2b1
-pyroma==0.6c11
 zest.releaser==3.44

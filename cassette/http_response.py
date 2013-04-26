@@ -50,5 +50,9 @@ class MockedHTTPResponse(MockedResponse):
     def getheader(self, name):
         return self.headers[name]
 
+    def rewind(self):
+        self.fp = StringIO(unicode(self.content, "utf-8"))
+        return self
+
     def close(self):
         pass
