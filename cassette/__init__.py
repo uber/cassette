@@ -22,6 +22,11 @@ def insert(filename):
 
 def eject():
     """Remove cassette, unpatching HTTP requests."""
+    # If the cassette items have changed, save the changes to file
+    if cassette_library.is_dirty:
+        cassette_library.write_to_file()
+
+    # Remove our overrides
     unpatch()
 
 
