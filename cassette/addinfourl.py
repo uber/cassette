@@ -47,13 +47,14 @@ class MockedAddInfoURL(urllib.addinfourl, MockedResponse):
 
     @staticmethod
     def create_file_descriptor(content):
-
+        """Create a file descriptor for content. It attempts to use ASCII, then UTF8, then binary."""
         try:
             fp = io.StringIO(unicode(content))
         except UnicodeDecodeError:
-            # FIXME: far too naive
-            # Are you sure it's not a binary file?
-            fp = io.StringIO(unicode(content, "utf-8"))
+            try:
+                fp = io.StringIO(unicode(content, 'utf8'))
+            except UnicodeDecodeError:
+                fp = io.BytesIO(content)
 
         return fp
 

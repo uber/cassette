@@ -3,6 +3,8 @@ from flask import Flask, redirect, url_for, request, jsonify
 
 app = Flask(__name__)
 
+IMAGE_FILENAME = "./cassette/tests/server/image.png"
+
 
 @app.route("/index")
 def index():
@@ -14,6 +16,12 @@ def non_ascii_content():
     return (u"Le Mexicain l'avait achetée en viager "
             u"à un procureur à la retraite. Après trois mois, "
             u"l'accident bête. Une affaire.")
+
+
+@app.route("/image")
+def image():
+    with open(IMAGE_FILENAME) as image_handle:
+        return image_handle.read()
 
 
 @app.route("/will_redirect")
