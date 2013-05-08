@@ -16,6 +16,12 @@ def non_ascii_content():
             u"l'accident bête. Une affaire.")
 
 
+@app.route("/image")
+def image():
+    with open('image.png') as image:
+        return image.read()
+
+
 @app.route("/will_redirect")
 def will_redirect():
     return redirect(url_for("redirected"))
