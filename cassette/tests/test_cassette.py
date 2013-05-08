@@ -239,7 +239,9 @@ class TestCassette(TestCase):
             expected_image = image_handle.read()
 
         # downloaded via urllib
+        cassette.insert(TEMPORARY_RESPONSES_FILENAME)
         actual_image = urllib2.urlopen(TEST_URL_IMAGE).read()
+        cassette.eject()
 
         # has a matching image
         self.assertEqual(self.had_response.called, False)
@@ -248,7 +250,9 @@ class TestCassette(TestCase):
         self.had_response.reset_mock()
 
         # downloaded again via urllib
+        cassette.insert(TEMPORARY_RESPONSES_FILENAME)
         actual_image = urllib2.urlopen(TEST_URL_IMAGE).read()
+        cassette.eject()
 
         # still has a matching image
         self.assertEqual(self.had_response.called, True)
