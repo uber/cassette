@@ -240,7 +240,20 @@ class TestCassette(TestCase):
 
         # downloaded via urllib
         actual_image = urllib2.urlopen(TEST_URL_IMAGE).read()
-        print actual_image, expected_image
+
+        # has a matching image
+        self.assertEqual(self.had_response.called, False)
+        self.assertEqual(expected_image, actual_image)
+
+        self.had_response.reset_mock()
+
+        # downloaded again via urllib
+        actual_image = urllib2.urlopen(TEST_URL_IMAGE).read()
+
+        # still has a matching image
+        self.assertEqual(self.had_response.called, True)
+        self.assertEqual(expected_image, actual_image)
+
 
 #
 # Verify that cassette can read from an existing file.
