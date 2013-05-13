@@ -1,7 +1,7 @@
 Changelog for Cassette
 ======================
 
-0.1.13 (unreleased)
+0.1.13 (2013-05-13)
 -------------------
 
 - Fix binary file downloading (thanks to @twolfson)
