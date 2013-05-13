@@ -19,6 +19,7 @@ Contents
    usage
    api
    development
+   changelog
 
 
 Quickstart
