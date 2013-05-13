@@ -18,10 +18,12 @@ from cassette.cassette_library import CassetteLibrary
 
 
 RESPONSES_FILENAME = "./cassette/tests/data/responses.yaml"
+IMAGE_FILENAME = "./cassette/tests/server/image.png"
 TEST_HOST = "http://127.0.0.1:5000/"
 TEST_URL = "http://127.0.0.1:5000/index"
 TEST_URL_HTTPS = "https://httpbin.org/ip"
 TEST_URL_REDIRECT = "http://127.0.0.1:5000/will_redirect"
+TEST_URL_IMAGE = "http://127.0.0.1:5000/image"
 
 
 # Taken from requests
@@ -228,6 +230,34 @@ class TestCassette(TestCase):
         url += _encode_params(param)
         r = self.check_urllib2_flow(url=url)
         self.assertEqual(r.json["args"]["param"], "1")
+
+    def test_download_binary_file(self):
+        """Verify that cassette can store a binary file (e.g. picture)"""
+
+        # An image
+        with open(IMAGE_FILENAME) as image_handle:
+            expected_image = image_handle.read()
+
+        # downloaded via urllib
+        cassette.insert(TEMPORARY_RESPONSES_FILENAME)
+        actual_image = urllib2.urlopen(TEST_URL_IMAGE).read()
+        cassette.eject()
+
+        # has a matching image
+        self.assertEqual(self.had_response.called, False)
+        self.assertEqual(expected_image, actual_image)
+
+        self.had_response.reset_mock()
+
+        # downloaded again via urllib
+        cassette.insert(TEMPORARY_RESPONSES_FILENAME)
+        actual_image = urllib2.urlopen(TEST_URL_IMAGE).read()
+        cassette.eject()
+
+        # still has a matching image
+        self.assertEqual(self.had_response.called, True)
+        self.assertEqual(expected_image, actual_image)
+
 
 #
 # Verify that cassette can read from an existing file.
