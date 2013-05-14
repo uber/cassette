@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Changelog for Cassette &mdash; Cassette 0.1.13 documentation</title>
+    <title>Changelog for Cassette &mdash; Cassette 0.2 documentation</title>
     
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.1.13',
+        VERSION:     '0.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,8 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Cassette 0.1.13 documentation" href="index.html" />
+    <link rel="top" title="Cassette 0.2 documentation" href="index.html" />
+    <link rel="next" title="License" href="license.html" />
     <link rel="prev" title="Development" href="development.html" /> 
   </head>
   <body>
@@ -37,9 +38,12 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
+          <a href="license.html" title="License"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
           <a href="development.html" title="Development"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">Cassette 0.1.13 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Cassette 0.2 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -51,27 +55,37 @@
   <div class="section" id="changelog-for-cassette">
 <h1>Changelog for Cassette<a class="headerlink" href="#changelog-for-cassette" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="id1">
-<h2>0.1.13 (2013-05-13)<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<h2>0.2 (2013-05-14)<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Get rid of urlopen mocking, mock only at <tt class="docutils literal"><span class="pre">httplib</span></tt> level to circumvent
+the problem with urlopen raising exceptions when getting non-2XX codes</li>
+<li>Clean up the docs, streamline their structure</li>
+<li><strong>This is a backward incompatible release</strong>, you&#8217;ll need to delete your
+YAML file.</li>
+</ul>
+</div>
+<div class="section" id="id2">
+<h2>0.1.13 (2013-05-13)<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li>Fix binary file downloading (thanks to &#64;twolfson)</li>
 </ul>
 </div>
-<div class="section" id="id2">
-<h2>0.1.12 (2013-04-26)<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id3">
+<h2>0.1.12 (2013-04-26)<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li>Add performance tests (courtesy of &#64;twolfson)</li>
 <li>Cache the loaded file content to achieve significant performance improvements
 (thanks to &#64;twolfson)</li>
 </ul>
 </div>
-<div class="section" id="id3">
-<h2>0.1.11 (2013-04-11)<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id4">
+<h2>0.1.11 (2013-04-11)<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li>Lazily load YAML file</li>
 </ul>
 </div>
-<div class="section" id="id4">
-<h2>0.1.11 (2013-04-11)<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id5">
+<h2>0.1.11 (2013-04-11)<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li>Started tracking changes</li>
 </ul>
@@ -87,10 +101,11 @@
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Changelog for Cassette</a><ul>
-<li><a class="reference internal" href="#id1">0.1.13 (2013-05-13)</a></li>
-<li><a class="reference internal" href="#id2">0.1.12 (2013-04-26)</a></li>
-<li><a class="reference internal" href="#id3">0.1.11 (2013-04-11)</a></li>
+<li><a class="reference internal" href="#id1">0.2 (2013-05-14)</a></li>
+<li><a class="reference internal" href="#id2">0.1.13 (2013-05-13)</a></li>
+<li><a class="reference internal" href="#id3">0.1.12 (2013-04-26)</a></li>
 <li><a class="reference internal" href="#id4">0.1.11 (2013-04-11)</a></li>
+<li><a class="reference internal" href="#id5">0.1.11 (2013-04-11)</a></li>
 </ul>
 </li>
 </ul>
@@ -98,6 +113,9 @@
   <h4>Previous topic</h4>
   <p class="topless"><a href="development.html"
                         title="previous chapter">Development</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="license.html"
+                        title="next chapter">License</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="_sources/changelog.txt"
@@ -130,9 +148,12 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
+          <a href="license.html" title="License"
+             >next</a> |</li>
+        <li class="right" >
           <a href="development.html" title="Development"
              >previous</a> |</li>
-        <li><a href="index.html">Cassette 0.1.13 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Cassette 0.2 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

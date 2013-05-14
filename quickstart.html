@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Development &mdash; Cassette 0.2 documentation</title>
+    <title>Quickstart &mdash; Cassette 0.2 documentation</title>
     
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -24,8 +24,8 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="top" title="Cassette 0.2 documentation" href="index.html" />
-    <link rel="next" title="Changelog for Cassette" href="changelog.html" />
-    <link rel="prev" title="API" href="api.html" /> 
+    <link rel="next" title="Usage" href="usage.html" />
+    <link rel="prev" title="Foreword" href="foreword.html" /> 
   </head>
   <body>
     <div class="related">
@@ -38,10 +38,10 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="changelog.html" title="Changelog for Cassette"
+          <a href="usage.html" title="Usage"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="api.html" title="API"
+          <a href="foreword.html" title="Foreword"
              accesskey="P">previous</a> |</li>
         <li><a href="index.html">Cassette 0.2 documentation</a> &raquo;</li> 
       </ul>
@@ -52,18 +52,31 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="development">
-<h1>Development<a class="headerlink" href="#development" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="running-cassette-tests">
-<h2>Running cassette tests<a class="headerlink" href="#running-cassette-tests" title="Permalink to this headline">¶</a></h2>
-<p>Create a virtual environment, install fabric (<tt class="docutils literal"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">fabric</span></tt>) then
-install requirements:</p>
-<div class="highlight-python"><pre>$ fab bootstrap</pre>
-</div>
-<p>Start the test server and run tests:</p>
-<div class="highlight-python"><pre>$ fab serve_test_server
-$ fab test</pre>
-</div>
+  <div class="section" id="quickstart">
+<h1>Quickstart<a class="headerlink" href="#quickstart" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li>The first time you run your tests, <tt class="docutils literal"><span class="pre">cassette</span></tt> will store all the
+external requests response in a YAML file.</li>
+<li>Next time you run your tests, <tt class="docutils literal"><span class="pre">cassette</span></tt> will fetch those responses
+from the YAML file. You can now run your tests while being offline.</li>
+</ul>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">urllib2</span>
+
+<span class="kn">import</span> <span class="nn">cassette</span>
+
+<span class="k">with</span> <span class="n">cassette</span><span class="o">.</span><span class="n">play</span><span class="p">(</span><span class="s">&quot;data/responses.yaml&quot;</span><span class="p">):</span>
+
+    <span class="c"># If the request is not already stored in responses.yaml, cassette</span>
+    <span class="c"># will request the URL and store its response in the file.</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="n">urllib2</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="s">&quot;http://www.internic.net/domain/named.root&quot;</span><span class="p">)</span>
+
+    <span class="c"># This time, the request response must be in the file. The external</span>
+    <span class="c"># request is not made. cassette retrieves the response from the</span>
+    <span class="c"># file.</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="n">urllib2</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="s">&quot;http://www.internic.net/domain/named.root&quot;</span><span class="p">)</span>
+
+<span class="k">assert</span> <span class="s">&quot;A.ROOT-SERVERS.NET&quot;</span> <span class="ow">in</span> <span class="n">r</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">10000</span><span class="p">)</span>
+</pre></div>
 </div>
 </div>
 
@@ -73,23 +86,15 @@ $ fab test</pre>
       </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="index.html">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">Development</a><ul>
-<li><a class="reference internal" href="#running-cassette-tests">Running cassette tests</a></li>
-</ul>
-</li>
-</ul>
-
   <h4>Previous topic</h4>
-  <p class="topless"><a href="api.html"
-                        title="previous chapter">API</a></p>
+  <p class="topless"><a href="foreword.html"
+                        title="previous chapter">Foreword</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="changelog.html"
-                        title="next chapter">Changelog for Cassette</a></p>
+  <p class="topless"><a href="usage.html"
+                        title="next chapter">Usage</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
-    <li><a href="_sources/development.txt"
+    <li><a href="_sources/quickstart.txt"
            rel="nofollow">Show Source</a></li>
   </ul>
 <div id="searchbox" style="display: none">
@@ -119,10 +124,10 @@ $ fab test</pre>
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="changelog.html" title="Changelog for Cassette"
+          <a href="usage.html" title="Usage"
              >next</a> |</li>
         <li class="right" >
-          <a href="api.html" title="API"
+          <a href="foreword.html" title="Foreword"
              >previous</a> |</li>
         <li><a href="index.html">Cassette 0.2 documentation</a> &raquo;</li> 
       </ul>

@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>API &mdash; Cassette 0.1.13 documentation</title>
+    <title>API &mdash; Cassette 0.2 documentation</title>
     
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.1.13',
+        VERSION:     '0.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Cassette 0.1.13 documentation" href="index.html" />
+    <link rel="top" title="Cassette 0.2 documentation" href="index.html" />
     <link rel="next" title="Development" href="development.html" />
     <link rel="prev" title="Usage" href="usage.html" /> 
   </head>
@@ -43,7 +43,7 @@
         <li class="right" >
           <a href="usage.html" title="Usage"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">Cassette 0.1.13 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Cassette 0.2 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -121,12 +121,6 @@
 <dd><p>Create a cassette name from an httplib request.</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="cassette.cassette_library.CassetteLibrary.cassette_name_for_urlopen">
-<tt class="descname">cassette_name_for_urlopen</tt><big>(</big><em>url_or_request</em>, <em>data</em><big>)</big><a class="reference internal" href="_modules/cassette/cassette_library.html#CassetteLibrary.cassette_name_for_urlopen"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cassette.cassette_library.CassetteLibrary.cassette_name_for_urlopen" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create a cassette name from a urlopen request.</p>
-</dd></dl>
-
 <dl class="attribute">
 <dt id="cassette.cassette_library.CassetteLibrary.data">
 <tt class="descname">data</tt><a class="headerlink" href="#cassette.cassette_library.CassetteLibrary.data" title="Permalink to this definition">¶</a></dt>
@@ -158,18 +152,30 @@ from the library.</p>
 <dd><p>Create an object from an httplib request.</p>
 </dd></dl>
 
-<dl class="classmethod">
-<dt id="cassette.cassette_library.CassetteName.from_urlopen_request">
-<em class="property">classmethod </em><tt class="descname">from_urlopen_request</tt><big>(</big><em>request</em>, <em>data=None</em><big>)</big><a class="reference internal" href="_modules/cassette/cassette_library.html#CassetteName.from_urlopen_request"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cassette.cassette_library.CassetteName.from_urlopen_request" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create an object from a urlopen request.</p>
 </dd></dl>
 
-<dl class="classmethod">
-<dt id="cassette.cassette_library.CassetteName.from_urlopen_url">
-<em class="property">classmethod </em><tt class="descname">from_urlopen_url</tt><big>(</big><em>url</em>, <em>data</em><big>)</big><a class="reference internal" href="_modules/cassette/cassette_library.html#CassetteName.from_urlopen_url"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cassette.cassette_library.CassetteName.from_urlopen_url" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create an object from a urlopen url.</p>
+</div>
+<div class="section" id="module-cassette.patcher">
+<span id="patcher-module"></span><h2>patcher module<a class="headerlink" href="#module-cassette.patcher" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="cassette.patcher.patch">
+<tt class="descclassname">cassette.patcher.</tt><tt class="descname">patch</tt><big>(</big><em>cassette_library</em><big>)</big><a class="reference internal" href="_modules/cassette/patcher.html#patch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cassette.patcher.patch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Replace standard library.</p>
 </dd></dl>
 
+<dl class="function">
+<dt id="cassette.patcher.unpatch">
+<tt class="descclassname">cassette.patcher.</tt><tt class="descname">unpatch</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/cassette/patcher.html#unpatch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cassette.patcher.unpatch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Unpatch standard library.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-cassette.unpatched">
+<span id="unpatched-module"></span><h2>unpatched module<a class="headerlink" href="#module-cassette.unpatched" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="cassette.unpatched.unpatched_httplib_context">
+<tt class="descclassname">cassette.unpatched.</tt><tt class="descname">unpatched_httplib_context</tt><big>(</big><em>*args</em>, <em>**kwds</em><big>)</big><a class="reference internal" href="_modules/cassette/unpatched.html#unpatched_httplib_context"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cassette.unpatched.unpatched_httplib_context" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a context in which httplib is unpatched.</p>
 </dd></dl>
 
 </div>
@@ -186,6 +192,8 @@ from the library.</p>
 <li><a class="reference internal" href="#">API</a><ul>
 <li><a class="reference internal" href="#module-cassette">cassette module</a></li>
 <li><a class="reference internal" href="#module-cassette.cassette_library">cassette_library module</a></li>
+<li><a class="reference internal" href="#module-cassette.patcher">patcher module</a></li>
+<li><a class="reference internal" href="#module-cassette.unpatched">unpatched module</a></li>
 </ul>
 </li>
 </ul>
@@ -233,7 +241,7 @@ from the library.</p>
         <li class="right" >
           <a href="usage.html" title="Usage"
              >previous</a> |</li>
-        <li><a href="index.html">Cassette 0.1.13 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Cassette 0.2 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

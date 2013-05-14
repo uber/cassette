@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Development &mdash; Cassette 0.2 documentation</title>
+    <title>Foreword &mdash; Cassette 0.2 documentation</title>
     
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -24,8 +24,8 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="top" title="Cassette 0.2 documentation" href="index.html" />
-    <link rel="next" title="Changelog for Cassette" href="changelog.html" />
-    <link rel="prev" title="API" href="api.html" /> 
+    <link rel="next" title="Quickstart" href="quickstart.html" />
+    <link rel="prev" title="Welcome to Cassette’s documentation!" href="index.html" /> 
   </head>
   <body>
     <div class="related">
@@ -38,10 +38,10 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="changelog.html" title="Changelog for Cassette"
+          <a href="quickstart.html" title="Quickstart"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="api.html" title="API"
+          <a href="index.html" title="Welcome to Cassette’s documentation!"
              accesskey="P">previous</a> |</li>
         <li><a href="index.html">Cassette 0.2 documentation</a> &raquo;</li> 
       </ul>
@@ -52,18 +52,27 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="development">
-<h1>Development<a class="headerlink" href="#development" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="running-cassette-tests">
-<h2>Running cassette tests<a class="headerlink" href="#running-cassette-tests" title="Permalink to this headline">¶</a></h2>
-<p>Create a virtual environment, install fabric (<tt class="docutils literal"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">fabric</span></tt>) then
-install requirements:</p>
-<div class="highlight-python"><pre>$ fab bootstrap</pre>
+  <div class="section" id="foreword">
+<h1>Foreword<a class="headerlink" href="#foreword" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="similar-libraries">
+<h2>Similar libraries<a class="headerlink" href="#similar-libraries" title="Permalink to this headline">¶</a></h2>
+<p>Cassette took a lot inspiration from the following packages:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://github.com/kevin1024/vcrpy">vcrpy</a>: great library but you
+can store only one request per YAML file...</li>
+<li><a class="reference external" href="https://github.com/myronmarston/vcr">vcr</a>: in Ruby</li>
+</ul>
 </div>
-<p>Start the test server and run tests:</p>
-<div class="highlight-python"><pre>$ fab serve_test_server
-$ fab test</pre>
-</div>
+<div class="section" id="limitations">
+<h2>Limitations<a class="headerlink" href="#limitations" title="Permalink to this headline">¶</a></h2>
+<p>Cassette should be considered <strong>alpha</strong>:</p>
+<ul class="simple">
+<li>Only tested with <tt class="docutils literal"><span class="pre">urllib2</span></tt> and <tt class="docutils literal"><span class="pre">httplib</span></tt></li>
+<li>Does not work with <tt class="docutils literal"><span class="pre">urllib</span></tt> and <tt class="docutils literal"><span class="pre">requests</span></tt></li>
+<li>The format used is not compatible with <tt class="docutils literal"><span class="pre">vcr</span></tt> or <tt class="docutils literal"><span class="pre">vcrpy</span></tt></li>
+<li>Only tested with Python 2.7</li>
+<li>File format <strong>WILL</strong> change.</li>
+</ul>
 </div>
 </div>
 
@@ -75,21 +84,22 @@ $ fab test</pre>
         <div class="sphinxsidebarwrapper">
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Development</a><ul>
-<li><a class="reference internal" href="#running-cassette-tests">Running cassette tests</a></li>
+<li><a class="reference internal" href="#">Foreword</a><ul>
+<li><a class="reference internal" href="#similar-libraries">Similar libraries</a></li>
+<li><a class="reference internal" href="#limitations">Limitations</a></li>
 </ul>
 </li>
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="api.html"
-                        title="previous chapter">API</a></p>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Welcome to Cassette&#8217;s documentation!</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="changelog.html"
-                        title="next chapter">Changelog for Cassette</a></p>
+  <p class="topless"><a href="quickstart.html"
+                        title="next chapter">Quickstart</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
-    <li><a href="_sources/development.txt"
+    <li><a href="_sources/foreword.txt"
            rel="nofollow">Show Source</a></li>
   </ul>
 <div id="searchbox" style="display: none">
@@ -119,10 +129,10 @@ $ fab test</pre>
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="changelog.html" title="Changelog for Cassette"
+          <a href="quickstart.html" title="Quickstart"
              >next</a> |</li>
         <li class="right" >
-          <a href="api.html" title="API"
+          <a href="index.html" title="Welcome to Cassette’s documentation!"
              >previous</a> |</li>
         <li><a href="index.html">Cassette 0.2 documentation</a> &raquo;</li> 
       </ul>
