@@ -121,10 +121,11 @@ class TestCassette(TestCase):
 
         self.assertEqual(self.had_response.called, False)
         if expected_content:
+            content = unicode(r.read(), "utf-8")
             if allow_incomplete_match:
-                self.assertIn(expected_content, r.read())
+                self.assertIn(expected_content, content)
             else:
-                self.assertEqual(r.read(), expected_content)
+                self.assertEqual(content, expected_content)
 
         self.had_response.reset_mock()
 
@@ -134,10 +135,11 @@ class TestCassette(TestCase):
 
         self.assertEqual(self.had_response.called, True)
         if expected_content:
+            content = unicode(r.read(), "utf-8")
             if allow_incomplete_match:
-                self.assertIn(expected_content, r.read())
+                self.assertIn(expected_content, content)
             else:
-                self.assertEqual(r.read(), expected_content)
+                self.assertEqual(content, expected_content)
 
         if r.headers["Content-Type"] == "application/json":
             try:
@@ -281,11 +283,12 @@ class TestCassetteFile(TestCase):
         with cassette.play(RESPONSES_FILENAME):
             r = urllib2.urlopen(url)
 
-        self.assertEqual(self.had_response.called, True)
+        content = unicode(r.read(), "utf-8")
         if allow_incomplete_match:
-            self.assertIn(expected_content, r.read())
+            self.assertIn(expected_content, content)
         else:
-            self.assertEqual(r.read(), expected_content)
+            self.assertEqual(content, expected_content)
+        self.assertEqual(self.had_response.called, True)
 
         return r
 
@@ -330,6 +333,9 @@ class TestCassetteFile(TestCase):
     def test_non_ascii_content(self):
         """Verify that cassette can handle non-ascii content."""
 
+        url = "http://127.0.0.1:5000/non-ascii-content"
+        r = urllib2.urlopen(url)
+        r.read()
         self.check_read_from_file_flow(
             url="http://127.0.0.1:5000/non-ascii-content",
             expected_content=u"Le Mexicain l'avait achetée en viager "

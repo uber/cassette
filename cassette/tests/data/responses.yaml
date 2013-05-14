@@ -1,111 +1,54 @@
-httplib:GET 127.0.0.1:5000//index None:
-  content: hello world
-  headers: {content-length: '11', content-type: text/html; charset=utf-8, date: 'Tue,
-      12 Mar 2013 19:43:10 GMT', server: Werkzeug/0.8.3 Python/2.7.2}
-  raw_headers: ["Content-Type: text/html; charset=utf-8\r\n", "Content-Length: 11\r\
-      \n", "Server: Werkzeug/0.8.3 Python/2.7.2\r\n", "Date: Tue, 12 Mar 2013 19:43:10\
-      \ GMT\r\n"]
-  reason: OK
-  status: 200
 httplib:GET 127.0.0.1:5000/index None:
   content: hello world
   headers: {content-length: '11', content-type: text/html; charset=utf-8, date: 'Tue,
-      12 Mar 2013 22:34:25 GMT', server: Werkzeug/0.8.3 Python/2.7.2}
+      14 May 2013 21:48:51 GMT', server: Werkzeug/0.8.3 Python/2.7.3}
   raw_headers: ["Content-Type: text/html; charset=utf-8\r\n", "Content-Length: 11\r\
-      \n", "Server: Werkzeug/0.8.3 Python/2.7.2\r\n", "Date: Tue, 12 Mar 2013 22:34:25\
+      \n", "Server: Werkzeug/0.8.3 Python/2.7.3\r\n", "Date: Tue, 14 May 2013 21:48:51\
       \ GMT\r\n"]
   reason: OK
   status: 200
-urlopen:GET http://127.0.0.1:5000/index:
-  code: 200
-  content: hello world
-  headers: !!python/object:httplib.HTTPMessage
-    dict: {content-length: '11', content-type: text/html; charset=utf-8, date: 'Tue,
-        12 Mar 2013 19:43:10 GMT', server: Werkzeug/0.8.3 Python/2.7.2}
-    encodingheader: null
-    fp: null
-    headers: ["Content-Type: text/html; charset=utf-8\r\n", "Content-Length: 11\r\n",
-      "Server: Werkzeug/0.8.3 Python/2.7.2\r\n", "Date: Tue, 12 Mar 2013 19:43:10\
-        \ GMT\r\n"]
-    maintype: text
-    plist: [charset=utf-8]
-    plisttext: ; charset=utf-8
-    seekable: 0
-    startofbody: null
-    startofheaders: null
-    status: ''
-    subtype: html
-    type: text/html
-    typeheader: text/html; charset=utf-8
-    unixfrom: ''
-  url: http://127.0.0.1:5000/index
-urlopen:GET http://127.0.0.1:5000/non-ascii-content:
-  code: 200
+httplib:GET 127.0.0.1:5000/non-ascii-content None:
   content: !!python/str "Le Mexicain l'avait achet\xE9e en viager \xE0 un procureur\
     \ \xE0 la retraite. Apr\xE8s trois mois, l'accident b\xEAte. Une affaire."
-  headers: !!python/object:httplib.HTTPMessage
-    dict: {content-length: '120', content-type: text/html; charset=utf-8, date: 'Tue,
-        12 Mar 2013 19:43:10 GMT', server: Werkzeug/0.8.3 Python/2.7.2}
-    encodingheader: null
-    fp: null
-    headers: ["Content-Type: text/html; charset=utf-8\r\n", "Content-Length: 120\r\
-        \n", "Server: Werkzeug/0.8.3 Python/2.7.2\r\n", "Date: Tue, 12 Mar 2013 19:43:10\
-        \ GMT\r\n"]
-    maintype: text
-    plist: [charset=utf-8]
-    plisttext: ; charset=utf-8
-    seekable: 0
-    startofbody: null
-    startofheaders: null
-    status: ''
-    subtype: html
-    type: text/html
-    typeheader: text/html; charset=utf-8
-    unixfrom: ''
-  url: http://127.0.0.1:5000/non-ascii-content
-urlopen:GET http://127.0.0.1:5000/will_redirect:
-  code: 200
+  headers: {content-length: '120', content-type: text/html; charset=utf-8, date: 'Tue,
+      14 May 2013 21:43:13 GMT', server: Werkzeug/0.8.3 Python/2.7.3}
+  raw_headers: ["Content-Type: text/html; charset=utf-8\r\n", "Content-Length: 120\r\
+      \n", "Server: Werkzeug/0.8.3 Python/2.7.3\r\n", "Date: Tue, 14 May 2013 21:43:13\
+      \ GMT\r\n"]
+  reason: OK
+  status: 200
+httplib:GET 127.0.0.1:5000/redirected None:
   content: hello world redirected
-  headers: !!python/object:httplib.HTTPMessage
-    dict: {content-length: '22', content-type: text/html; charset=utf-8, date: 'Tue,
-        12 Mar 2013 19:43:15 GMT', server: Werkzeug/0.8.3 Python/2.7.2}
-    encodingheader: null
-    fp: null
-    headers: ["Content-Type: text/html; charset=utf-8\r\n", "Content-Length: 22\r\n",
-      "Server: Werkzeug/0.8.3 Python/2.7.2\r\n", "Date: Tue, 12 Mar 2013 19:43:15\
-        \ GMT\r\n"]
-    maintype: text
-    plist: [charset=utf-8]
-    plisttext: ; charset=utf-8
-    seekable: 0
-    startofbody: null
-    startofheaders: null
-    status: ''
-    subtype: html
-    type: text/html
-    typeheader: text/html; charset=utf-8
-    unixfrom: ''
-  url: http://127.0.0.1:5000/redirected
-urlopen:GET https://httpbin.org/ip:
-  code: 200
-  content: "{\n  \"origin\": \"10.188.10.218\"\n}"
-  headers: !!python/object:httplib.HTTPMessage
-    dict: {connection: close, content-length: '31', content-type: application/json,
-      date: 'Tue, 12 Mar 2013 19:43:15 GMT', server: gunicorn/0.16.1}
-    encodingheader: null
-    fp: null
-    headers: ["Server: gunicorn/0.16.1\r\n", "Date: Tue, 12 Mar 2013 19:43:15 GMT\r\
-        \n", "Content-Type: application/json\r\n", "Content-Length: 31\r\n", "Connection:\
-        \ close\r\n"]
-    maintype: application
-    plist: []
-    plisttext: ''
-    seekable: 0
-    startofbody: null
-    startofheaders: null
-    status: ''
-    subtype: json
-    type: application/json
-    typeheader: application/json
-    unixfrom: ''
-  url: https://httpbin.org/ip
+  headers: {content-length: '22', content-type: text/html; charset=utf-8, date: 'Tue,
+      14 May 2013 21:48:51 GMT', server: Werkzeug/0.8.3 Python/2.7.3}
+  raw_headers: ["Content-Type: text/html; charset=utf-8\r\n", "Content-Length: 22\r\
+      \n", "Server: Werkzeug/0.8.3 Python/2.7.3\r\n", "Date: Tue, 14 May 2013 21:48:51\
+      \ GMT\r\n"]
+  reason: OK
+  status: 200
+httplib:GET 127.0.0.1:5000/will_redirect None:
+  content: '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+    <title>Redirecting...</title>
+
+    <h1>Redirecting...</h1>
+
+    <p>You should be redirected automatically to target URL: <a href="/redirected">/redirected</a>.  If
+    not click the link.'
+  headers: {content-length: '229', content-type: text/html; charset=utf-8, date: 'Tue,
+      14 May 2013 21:48:51 GMT', location: 'http://127.0.0.1:5000/redirected', server: Werkzeug/0.8.3
+      Python/2.7.3}
+  raw_headers: ["Content-Type: text/html; charset=utf-8\r\n", "Content-Length: 229\r\
+      \n", "Location: http://127.0.0.1:5000/redirected\r\n", "Server: Werkzeug/0.8.3\
+      \ Python/2.7.3\r\n", "Date: Tue, 14 May 2013 21:48:51 GMT\r\n"]
+  reason: FOUND
+  status: 302
+httplib:GET httpbin.org:443/ip None:
+  content: "{\n  \"origin\": \"199.116.73.34\"\n}"
+  headers: {connection: Close, content-length: '31', content-type: application/json,
+    date: 'Tue, 14 May 2013 21:48:51 GMT', server: gunicorn/0.16.1}
+  raw_headers: ["Content-Type: application/json\r\n", "Date: Tue, 14 May 2013 21:48:51\
+      \ GMT\r\n", "Server: gunicorn/0.16.1\r\n", "Content-Length: 31\r\n", "Connection:\
+      \ Close\r\n"]
+  reason: OK
+  status: 200

@@ -7,7 +7,6 @@ import hashlib
 import yaml
 
 from cassette.http_response import MockedHTTPResponse
-from cassette.addinfourl import MockedAddInfoURL
 
 old_urlopen = urllib2.urlopen
 log = logging.getLogger("cassette")
@@ -96,14 +95,7 @@ class CassetteLibrary(object):
         if not cassette_name:
             raise TypeError("No cassette name provided.")
 
-        # Choose the class based on the response class
-        if hasattr(response, "getheaders"):
-            # It's an httplib.HTTPResponse
-            mock_response_class = MockedHTTPResponse
-
-        else:
-            mock_response_class = MockedAddInfoURL
-
+        mock_response_class = MockedHTTPResponse
         mocked = mock_response_class.from_response(response)
         self.data[cassette_name] = mocked
 
@@ -156,11 +148,7 @@ class CassetteLibrary(object):
         content = yaml.load(yaml_str)
 
         for k, v in content.items():
-            if k.startswith("urlopen:"):
-                mock_response_class = MockedAddInfoURL
-            else:
-                mock_response_class = MockedHTTPResponse
-
+            mock_response_class = MockedHTTPResponse
             data[k] = mock_response_class.from_dict(v)
 
         # Cache the file for later
