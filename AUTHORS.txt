@@ -1,0 +1,13 @@
+Cassette is written and maintained by Charles-Axel Dein and various
+contributors:
+
+Development Lead
+````````````````
+
+- Charles-Axel Dein <charles@uber.com>
+
+Patches and Suggestions
+```````````````````````
+
+- Todd Wolfson <todd@uber.com>
+- Zack Heller <zack@uber.com>

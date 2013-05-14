@@ -24,6 +24,7 @@ TEST_URL = "http://127.0.0.1:5000/index"
 TEST_URL_HTTPS = "https://httpbin.org/ip"
 TEST_URL_REDIRECT = "http://127.0.0.1:5000/will_redirect"
 TEST_URL_IMAGE = "http://127.0.0.1:5000/image"
+TEST_URL_404 = "http://127.0.0.1:5000/404"
 
 
 # Taken from requests
@@ -121,10 +122,11 @@ class TestCassette(TestCase):
 
         self.assertEqual(self.had_response.called, False)
         if expected_content:
+            content = unicode(r.read(), "utf-8")
             if allow_incomplete_match:
-                self.assertIn(expected_content, r.read())
+                self.assertIn(expected_content, content)
             else:
-                self.assertEqual(r.read(), expected_content)
+                self.assertEqual(content, expected_content)
 
         self.had_response.reset_mock()
 
@@ -134,10 +136,11 @@ class TestCassette(TestCase):
 
         self.assertEqual(self.had_response.called, True)
         if expected_content:
+            content = unicode(r.read(), "utf-8")
             if allow_incomplete_match:
-                self.assertIn(expected_content, r.read())
+                self.assertIn(expected_content, content)
             else:
-                self.assertEqual(r.read(), expected_content)
+                self.assertEqual(content, expected_content)
 
         if r.headers["Content-Type"] == "application/json":
             try:
@@ -258,6 +261,21 @@ class TestCassette(TestCase):
         self.assertEqual(self.had_response.called, True)
         self.assertEqual(expected_image, actual_image)
 
+    def test_flow_404(self):
+        """Verify that cassette can returns 404 from file."""
+
+        # First run
+        with cassette.play(TEMPORARY_RESPONSES_FILENAME):
+            self.assertRaises(urllib2.HTTPError, urllib2.urlopen, TEST_URL_404)
+
+        self.assertEqual(self.had_response.called, False)
+
+        # Second run, it has the response.
+        with cassette.play(TEMPORARY_RESPONSES_FILENAME):
+            self.assertRaises(urllib2.HTTPError, urllib2.urlopen, TEST_URL_404)
+
+        self.assertEqual(self.had_response.called, True)
+
 
 #
 # Verify that cassette can read from an existing file.
@@ -281,11 +299,12 @@ class TestCassetteFile(TestCase):
         with cassette.play(RESPONSES_FILENAME):
             r = urllib2.urlopen(url)
 
-        self.assertEqual(self.had_response.called, True)
+        content = unicode(r.read(), "utf-8")
         if allow_incomplete_match:
-            self.assertIn(expected_content, r.read())
+            self.assertIn(expected_content, content)
         else:
-            self.assertEqual(r.read(), expected_content)
+            self.assertEqual(content, expected_content)
+        self.assertEqual(self.had_response.called, True)
 
         return r
 
