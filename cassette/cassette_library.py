@@ -1,14 +1,12 @@
 from __future__ import absolute_import
 import logging
 import os
-import urllib2
 import hashlib
 
 import yaml
 
 from cassette.http_response import MockedHTTPResponse
 
-old_urlopen = urllib2.urlopen
 log = logging.getLogger("cassette")
 
 
@@ -24,34 +22,6 @@ class CassetteName(unicode):
     A CassetteName represents an unique way to retrieve the cassette
     from the library.
     """
-
-    @classmethod
-    def from_urlopen_url(cls, url, data):
-        """Create an object from a urlopen url."""
-        req = urllib2.Request(url, data)
-        return cls.from_urlopen_request(req)
-
-    @classmethod
-    def from_urlopen_request(cls, request, data=None):
-        """Create an object from a urlopen request."""
-
-        # From Python source code, urllib2.py:382
-        if data is not None:
-            request.add_data(data)
-
-        data = request.get_data()
-        if not data:
-            data = ""
-
-        template_vars = dict(
-            method=request.get_method(),
-            url=request.get_full_url(),
-            data=data
-        )
-
-        name = "urlopen:{method} {url} {data}".format(**template_vars)
-        name = name.strip()
-        return name
 
     @classmethod
     def from_httplib_connection(cls, host, port, method, url, body):
@@ -155,17 +125,6 @@ class CassetteLibrary(object):
         self.save_to_cache(file_hash=yaml_hash, data=data)
 
         return data
-
-    def cassette_name_for_urlopen(self, url_or_request, data):
-        """Create a cassette name from a urlopen request."""
-
-        if isinstance(url_or_request, basestring):
-            name = CassetteName.from_urlopen_url(url_or_request, data)
-        else:
-            # url is a urllib2.Request object
-            name = CassetteName.from_urlopen_request(url_or_request, data)
-
-        return name
 
     def cassette_name_for_httplib_connection(self, host, port, method,
                                              url, body):
