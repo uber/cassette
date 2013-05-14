@@ -24,6 +24,7 @@ TEST_URL = "http://127.0.0.1:5000/index"
 TEST_URL_HTTPS = "https://httpbin.org/ip"
 TEST_URL_REDIRECT = "http://127.0.0.1:5000/will_redirect"
 TEST_URL_IMAGE = "http://127.0.0.1:5000/image"
+TEST_URL_404 = "http://127.0.0.1:5000/404"
 
 
 # Taken from requests
@@ -260,6 +261,21 @@ class TestCassette(TestCase):
         self.assertEqual(self.had_response.called, True)
         self.assertEqual(expected_image, actual_image)
 
+    def test_flow_404(self):
+        """Verify that cassette can returns 404 from file."""
+
+        # First run
+        with cassette.play(TEMPORARY_RESPONSES_FILENAME):
+            self.assertRaises(urllib2.HTTPError, urllib2.urlopen, TEST_URL_404)
+
+        self.assertEqual(self.had_response.called, False)
+
+        # Second run, it has the response.
+        with cassette.play(TEMPORARY_RESPONSES_FILENAME):
+            self.assertRaises(urllib2.HTTPError, urllib2.urlopen, TEST_URL_404)
+
+        self.assertEqual(self.had_response.called, True)
+
 
 #
 # Verify that cassette can read from an existing file.
@@ -333,9 +349,6 @@ class TestCassetteFile(TestCase):
     def test_non_ascii_content(self):
         """Verify that cassette can handle non-ascii content."""
 
-        url = "http://127.0.0.1:5000/non-ascii-content"
-        r = urllib2.urlopen(url)
-        r.read()
         self.check_read_from_file_flow(
             url="http://127.0.0.1:5000/non-ascii-content",
             expected_content=u"Le Mexicain l'avait achetée en viager "
