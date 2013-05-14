@@ -1,6 +1,15 @@
 Changelog for Cassette
 ======================
 
+0.2 (unreleased)
+----------------
+
+- Get rid of urlopen mocking, mock only at ``httplib`` level to circumvent
+  the problem with urlopen raising exceptions when getting non-2XX codes
+- Clean up the docs, streamline their structure
+- **This is a backward incompatible release**, you'll need to delete your
+  YAML file.
+
 0.1.13 (2013-05-13)
 -------------------
 
