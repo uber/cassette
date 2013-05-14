@@ -1,7 +1,7 @@
 Changelog for Cassette
 ======================
 
-0.2 (unreleased)
+0.2 (2013-05-14)
 ----------------
 
 - Get rid of urlopen mocking, mock only at ``httplib`` level to circumvent
