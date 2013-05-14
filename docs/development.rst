@@ -4,11 +4,12 @@ Development
 Running cassette tests
 ----------------------
 
-Install requirements:
+Create a virtual environment, install fabric (``pip install fabric``) then
+install requirements:
 
 ::
 
-    $ pip install -r requirements-dev.txt
+    $ fab bootstrap
 
 Start the test server and run tests:
 

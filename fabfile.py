@@ -4,7 +4,7 @@ import urllib2
 from fabric.api import local, task, lcd
 from fabric.colors import magenta, green
 
-from cassette.tests.test_cassette import TEST_URL
+TEST_URL = "http://127.0.0.1:5000/index"
 
 
 @task
@@ -65,6 +65,7 @@ def push_docs():
 
     docs()
     with lcd("../cassette-docs/html"):
+        local("git add .")
         local("git commit -am 'Update documentation'")
         local("git push")
 
@@ -83,3 +84,11 @@ def release():
     local("git push --tags")
     local("git push")
     push_docs()
+
+
+@task
+def bootstrap():
+    """Bootstrap the developer environment."""
+
+    local("pip install -r requirements-dev.txt")
+    local("pip install -r requirements.txt")
