@@ -117,9 +117,10 @@ class CassetteLibrary(object):
         # Otherwise, parse the contents
         content = yaml.load(yaml_str)
 
-        for k, v in content.items():
-            mock_response_class = MockedHTTPResponse
-            data[k] = mock_response_class.from_dict(v)
+        if content:
+            for k, v in content.items():
+                mock_response_class = MockedHTTPResponse
+                data[k] = mock_response_class.from_dict(v)
 
         # Cache the file for later
         self.save_to_cache(file_hash=yaml_hash, data=data)
