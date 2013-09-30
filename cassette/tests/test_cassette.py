@@ -229,7 +229,7 @@ class TestCassette(TestCase):
             "param": "1",
         }
 
-        url = "/get?"
+        url = "get?"
         url += _encode_params(param)
         r = self.check_urllib2_flow(url=url)
         self.assertEqual(r.json["args"]["param"], "1")
