@@ -6,8 +6,7 @@ Similar libraries
 
 Cassette took a lot inspiration from the following packages:
 
--  `vcrpy <https://github.com/kevin1024/vcrpy>`__: great library but you
-   can store only one request per YAML file...
+-  `vcrpy <https://github.com/kevin1024/vcrpy>`__: HTTP recording and playback library
 -  `vcr <https://github.com/myronmarston/vcr>`__: in Ruby
 
 Limitations
