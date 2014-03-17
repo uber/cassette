@@ -24,10 +24,13 @@ class CassetteName(unicode):
     """
 
     @classmethod
-    def from_httplib_connection(cls, host, port, method, url, body):
+    def from_httplib_connection(cls, host, port, method, url, body, headers):
         """Create an object from an httplib request."""
 
-        name = "httplib:{method} {host}:{port}{url} {body}".format(**locals())
+        if headers:
+            headers = hashlib.md5(repr(sorted(headers.items()))).hexdigest()
+
+        name = "httplib:{method} {host}:{port}{url} {headers} {body}".format(**locals())
         name = name.strip()
         return name
 
@@ -128,10 +131,10 @@ class CassetteLibrary(object):
         return data
 
     def cassette_name_for_httplib_connection(self, host, port, method,
-                                             url, body):
+                                             url, body, headers):
         """Create a cassette name from an httplib request."""
         return CassetteName.from_httplib_connection(
-            host, port, method, url, body)
+            host, port, method, url, body, headers)
 
     def rewind(self):
         for k, v in self.data.items():
