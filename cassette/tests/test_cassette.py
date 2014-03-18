@@ -25,6 +25,7 @@ TEST_URL_HTTPS = "https://httpbin.org/ip"
 TEST_URL_REDIRECT = "http://127.0.0.1:5000/will_redirect"
 TEST_URL_IMAGE = "http://127.0.0.1:5000/image"
 TEST_URL_404 = "http://127.0.0.1:5000/404"
+TEST_URL_HEADERS = "http://127.0.0.1:5000/headers"
 
 
 # Taken from requests
@@ -293,11 +294,13 @@ class TestCassetteFile(TestCase):
         self.addCleanup(patcher.stop)
 
     def check_read_from_file_flow(self, url, expected_content,
-                                  allow_incomplete_match=False):
+                                  allow_incomplete_match=False,
+                                  request_headers=None):
         """Verify the flow when reading from an existing file."""
 
         with cassette.play(RESPONSES_FILENAME):
-            r = urllib2.urlopen(url)
+            request = urllib2.Request(url, headers=request_headers or {})
+            r = urllib2.urlopen(request)
 
         content = unicode(r.read(), "utf-8")
         if allow_incomplete_match:
@@ -354,3 +357,19 @@ class TestCassetteFile(TestCase):
             expected_content=u"Le Mexicain l'avait achetée en viager "
             u"à un procureur à la retraite. Après trois mois, "
             u"l'accident bête. Une affaire.")
+
+    def test_request_headers_json(self):
+        """Verify that request headers are respected for application/json."""
+
+        self.check_read_from_file_flow(
+            url=TEST_URL_HEADERS,
+            request_headers={"Accept": "application/json"},
+            expected_content='"json": true',
+            allow_incomplete_match=True)
+
+    def test_request_headers_no_accept(self):
+        """Verify that request headers are respected for default headers."""
+
+        self.check_read_from_file_flow(
+            url=TEST_URL_HEADERS,
+            expected_content="not json")

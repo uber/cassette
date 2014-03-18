@@ -7,7 +7,7 @@ log = logging.getLogger("cassette")
 
 class CassetteConnectionMixin(object):
 
-    def request(self, method, url, body=None, headers={}):
+    def request(self, method, url, body=None, headers=None):
         """Send HTTP request."""
 
         lib = self._cassette_library
@@ -16,14 +16,15 @@ class CassetteConnectionMixin(object):
             port=self.port,
             method=method,
             url=url,
-            body=body
+            body=body,
+            headers=headers,
         )
         if self._cassette_name in lib:
             self._response = lib[self._cassette_name]
             return
 
         log.warning("Making external HTTP request: %s" % self._cassette_name)
-        self._baseclass.request(self, method, url, body, headers)
+        self._baseclass.request(self, method, url, body, headers or {})
 
     def getresponse(self, buffering=False):
         """Return HTTP response."""

@@ -38,5 +38,13 @@ def redirected():
 def get():
     return jsonify(args=request.args)
 
+
+@app.route("/headers")
+def headers():
+    if request.headers.get("Accept") == "application/json":
+        return jsonify(json=True)
+    else:
+        return "not json"
+
 if __name__ == "__main__":
     app.run()
