@@ -1,7 +1,7 @@
 Changelog for Cassette
 ======================
 
-0.3 (unreleased)
+0.3 (2014-03-18)
 ----------------
 
 - Respect request headers in cassette name. Requires regenerating cassette
