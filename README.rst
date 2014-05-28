@@ -32,7 +32,7 @@ Installation
 Documentation
 -------------
 
-Latest documentation: `uber.github.io/cassette/ <http://uber.github.io/cassette/>`_
+Latest documentation: `cassette.readthedocs.org <http://cassette.readthedocs.org/>`_
 
 
 License
