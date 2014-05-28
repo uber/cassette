@@ -28,3 +28,7 @@ pip-log.txt
 
 # Doc
 docs/_build
+
+# Development
+*.swp
+*.un~
