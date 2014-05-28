@@ -16,7 +16,7 @@ setup(
     version='0.3',
     author="Charles-Axel Dein",
     author_email="charles@uber.com",
-    url="https://github.com/uber/cassette",
+    url="http://cassette.readthedocs.org/",
     license="MIT",
     packages=find_packages(),
     keywords=["http", "tests", "mock"],
