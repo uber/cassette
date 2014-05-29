@@ -122,7 +122,6 @@ class CassetteLibrary(object):
 
             with open(os.path.join(self.filename, filename), 'w+') as f:
                 f.write(encoded_str)
-                f.close()
 
             self.save_to_cache(file_hash=_hash(encoded_str), data=response)
 
