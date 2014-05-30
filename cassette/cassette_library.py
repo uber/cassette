@@ -50,6 +50,7 @@ class CassetteLibrary(object):
     This is an abstract class that needs to have several methods implemented.
 
     :param str filename: filename to use when storing and replaying requests.
+    :param str encoding: the encoding to use for storing the responses.
     """
 
     # TODO: what about enforcing self.data to be implemented somehow
@@ -84,6 +85,7 @@ class CassetteLibrary(object):
         return mocked
 
     def save_to_cache(self, file_hash, data):
+        """Save a decoded data object into cache."""
         CassetteLibrary.cache[self.filename] = {
             'hash': file_hash,
             'data': data
@@ -100,12 +102,6 @@ class CassetteLibrary(object):
         version of urllib2/httplib).
         """
         pass
-
-    def generate_filename(self, filename):
-        for character in ('/', ':', ' '):
-            filename = filename.replace(character, '_')
-
-        return filename + self.encoder.file_ext
 
     def cassette_name_for_httplib_connection(self, host, port, method,
                                              url, body, headers):
@@ -128,13 +124,25 @@ class CassetteLibrary(object):
     # Static methods
     @staticmethod
     def create_new_cassette_library(filename, encoding):
-        """REAL GOOD DOCSTRING HURRR"""
-        if encoding not in ('json', 'yaml', None):
+        """Returns an instantiated CassetteLibrary.
+
+        Use this method to create new a CassetteLibrary. It will automatically
+        determine if it should use a file or directory to back the cassette
+        based on the filename. The method assumes that all file names with an
+        extension (e.g. /file.json) are files, and all file names without
+        extensions are directories (e.g. /testdir).
+
+
+        :param str filename: filename of file or directory for storing requests
+        :param str encoding: the encoding to use for storing requests
+        """
+        if encoding not in ('json', 'yaml', ''):
             raise KeyError("'{e}' is not a supported encoding.\
                     ".format(e=encoding))
 
-        # Check if file has extension
         _, extension = os.path.splitext(filename)
+
+        # Check if file has extension
         if extension:
             # If it has an extension, we assume filename is a file
             return CassetteLibrary._process_file(filename, encoding, extension)
@@ -149,7 +157,7 @@ class CassetteLibrary(object):
                     '{f}'".format(f=filename))
 
         # Parse encoding type
-        if encoding is None:
+        if not encoding:
             if extension.lower() == JsonEncoder.file_ext:
                 encoding = 'json'
             elif extension.lower() == YamlEncoder.file_ext:
@@ -173,12 +181,7 @@ class CassetteLibrary(object):
 
 
 class FileCassetteLibrary(CassetteLibrary):
-    """
-    The CassetteLibrary holds the stored requests and manage them.
-
-    :param str filename: filename to use when storing and replaying requests.
-
-    """
+    """A CassetteLibrary that stores and manages requests with a single file."""
 
     @property
     def data(self):
@@ -266,15 +269,22 @@ class FileCassetteLibrary(CassetteLibrary):
 
 
 class DirectoryCassetteLibrary(CassetteLibrary):
+    """A CassetteLibrary that stores and manages requests with directory."""
 
     def __init__(self, *args, **kwargs):
         super(DirectoryCassetteLibrary, self).__init__(*args, **kwargs)
 
         self.data = {}
 
+    def generate_filename(self, cassette_name):
+        """Generate the filename for a given cassette name."""
+        for character in ('/', ':', ' '):
+            cassette_name = cassette_name.replace(character, '_')
+
+        return cassette_name + self.encoder.file_ext
+
     def write_to_file(self):
         """Write mocked response to a directory of files."""
-
         for cassette_name, response in self.data.items():
             filename = self.generate_filename(cassette_name)
             encoded_str = self.encoder.dump(response.to_dict())
@@ -294,6 +304,11 @@ class DirectoryCassetteLibrary(CassetteLibrary):
         self.is_dirty = False
 
     def __contains__(self, cassette_name):
+        """Returns whether or not the cassette already exists.
+
+        The method first checks if it is already stored in memory. If not, it
+        will check if a file supporting the cassette name exists.
+        """
         contains = cassette_name in self.data
 
         if not contains:
@@ -330,8 +345,7 @@ class DirectoryCassetteLibrary(CassetteLibrary):
         """Returns the mocked response object from the encoded file.
 
         If the cassette file is in the cache, then use it. Otherwise, read
-        from the disk to fetch the particular request.
-        """
+        from the disk to fetch the particular request."""
 
         filename = os.path.join(
             self.filename, self.generate_filename(cassette_name))
