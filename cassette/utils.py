@@ -10,40 +10,38 @@ TEXT_ENCODING = 'ISO-8859-1'
 
 
 class Encoder(object):
-    """
-        Some DOCSTRING HERE
-    """
+    """Abstract class for an encoder consumed by cassette."""
 
+    # Used for matching filenames that correspond to the encoder
     file_ext = '.file'
 
     def dump(self, data):
+        """Abstract method for dumping objects into an encoded form."""
         raise NotImplementedError('Encoder not implemented.')
 
     def load(self, encoded_str):
+        """Abstract method for dumping an encoded string into objects."""
         raise NotImplementedError('Encoder not implemented.')
 
 
 class JsonEncoder(Encoder):
-    """
-        More DOCSTRING HERE
-    """
+    """JSON encoder for storing HTTP responses in plain text."""
 
     file_ext = '.json'
 
     def dump(self, data):
+        """Returns a YAML encoded string of the data."""
         return json.dumps(data, ensure_ascii=False)
 
     def load(self, encoded_str):
+        """Returns an object from the encoded JSON string."""
         return json.loads(encoded_str, TEXT_ENCODING,
                           object_hook=JsonEncoder.json_str_decode_dict)
 
     @staticmethod
     def json_str_decode_list(data):
-        # JSON Decoding functions (non-unicode)
+        """Helper function to decode the list portion of a JSON blob."""
 
-        # Code from stack overflow:
-        # http://stackoverflow.com/questions/956867/how-to-get-string-objects-instead-
-        # of-unicode-ones-from-json-in-python
         rv = []
         for item in data:
             if isinstance(item, unicode):
@@ -57,6 +55,16 @@ class JsonEncoder(Encoder):
 
     @staticmethod
     def json_str_decode_dict(data):
+        """Helper function to decode the dictionary portion of a JSON blob.
+
+        This helper function is necessary to decode the data as an ASCII string
+        instead of a unicode string, which is required in order to be consumed
+        by the mock HTTP response.
+
+        Original code is from stackoverflow:
+        http://stackoverflow.com/questions/956867/how-to-get-string-objects-ins
+        tead-of-unicode-ones-from-json-in-python
+        """
         rv = {}
         for key, value in data.iteritems():
             if isinstance(key, unicode):
@@ -72,14 +80,14 @@ class JsonEncoder(Encoder):
 
 
 class YamlEncoder(Encoder):
-    """
-        More DOCSTRING HERE
-    """
+    """YAML encoder for storing HTTP responses in plain text."""
 
     file_ext = '.yaml'
 
     def dump(self, data):
+        """Returns a YAML encoded string of the data."""
         return yaml.dump(data)
 
     def load(self, encoded_str):
+        """Returns an object from the encoded JSON string."""
         return yaml.load(encoded_str)
