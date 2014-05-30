@@ -27,7 +27,8 @@ class CassetteName(unicode):
     """
 
     @classmethod
-    def from_httplib_connection(cls, host, port, method, url, body, headers, hash_body=False):
+    def from_httplib_connection(cls, host, port, method, url, body,
+                                headers, hash_body=False):
         """Create an object from an httplib request."""
 
         if headers:
@@ -120,8 +121,14 @@ class CassetteLibrary(object):
             # Serialize the items via YAML
             encoded_str = self.dump(response.to_dict())
 
-            with open(os.path.join(self.filename, filename), 'w+') as f:
-                f.write(encoded_str)
+            try:
+                with open(os.path.join(self.filename, filename), 'w+') as f:
+                    f.write(encoded_str)
+            except:
+                # this should never happen since the directory must be there
+                # since it defaults to single file when the dir is not there
+                raise IOError("Directory containing file '{f}' does not \
+                        exist.".format(f=self.filename))
 
             self.save_to_cache(file_hash=_hash(encoded_str), data=response)
 
@@ -133,8 +140,12 @@ class CassetteLibrary(object):
         encoded_str = self.dump(data)
 
         # Save the changes to file
-        with open(self.filename, "w+") as f:
-            f.write(encoded_str)
+        try:
+            with open(self.filename, "w+") as f:
+                f.write(encoded_str)
+        except:
+            raise IOError("Directory containing file '{f}' does not \
+                    exist.".format(f=self.filename))
 
         # Update our hash
         self.save_to_cache(file_hash=_hash(encoded_str), data=self.data)
@@ -146,7 +157,7 @@ class CassetteLibrary(object):
         filename = self.filename
 
         if not os.path.exists(filename):
-            log.info("File '%s' does not exist." % filename)
+            log.info("File '{f}' does not exist.".format(f=filename))
             return data
 
         # Open and read in the file
@@ -200,10 +211,9 @@ class CassetteLibrary(object):
 
         if contains:
             self._had_response()  # For testing purposes
-            log.info("Library has '%s'" % cassette_name)
-
+            log.info("Library has '{n}'".format(n=cassette_name))
         else:
-            log.warning("Library does not have '%s'" % cassette_name)
+            log.warning("Library does not have '{n}'".format(n=cassette_name))
 
         return contains
 
@@ -220,9 +230,9 @@ class CassetteLibrary(object):
 
         if contains:
             self._had_response()  # For testing purposes
-            log.info("Library has '%s'" % cassette_name)
+            log.info("Library has '{n}'".format(n=cassette_name))
         else:
-            log.warning("Library does not have '%s'" % cassette_name)
+            log.warning("Library does not have '{n}'".format(n=cassette_name))
 
         return contains
 
@@ -269,7 +279,7 @@ class CassetteLibrary(object):
             self.filename, self.generate_filename(cassette_name))
 
         if not os.path.exists(filename):
-            log.info("File '%s' does not exist." % filename)
+            log.info("File '{f}' does not exist.".format(f=filename))
             return None
 
         with open(filename) as f:
@@ -299,7 +309,8 @@ class CassetteLibrary(object):
 
     def load_str(self, encoded_str):
         if self.encoding == 'json':
-            return json.loads(encoded_str, TEXT_ENCODING, object_hook=json_str_decode_dict)
+            return json.loads(encoded_str, TEXT_ENCODING,
+                              object_hook=json_str_decode_dict)
         return yaml.load(encoded_str)
 
     def generate_filename(self, filename):
