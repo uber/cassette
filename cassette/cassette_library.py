@@ -3,12 +3,9 @@ import logging
 import os
 import hashlib
 
-import json
-import yaml
-
 from cassette.http_response import MockedHTTPResponse
-from cassette.utils import json_str_decode_dict
-from cassette.utils import TEXT_ENCODING
+from cassette.utils import JsonEncoder
+from cassette.utils import YamlEncoder
 
 log = logging.getLogger("cassette")
 
@@ -63,7 +60,10 @@ class CassetteLibrary(object):
         # Note: if file/directory doesn't exist, default to file
         self.is_directory = os.path.isdir(self.filename)
 
-        self.encoding = encoding
+        if encoding == 'json':
+            self.encoder = JsonEncoder()
+        else:
+            self.encoder = YamlEncoder()
 
     @property
     def data(self):
@@ -117,9 +117,7 @@ class CassetteLibrary(object):
         # Here key=request, value=response
         for cassette_name, response in self.data.items():
             filename = self.generate_filename(cassette_name)
-            # TODO: abstract encoding type
-            # Serialize the items via YAML
-            encoded_str = self.dump(response.to_dict())
+            encoded_str = self.encoder.dump(response.to_dict())
 
             try:
                 with open(os.path.join(self.filename, filename), 'w+') as f:
@@ -137,7 +135,7 @@ class CassetteLibrary(object):
 
         # Serialize the items via YAML
         data = {k: v.to_dict() for k, v in self.data.items()}
-        encoded_str = self.dump(data)
+        encoded_str = self.encoder.dump(data)
 
         # Save the changes to file
         try:
@@ -171,7 +169,7 @@ class CassetteLibrary(object):
             return cached_result['data']
 
         # Otherwise, parse the contents
-        content = self.load_str(encoded_str)
+        content = self.encoder.load(encoded_str)
 
         if content:
             for k, v in content.items():
@@ -292,7 +290,7 @@ class CassetteLibrary(object):
             return cached_result['data']
 
         # Otherwise, parse the contents
-        content = self.load_str(encoded_str)
+        content = self.encoder.load(encoded_str)
 
         if content:
             mock_response_class = MockedHTTPResponse
@@ -302,21 +300,12 @@ class CassetteLibrary(object):
         self.save_to_cache(file_hash=encoded_hash, data=req)
         return req
 
-    def dump(self, data):
-        if self.encoding == 'json':
-            return json.dumps(data, ensure_ascii=False)
-        return yaml.dump(data)
-
-    def load_str(self, encoded_str):
-        if self.encoding == 'json':
-            return json.loads(encoded_str, TEXT_ENCODING,
-                              object_hook=json_str_decode_dict)
-        return yaml.load(encoded_str)
-
     def generate_filename(self, filename):
-        for ch in ['/', ':', ' ']:
-            filename = filename.replace(ch, '_')
+        for character in ['/', ':', ' ']:
+            filename = filename.replace(character, '_')
 
-        if self.encoding == 'json':
-            return filename + '.json'
-        return filename + '.yaml'
+        return filename + self.encoder.file_ext
+
+
+class CassetteLibraryDirectory(CassetteLibrary):
+    pass
