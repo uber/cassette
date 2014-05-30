@@ -25,14 +25,14 @@ class CassetteName(unicode):
 
     @classmethod
     def from_httplib_connection(cls, host, port, method, url, body,
-                                headers, hash_body=False):
+                                headers, will_hash_body=False):
         """Create an object from an httplib request."""
 
         if headers:
             headers = hashlib.md5(repr(sorted(headers.items()))).hexdigest()
 
         # note that old yaml files will not contain the correct matching body
-        if hash_body:
+        if will_hash_body:
             if body:
                 body = hashlib.md5(body).hexdigest()
             else:
@@ -47,36 +47,22 @@ class CassetteLibrary(object):
     """
     The CassetteLibrary holds the stored requests and manage them.
 
-    :param str filename: filename to use when storing and replaying requests.
+    This is an abstract class that needs to have several methods implemented.
 
+    :param str filename: filename to use when storing and replaying requests.
     """
 
+    # TODO: what about enforcing self.data to be implemented somehow
     cache = {}
 
-    def __init__(self, filename, encoding='yaml'):
+    def __init__(self, filename, encoding):
         self.filename = os.path.abspath(filename)
         self.is_dirty = False
-
-        # Note: if file/directory doesn't exist, default to file
-        self.is_directory = os.path.isdir(self.filename)
 
         if encoding == 'json':
             self.encoder = JsonEncoder()
         else:
             self.encoder = YamlEncoder()
-
-    @property
-    def data(self):
-        """Lazily loaded data."""
-
-        if not hasattr(self, "_data"):
-            if self.is_directory:
-                # each key is a file, hence will fetch when needed
-                self._data = {}
-            else:
-                self._data = self.load_file()
-
-        return self._data
 
     def add_response(self, cassette_name, response):
         """Add a new response to the mocked response.
@@ -103,34 +89,107 @@ class CassetteLibrary(object):
             'data': data
         }
 
+    def rewind(self):
+        for k, v in self.data.items():
+            v.rewind()
+
+    def _had_response(self):
+        """Mark that the library already the response.
+
+        This is for testing purposes (it's complicated to patch the unpatched
+        version of urllib2/httplib).
+        """
+        pass
+
+    def generate_filename(self, filename):
+        for character in ('/', ':', ' '):
+            filename = filename.replace(character, '_')
+
+        return filename + self.encoder.file_ext
+
+    def cassette_name_for_httplib_connection(self, host, port, method,
+                                             url, body, headers):
+        """Create a cassette name from an httplib request."""
+        return CassetteName.from_httplib_connection(
+            host, port, method, url, body, headers)
+
+    # Methods that need to be implemented by subclasses
     def write_to_file(self):
-        if self.is_directory:
-            self.write_to_directory()
-        else:
-            self.write_to_single_file()
-
+        """Write the response data to file."""
         self.is_dirty = False
+        raise NotImplementedError('CassetteLibrary not implemented.')
 
-    def write_to_directory(self):
-        """Write mocked response to a directory of files."""
+    def __contains__(self, cassette_name):
+        raise NotImplementedError('CassetteLibrary not implemented.')
 
-        # Here key=request, value=response
-        for cassette_name, response in self.data.items():
-            filename = self.generate_filename(cassette_name)
-            encoded_str = self.encoder.dump(response.to_dict())
+    def __getitem__(self, cassette_name):
+        raise NotImplementedError('CassetteLibrary not implemented.')
 
-            try:
-                with open(os.path.join(self.filename, filename), 'w+') as f:
-                    f.write(encoded_str)
-            except:
-                # this should never happen since the directory must be there
-                # since it defaults to single file when the dir is not there
-                raise IOError("Directory containing file '{f}' does not \
-                        exist.".format(f=self.filename))
+    # Static methods
+    @staticmethod
+    def create_new_cassette_library(filename, encoding):
+        """REAL GOOD DOCSTRING HURRR"""
+        if encoding not in ('json', 'yaml', None):
+            raise KeyError("'{e}' is not a supported encoding.\
+                    ".format(e=encoding))
 
-            self.save_to_cache(file_hash=_hash(encoded_str), data=response)
+        # Check if file has extension
+        _, extension = os.path.splitext(filename)
+        if extension:
+            # If it has an extension, we assume filename is a file
+            return CassetteLibrary._process_file(filename, encoding, extension)
+        else:
+            # Otherwise, we assume filename is a directory
+            return CassetteLibrary._process_directory(filename, encoding)
 
-    def write_to_single_file(self):
+    @staticmethod
+    def _process_file(filename, encoding, extension):
+        if os.path.isdir(filename):
+            raise IOError("Expected a file, but found a directory at \
+                    '{f}'".format(f=filename))
+
+        # Parse encoding type
+        if encoding is None:
+            if extension.lower() == JsonEncoder.file_ext:
+                encoding = 'json'
+            elif extension.lower() == YamlEncoder.file_ext:
+                encoding = 'yaml'
+            else:
+                # Default to YAML for legacy code
+                encoding = 'yaml'
+
+        return FileCassetteLibrary(filename, encoding)
+
+    @staticmethod
+    def _process_directory(filename, encoding):
+        if os.path.isfile(filename):
+            raise IOError("Expected a directory, but found a file at \
+                    '{f}'".format(f=filename))
+
+        if encoding is None:
+            encoding = 'json'  # default new directories to json
+
+        return DirectoryCassetteLibrary(filename, encoding)
+
+
+class FileCassetteLibrary(CassetteLibrary):
+    """
+    The CassetteLibrary holds the stored requests and manage them.
+
+    :param str filename: filename to use when storing and replaying requests.
+
+    """
+
+    @property
+    def data(self):
+        """Lazily loaded data."""
+
+        if not hasattr(self, "_data"):
+            self._data = self.load_file()
+
+        return self._data
+
+    def write_to_file(self):
         """Write mocked responses to file."""
 
         # Serialize the items via YAML
@@ -147,6 +206,8 @@ class CassetteLibrary(object):
 
         # Update our hash
         self.save_to_cache(file_hash=_hash(encoded_str), data=self.data)
+
+        self.is_dirty = False
 
     def load_file(self):
         """Load MockedResponses from YAML file."""
@@ -181,30 +242,7 @@ class CassetteLibrary(object):
 
         return data
 
-    def cassette_name_for_httplib_connection(self, host, port, method,
-                                             url, body, headers):
-        """Create a cassette name from an httplib request."""
-        return CassetteName.from_httplib_connection(
-            host, port, method, url, body, headers, hash_body=self.is_directory)
-
-    def rewind(self):
-        for k, v in self.data.items():
-            v.rewind()
-
-    def _had_response(self):
-        """Mark that the library already the response.
-
-        This is for testing purposes (it's complicated to patch the unpatched
-        version of urllib2/httplib).
-        """
-        pass
-
     def __contains__(self, cassette_name):
-        if self.is_directory:
-            return self._name_in_directory(cassette_name)
-        return self._name_in_file(cassette_name)
-
-    def _name_in_file(self, cassette_name):
         contains = cassette_name in self.data
 
         if contains:
@@ -215,12 +253,51 @@ class CassetteLibrary(object):
 
         return contains
 
-    def _name_in_directory(self, cassette_name):
+    def __getitem__(self, cassette_name):
+        """Fetch the request from the loaded dictionary data."""
+        req = self.data.get(cassette_name, None)
+
+        if not req:
+            raise KeyError("Cassette '{c}' does not exist in \
+                    library.".format(c=cassette_name))
+
+        req.rewind()
+        return req
+
+
+class DirectoryCassetteLibrary(CassetteLibrary):
+
+    def __init__(self, *args, **kwargs):
+        super(DirectoryCassetteLibrary, self).__init__(*args, **kwargs)
+
+        self.data = {}
+
+    def write_to_file(self):
+        """Write mocked response to a directory of files."""
+
+        for cassette_name, response in self.data.items():
+            filename = self.generate_filename(cassette_name)
+            encoded_str = self.encoder.dump(response.to_dict())
+
+            try:
+                with open(os.path.join(self.filename, filename), 'w+') as f:
+                    f.write(encoded_str)
+            except:
+                # this should never happen since the directory must be there
+                # since it defaults to single file when the dir is not there
+                raise IOError("Directory containing file '{f}' does not \
+                        exist.".format(f=self.filename))
+
+            # Update our hash
+            self.save_to_cache(file_hash=_hash(encoded_str), data=response)
+
+        self.is_dirty = False
+
+    def __contains__(self, cassette_name):
         contains = cassette_name in self.data
 
         if not contains:
             # Check file directory if it exists
-
             filename = os.path.join(
                 self.filename, self.generate_filename(cassette_name))
 
@@ -235,42 +312,25 @@ class CassetteLibrary(object):
         return contains
 
     def __getitem__(self, cassette_name):
-        if self.is_directory:
-            return self._getitem_from_directory(cassette_name)
-        return self._getitem_from_file(cassette_name)
-
-    def _getitem_from_file(self, cassette_name):
-        """
-        Fetch the request from the dictionary data that has already been loaded.
-        """
-        req = self.data.get(cassette_name, None)
-
-        if req:
-            req.rewind()
-
-        return req
-
-    def _getitem_from_directory(self, cassette_name):
-        """
-        Fetch the request from self.data if it exists. Otherwise, look to disk.
-        """
+        """Fetch the request if it exists in memory. Otherwise, look to disk."""
         if cassette_name in self.data:
             req = self.data[cassette_name]
         else:
             # If not in self.data, need to fetch from disk
-            req = self.load_request_from_file(cassette_name)
+            req = self._load_request_from_file(cassette_name)
 
-        if req:
-            req.rewind()
+        if not req:
+            raise KeyError("Cassette '{c}' does not exist in \
+                    library.".format(c=cassette_name))
 
+        req.rewind()
         return req
 
-    def load_request_from_file(self, cassette_name):
-        """
+    def _load_request_from_file(self, cassette_name):
+        """Returns the mocked response object from the encoded file.
+
         If the cassette file is in the cache, then use it. Otherwise, read
         from the disk to fetch the particular request.
-
-        Returns the mocked response object from a YAML file.
         """
 
         filename = os.path.join(
@@ -300,12 +360,9 @@ class CassetteLibrary(object):
         self.save_to_cache(file_hash=encoded_hash, data=req)
         return req
 
-    def generate_filename(self, filename):
-        for character in ['/', ':', ' ']:
-            filename = filename.replace(character, '_')
-
-        return filename + self.encoder.file_ext
-
-
-class CassetteLibraryDirectory(CassetteLibrary):
-    pass
+    # Override
+    def cassette_name_for_httplib_connection(self, host, port, method,
+                                             url, body, headers):
+        """Create a cassette name from an httplib request."""
+        return CassetteName.from_httplib_connection(
+            host, port, method, url, body, headers, will_hash_body=True)
