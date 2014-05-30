@@ -12,13 +12,10 @@ logging.getLogger("cassette").addHandler(logging.NullHandler())
 def insert(filename, encoding=''):
     """Setup cassette.
 
-    :param filename: path to .yaml where requests and responses will be stored.
+    :param filename: path to where requests and responses will be stored.
     """
     global cassette_library
 
-    # TODO: check if it is a file or directory
-    # if .json/.yaml --> file
-    # otherwise --> directory
     cassette_library = CassetteLibrary.create_new_cassette_library(
         filename, encoding)
     patch(cassette_library)

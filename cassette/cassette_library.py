@@ -132,7 +132,6 @@ class CassetteLibrary(object):
         extension (e.g. /file.json) are files, and all file names without
         extensions are directories (e.g. /testdir).
 
-
         :param str filename: filename of file or directory for storing requests
         :param str encoding: the encoding to use for storing requests
         """
