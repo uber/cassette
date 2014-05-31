@@ -88,12 +88,9 @@ def url_for(endpoint):
     """Return full URL for endpoint."""
     return TEST_HOST + endpoint
 
-#
-# Testing the whole flow with a temporary response file.
-#
-
 
 class TestCassette(TestCase):
+    """Testing the whole flow with a temporary response file."""
 
     def setUp(self):
         self.filename = TEMPORARY_RESPONSES_FILENAME
@@ -281,10 +278,8 @@ class TestCassette(TestCase):
         self.assertEqual(self.had_response.called, True)
 
 
-#
-# Perform the same test but in JSON
-#
 class TestCassetteJson(TestCassette):
+    """Perform the same test but in JSON."""
 
     def setUp(self):
         self.filename = TEMPORARY_RESPONSES_FILENAME
@@ -300,10 +295,8 @@ class TestCassetteJson(TestCassette):
             os.remove(self.filename)
 
 
-#
-# Testing the whole flow with a temporary response directory in yaml.
-#
 class TestCassetteDirectory(TestCassette):
+    """Testing the whole flow with a temporary response directory in yaml."""
 
     def setUp(self):
         self.filename = TEMPORARY_RESPONSES_DIRECTORY
@@ -318,18 +311,13 @@ class TestCassetteDirectory(TestCassette):
         if os.path.exists(self.filename) and os.path.isdir(self.filename):
             shutil.rmtree(self.filename)
 
-        # Directory must exist prior to cassette instantiation
-        os.mkdir(self.filename)
-
     def tearDown(self):
         if os.path.exists(self.filename) and os.path.isdir(self.filename):
             shutil.rmtree(self.filename)
 
 
-#
-# Testing the whole flow with a temporary response directory in json.
-#
 class TestCassetteDirectoryJson(TestCassetteDirectory):
+    """Testing the whole flow with a temporary response directory in json."""
 
     def setUp(self):
         self.filename = TEMPORARY_RESPONSES_DIRECTORY
@@ -344,16 +332,9 @@ class TestCassetteDirectoryJson(TestCassetteDirectory):
         if os.path.exists(self.filename) and os.path.isdir(self.filename):
             shutil.rmtree(self.filename)
 
-        # Directory must exist prior to cassette instantiation
-        os.mkdir(self.filename)
-
-
-#
-# Verify that cassette can read from an existing file.
-#
-
 
 class TestCassetteFile(TestCase):
+    """Verify that cassette can read from an existing file."""
 
     def setUp(self):
 

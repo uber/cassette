@@ -173,7 +173,7 @@ class CassetteLibrary(object):
             raise IOError("Expected a directory, but found a file at \
                     '{f}'".format(f=filename))
 
-        if encoding is None:
+        if not encoding:
             encoding = 'json'  # default new directories to json
 
         return DirectoryCassetteLibrary(filename, encoding)
@@ -284,12 +284,15 @@ class DirectoryCassetteLibrary(CassetteLibrary):
 
     def write_to_file(self):
         """Write mocked response to a directory of files."""
+        if not os.path.exists(self.filename):
+            os.mkdir(self.filename)
+
         for cassette_name, response in self.data.items():
             filename = self.generate_filename(cassette_name)
             encoded_str = self.encoder.dump(response.to_dict())
 
             try:
-                with open(os.path.join(self.filename, filename), 'w+') as f:
+                with open(os.path.join(self.filename, filename), 'w') as f:
                     f.write(encoded_str)
             except:
                 # this should never happen since the directory must be there
