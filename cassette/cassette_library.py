@@ -3,6 +3,8 @@ import logging
 import os
 import hashlib
 
+from urlparse import urlparse
+
 from cassette.http_response import MockedHTTPResponse
 from cassette.utils import JsonEncoder
 from cassette.utils import YamlEncoder
@@ -31,14 +33,25 @@ class CassetteName(unicode):
         if headers:
             headers = hashlib.md5(repr(sorted(headers.items()))).hexdigest()
 
-        # note that old yaml files will not contain the correct matching body
         if will_hash_body:
             if body:
                 body = hashlib.md5(body).hexdigest()
             else:
                 body = ''
 
-        name = "httplib:{method} {host}:{port}{url} {headers} {body}".format(**locals())
+            if url:
+                # instantiated to 0.0.0.0 so we can parse
+                parsed_url = urlparse('http://0.0.0.0' + url)
+                url = parsed_url.path
+                query = hashlib.md5(parsed_url.query + '#' + parsed_url.fragment).hexdigest()
+            else:
+                url = ''
+                query = ''
+            name = "httplib:{method} {host}:{port}{url} {query} {headers} {body}".format(**locals())
+        else:
+            # note that old yaml files will not contain the correct matching body
+            name = "httplib:{method} {host}:{port}{url} {headers} {body}".format(**locals())
+
         name = name.strip()
         return name
 
