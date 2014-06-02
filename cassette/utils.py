@@ -7,6 +7,7 @@ import yaml
 import json
 
 TEXT_ENCODING = 'ISO-8859-1'
+SUPPORTED_FORMATS = ('json', 'yaml', '')
 
 
 class Encoder(object):
@@ -14,6 +15,42 @@ class Encoder(object):
 
     # Used for matching filenames that correspond to the encoder
     file_ext = '.file'
+
+    @staticmethod
+    def is_supported_format(file_format):
+        """Returns whether the file format is supported.
+
+        :param str file_format:
+        """
+        return file_format in SUPPORTED_FORMATS
+
+    @staticmethod
+    def get_encoder_from_file_format(file_format):
+        """Return the correct encoder that corresponds to the file format.
+
+        :param str file_format:
+        """
+        if file_format == 'json':
+            return JsonEncoder()
+        elif file_format == 'yaml':
+            return YamlEncoder()
+        else:
+            # Default to YAML for legacy code
+            return YamlEncoder()
+
+    @staticmethod
+    def get_encoder_from_extension(extension):
+        """Return the correct encoder that corresponds to the file extension.
+
+        :param str extension:
+        """
+        if extension.lower() == JsonEncoder.file_ext:
+            return JsonEncoder()
+        elif extension.lower() == YamlEncoder.file_ext:
+            return YamlEncoder()
+        else:
+            # Default to YAML for legacy code
+            return YamlEncoder()
 
     def dump(self, data):
         """Abstract method for dumping objects into an encoded form."""

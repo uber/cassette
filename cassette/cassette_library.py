@@ -6,8 +6,8 @@ import hashlib
 from urlparse import urlparse
 
 from cassette.http_response import MockedHTTPResponse
+from cassette.utils import Encoder
 from cassette.utils import JsonEncoder
-from cassette.utils import YamlEncoder
 
 log = logging.getLogger("cassette")
 
@@ -63,20 +63,17 @@ class CassetteLibrary(object):
     This is an abstract class that needs to have several methods implemented.
 
     :param str filename: filename to use when storing and replaying requests.
-    :param str encoding: the encoding to use for storing the responses.
+    :param str file_format: the file format to use for storing the responses.
     """
 
     # TODO: what about enforcing self.data to be implemented somehow
     cache = {}
 
-    def __init__(self, filename, encoding):
+    def __init__(self, filename, encoder):
         self.filename = os.path.abspath(filename)
         self.is_dirty = False
 
-        if encoding == 'json':
-            self.encoder = JsonEncoder()
-        else:
-            self.encoder = YamlEncoder()
+        self.encoder = encoder
 
     def add_response(self, cassette_name, response):
         """Add a new response to the mocked response.
@@ -136,7 +133,7 @@ class CassetteLibrary(object):
 
     # Static methods
     @staticmethod
-    def create_new_cassette_library(filename, encoding):
+    def create_new_cassette_library(filename, file_format):
         """Returns an instantiated CassetteLibrary.
 
         Use this method to create new a CassetteLibrary. It will automatically
@@ -146,50 +143,48 @@ class CassetteLibrary(object):
         extensions are directories (e.g. /testdir).
 
         :param str filename: filename of file or directory for storing requests
-        :param str encoding: the encoding to use for storing requests
+        :param str file_format: the file_format to use for storing requests
         """
-        if encoding not in ('json', 'yaml', ''):
-            raise KeyError("'{e}' is not a supported encoding.\
-                    ".format(e=encoding))
+        if file_format not in ('json', 'yaml', ''):
+            raise KeyError("'{e}' is not a supported file_format.\
+                    ".format(e=file_format))
 
         _, extension = os.path.splitext(filename)
 
         # Check if file has extension
         if extension:
             # If it has an extension, we assume filename is a file
-            return CassetteLibrary._process_file(filename, encoding, extension)
+            return CassetteLibrary._process_file(filename, file_format, extension)
         else:
             # Otherwise, we assume filename is a directory
-            return CassetteLibrary._process_directory(filename, encoding)
+            return CassetteLibrary._process_directory(filename, file_format)
 
     @staticmethod
-    def _process_file(filename, encoding, extension):
+    def _process_file(filename, file_format, extension):
         if os.path.isdir(filename):
             raise IOError("Expected a file, but found a directory at \
                     '{f}'".format(f=filename))
 
         # Parse encoding type
-        if not encoding:
-            if extension.lower() == JsonEncoder.file_ext:
-                encoding = 'json'
-            elif extension.lower() == YamlEncoder.file_ext:
-                encoding = 'yaml'
-            else:
-                # Default to YAML for legacy code
-                encoding = 'yaml'
+        if not file_format:
+            encoder = Encoder.get_encoder_from_extension(extension)
+        else:
+            encoder = Encoder.get_encoder_from_file_format(file_format)
 
-        return FileCassetteLibrary(filename, encoding)
+        return FileCassetteLibrary(filename, encoder)
 
     @staticmethod
-    def _process_directory(filename, encoding):
+    def _process_directory(filename, file_format):
         if os.path.isfile(filename):
             raise IOError("Expected a directory, but found a file at \
                     '{f}'".format(f=filename))
 
-        if not encoding:
-            encoding = 'json'  # default new directories to json
+        if not file_format:
+            encoder = JsonEncoder()  # default new directories to json
+        else:
+            encoder = Encoder.get_encoder_from_file_format(file_format)
 
-        return DirectoryCassetteLibrary(filename, encoding)
+        return DirectoryCassetteLibrary(filename, encoder)
 
 
 class FileCassetteLibrary(CassetteLibrary):
