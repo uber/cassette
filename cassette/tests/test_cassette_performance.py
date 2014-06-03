@@ -1,8 +1,10 @@
-import urllib2
-import cassette
 import os
 import shutil
+import urllib2
 from datetime import datetime, timedelta
+from unittest import skip
+
+import cassette
 from cassette.tests.base import TestCase
 
 TEST_URL = "http://127.0.0.1:5000/non-ascii-content"
@@ -10,6 +12,7 @@ CASSETTE_FILE = './cassette/tests/data/performance.tmp'
 CASSETTE_DIRECTORY = './cassette/tests/data/performancedir/'
 
 
+@skip('Skipping performance tests')
 class TestCassettePerformanceSingleFile(TestCase):
     """Benchmark performance of a single file cassette."""
 
