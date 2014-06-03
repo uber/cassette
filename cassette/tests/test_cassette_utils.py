@@ -1,7 +1,5 @@
 from cassette.tests.base import TestCase
-from cassette.utils import Encoder
-from cassette.utils import JsonEncoder
-from cassette.utils import YamlEncoder
+from cassette.utils import Encoder, JsonEncoder, YamlEncoder
 
 TEST_DATA = {
     'binary_data': '\x89\x70\x00',

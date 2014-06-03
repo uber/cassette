@@ -3,8 +3,9 @@
 
     Helper functions.
 """
-import yaml
 import json
+
+import yaml
 
 TEXT_ENCODING = 'ISO-8859-1'
 SUPPORTED_FORMATS = ('json', 'yaml', '')

@@ -1,13 +1,12 @@
 from __future__ import absolute_import
+
+import hashlib
 import logging
 import os
-import hashlib
-
 from urlparse import urlparse
 
 from cassette.http_response import MockedHTTPResponse
-from cassette.utils import Encoder
-from cassette.utils import JsonEncoder
+from cassette.utils import Encoder, JsonEncoder
 
 log = logging.getLogger("cassette")
 

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from flask import Flask, redirect, url_for, request, jsonify
+from flask import Flask, jsonify, redirect, request, url_for
 
 app = Flask(__name__)
 

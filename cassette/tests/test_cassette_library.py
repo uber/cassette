@@ -1,15 +1,13 @@
-import mock
 import os
 
-from cassette.tests.base import TestCase
-from cassette.tests.base import TEMPORARY_RESPONSES_FILENAME
-from cassette.tests.base import TEMPORARY_RESPONSES_ROOT
-from cassette.cassette_library import CassetteLibrary
-from cassette.cassette_library import DirectoryCassetteLibrary
-from cassette.cassette_library import FileCassetteLibrary
-from cassette.utils import JsonEncoder
-from cassette.utils import YamlEncoder
+import mock
 
+from cassette.cassette_library import (CassetteLibrary,
+                                       DirectoryCassetteLibrary,
+                                       FileCassetteLibrary)
+from cassette.tests.base import (TEMPORARY_RESPONSES_FILENAME,
+                                 TEMPORARY_RESPONSES_ROOT, TestCase)
+from cassette.utils import JsonEncoder, YamlEncoder
 
 BAD_DIRECTORY = os.path.join(TEMPORARY_RESPONSES_ROOT, 'tmp.json')
 BAD_FILE = os.path.join(TEMPORARY_RESPONSES_ROOT, 'tmp')

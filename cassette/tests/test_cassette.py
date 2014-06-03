@@ -13,11 +13,9 @@ import urllib2
 import mock
 
 import cassette
-from cassette.tests.base import TestCase
-from cassette.tests.base import TEMPORARY_RESPONSES_FILENAME
-from cassette.tests.base import TEMPORARY_RESPONSES_DIRECTORY
 from cassette.cassette_library import CassetteLibrary
-
+from cassette.tests.base import (TEMPORARY_RESPONSES_DIRECTORY,
+                                 TEMPORARY_RESPONSES_FILENAME, TestCase)
 
 RESPONSES_FILENAME = "./cassette/tests/data/responses.yaml"
 IMAGE_FILENAME = "./cassette/tests/server/image.png"
