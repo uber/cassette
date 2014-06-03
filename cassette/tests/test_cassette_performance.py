@@ -43,7 +43,7 @@ class TestCassettePerformanceSingleFile(TestCase):
     def generate_large_cassette_json(self):
         """Generate a large set of responses and store in JSON."""
         # Record every next request
-        cassette.insert(self.filename, encoding='json')
+        cassette.insert(self.filename, file_format='json')
 
         # Create 100 requests to load in
         for i in range(0, 100):
@@ -69,7 +69,7 @@ class TestCassettePerformanceSingleFile(TestCase):
         # 100 times in a row
         for i in range(0, 100):
             # Open cassette
-            cassette.insert(self.filename, encoding='yaml')
+            cassette.insert(self.filename, file_format='yaml')
 
             # Make a few requests
             for j in range(0, 5):
@@ -84,7 +84,7 @@ class TestCassettePerformanceSingleFile(TestCase):
         # 100 times in a row
         for i in range(0, 100):
             # Open cassette
-            cassette.insert(self.filename, encoding='json')
+            cassette.insert(self.filename, file_format='json')
 
             # Make a few requests
             for j in range(0, 5):

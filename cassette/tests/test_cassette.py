@@ -92,7 +92,7 @@ class TestCassette(TestCase):
 
     def setUp(self):
         self.filename = TEMPORARY_RESPONSES_FILENAME
-        self.encoding = 'yaml'
+        self.file_format = 'yaml'
 
         # This is a dummy method that we use to check if cassette had
         # the response.
@@ -116,7 +116,7 @@ class TestCassette(TestCase):
             url = url_for(url)
 
         # First run
-        with cassette.play(self.filename, encoding=self.encoding):
+        with cassette.play(self.filename, file_format=self.file_format):
             r = urllib2.urlopen(url, data)  # 1st run
 
         self.assertEqual(self.had_response.called, False)
@@ -130,7 +130,7 @@ class TestCassette(TestCase):
         self.had_response.reset_mock()
 
         # Second run
-        with cassette.play(self.filename, encoding=self.encoding):
+        with cassette.play(self.filename, file_format=self.file_format):
             r = urllib2.urlopen(url, data)  # 2nd run
 
         self.assertEqual(self.had_response.called, True)
@@ -161,7 +161,7 @@ class TestCassette(TestCase):
         """Verify that cassette works when using httplib directly."""
 
         # First run
-        with cassette.play(self.filename, encoding=self.encoding):
+        with cassette.play(self.filename, file_format=self.file_format):
             conn = httplib.HTTPConnection("127.0.0.1", 5000)
             conn.request("GET", "/index")
             r = conn.getresponse()
@@ -174,7 +174,7 @@ class TestCassette(TestCase):
         self.had_response.reset_mock()
 
         # Second run
-        with cassette.play(self.filename, encoding=self.encoding):
+        with cassette.play(self.filename, file_format=self.file_format):
             conn = httplib.HTTPConnection("127.0.0.1", 5000)
             conn.request("GET", "/index")
             r = conn.getresponse()
@@ -193,7 +193,7 @@ class TestCassette(TestCase):
         """Verify the cassette behavior when setting up the context."""
 
         # First run
-        cassette.insert(self.filename, encoding=self.encoding)
+        cassette.insert(self.filename, file_format=self.file_format)
         r = urllib2.urlopen(TEST_URL + '?manual')
         cassette.eject()
 
@@ -203,7 +203,7 @@ class TestCassette(TestCase):
         self.had_response.reset_mock()
 
         # Second run
-        cassette.insert(self.filename, encoding=self.encoding)
+        cassette.insert(self.filename, file_format=self.file_format)
         r = urllib2.urlopen(TEST_URL + '?manual')
         cassette.eject()
 
@@ -241,7 +241,7 @@ class TestCassette(TestCase):
             expected_image = image_handle.read()
 
         # downloaded via urllib
-        cassette.insert(self.filename, encoding=self.encoding)
+        cassette.insert(self.filename, file_format=self.file_format)
         actual_image = urllib2.urlopen(TEST_URL_IMAGE).read()
         cassette.eject()
 
@@ -252,7 +252,7 @@ class TestCassette(TestCase):
         self.had_response.reset_mock()
 
         # downloaded again via urllib
-        cassette.insert(self.filename, encoding=self.encoding)
+        cassette.insert(self.filename, file_format=self.file_format)
         actual_image = urllib2.urlopen(TEST_URL_IMAGE).read()
         cassette.eject()
 
@@ -264,13 +264,13 @@ class TestCassette(TestCase):
         """Verify that cassette can returns 404 from file."""
 
         # First run
-        with cassette.play(self.filename, encoding=self.encoding):
+        with cassette.play(self.filename, file_format=self.file_format):
             self.assertRaises(urllib2.HTTPError, urllib2.urlopen, TEST_URL_404)
 
         self.assertEqual(self.had_response.called, False)
 
         # Second run, it has the response.
-        with cassette.play(self.filename, encoding=self.encoding):
+        with cassette.play(self.filename, file_format=self.file_format):
             self.assertRaises(urllib2.HTTPError, urllib2.urlopen, TEST_URL_404)
 
         self.assertEqual(self.had_response.called, True)
@@ -281,7 +281,7 @@ class TestCassetteJson(TestCassette):
 
     def setUp(self):
         self.filename = TEMPORARY_RESPONSES_FILENAME
-        self.encoding = 'json'
+        self.file_format = 'json'
 
         # This is a dummy method that we use to check if cassette had
         # the response.
@@ -298,7 +298,7 @@ class TestCassetteDirectory(TestCassette):
 
     def setUp(self):
         self.filename = TEMPORARY_RESPONSES_DIRECTORY
-        self.encoding = 'yaml'
+        self.file_format = 'yaml'
 
         # This is a dummy method that we use to check if cassette had
         # the response.
@@ -319,7 +319,7 @@ class TestCassetteDirectoryJson(TestCassetteDirectory):
 
     def setUp(self):
         self.filename = TEMPORARY_RESPONSES_DIRECTORY
-        self.encoding = 'json'
+        self.file_format = 'json'
 
         # This is a dummy method that we use to check if cassette had
         # the response.
