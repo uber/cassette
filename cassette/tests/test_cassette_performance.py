@@ -24,6 +24,7 @@ class TestCassettePerformanceSingleFile(TestCase):
             os.remove(self.filename)
 
     def generate_large_cassette_yaml(self):
+        """Generate a large set of responses and store in YAML."""
         # Record every next request
         cassette.insert(self.filename)
 
@@ -36,6 +37,7 @@ class TestCassettePerformanceSingleFile(TestCase):
         cassette.eject()
 
     def generate_large_cassette_json(self):
+        """Generate a large set of responses and store in JSON."""
         # Record every next request
         cassette.insert(self.filename, encoding='json')
 
@@ -48,6 +50,7 @@ class TestCassettePerformanceSingleFile(TestCase):
         cassette.eject()
 
     def test_generate_speed_yaml(self):
+        """Verify YAML generation of large response set takes under 2 secs."""
         # Record how long it takes for the generation to take place
         start_time = datetime.now()
         self.generate_large_cassette_yaml()
@@ -58,10 +61,11 @@ class TestCassettePerformanceSingleFile(TestCase):
         self.assertLess(stop_time - start_time, two_seconds)
 
     def fetch_frequent_cassette(self):
+        """Make repeated fetches of the same url with YAML file storage."""
         # 100 times in a row
         for i in range(0, 100):
             # Open cassette
-            cassette.insert(self.filename)
+            cassette.insert(self.filename, encoding='yaml')
 
             # Make a few requests
             for j in range(0, 5):
@@ -72,6 +76,7 @@ class TestCassettePerformanceSingleFile(TestCase):
             cassette.eject()
 
     def fetch_frequent_cassette_json(self):
+        """Make repeated fetches of the same url in JSON file storage."""
         # 100 times in a row
         for i in range(0, 100):
             # Open cassette
@@ -86,6 +91,7 @@ class TestCassettePerformanceSingleFile(TestCase):
             cassette.eject()
 
     def test_fetch_speed_yaml(self):
+        """Verify fetching repeated files in YAML takes under 2 secs."""
         # Guarantee there is a large cassette to test against
         if not os.path.exists(self.filename):
             self.generate_large_cassette_yaml()
@@ -100,6 +106,7 @@ class TestCassettePerformanceSingleFile(TestCase):
         self.assertLess(stop_time - start_time, two_seconds)
 
     def test_generate_speed_json(self):
+        """Verify JSON generation of large response set takes under 2 secs."""
         # Record how long it takes for the generation to take place
         start_time = datetime.now()
         self.generate_large_cassette_json()
@@ -110,6 +117,7 @@ class TestCassettePerformanceSingleFile(TestCase):
         self.assertLess(stop_time - start_time, two_seconds)
 
     def test_fetch_speed_json(self):
+        """Verify fetching repeated files in JSON takes under 2 secs."""
         # Guarantee there is a large cassette to test against
         if not os.path.exists(self.filename):
             self.generate_large_cassette_json()
@@ -132,7 +140,6 @@ class TestCassettePerformanceDirectory(TestCassettePerformanceSingleFile):
         if os.path.exists(self.filename) and os.path.isdir(self.filename):
             shutil.rmtree(self.filename)
 
-        # Directory must exist prior to cassette instantiation
         os.mkdir(self.filename)
 
     def tearDown(self):

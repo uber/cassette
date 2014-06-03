@@ -49,7 +49,8 @@ class CassetteName(unicode):
                 query = ''
             name = "httplib:{method} {host}:{port}{url} {query} {headers} {body}".format(**locals())
         else:
-            # note that old yaml files will not contain the correct matching body
+            # note that old yaml files will not contain the correct matching
+            # query and body
             name = "httplib:{method} {host}:{port}{url} {headers} {body}".format(**locals())
 
         name = name.strip()
@@ -61,12 +62,13 @@ class CassetteLibrary(object):
     The CassetteLibrary holds the stored requests and manage them.
 
     This is an abstract class that needs to have several methods implemented.
+    In addition, subclasses must store request/response pairs as a keys and
+    values as a dictionary in the property `self.data`
 
     :param str filename: filename to use when storing and replaying requests.
     :param str file_format: the file format to use for storing the responses.
     """
 
-    # TODO: what about enforcing self.data to be implemented somehow
     cache = {}
 
     def __init__(self, filename, encoder):
@@ -102,6 +104,7 @@ class CassetteLibrary(object):
         }
 
     def rewind(self):
+        """Restore all responses to a re-seekable state."""
         for k, v in self.data.items():
             v.rewind()
 
@@ -122,7 +125,6 @@ class CassetteLibrary(object):
     # Methods that need to be implemented by subclasses
     def write_to_file(self):
         """Write the response data to file."""
-        self.is_dirty = False
         raise NotImplementedError('CassetteLibrary not implemented.')
 
     def __contains__(self, cassette_name):
@@ -161,6 +163,11 @@ class CassetteLibrary(object):
 
     @staticmethod
     def _process_file(filename, file_format, extension):
+        """Return an instantiated FileCassetteLibrary with the correct encoder.
+
+        :param str file_format:
+        :param str extension:
+        """
         if os.path.isdir(filename):
             raise IOError("Expected a file, but found a directory at \
                     '{f}'".format(f=filename))
@@ -175,6 +182,11 @@ class CassetteLibrary(object):
 
     @staticmethod
     def _process_directory(filename, file_format):
+        """Return an instantiated DirectoryCassetteLibrary with the correct
+        encoder.
+
+        :param str file_format:
+        """
         if os.path.isfile(filename):
             raise IOError("Expected a directory, but found a file at \
                     '{f}'".format(f=filename))
@@ -264,7 +276,7 @@ class FileCassetteLibrary(CassetteLibrary):
         return contains
 
     def __getitem__(self, cassette_name):
-        """Fetch the request from the loaded dictionary data."""
+        """Return the request from the loaded dictionary data."""
         req = self.data.get(cassette_name, None)
 
         if not req:
@@ -337,7 +349,7 @@ class DirectoryCassetteLibrary(CassetteLibrary):
         return contains
 
     def __getitem__(self, cassette_name):
-        """Fetch the request if it exists in memory. Otherwise, look to disk."""
+        """Return the request if it is in memory. Otherwise, look to disk."""
         if cassette_name in self.data:
             req = self.data[cassette_name]
         else:
@@ -355,7 +367,8 @@ class DirectoryCassetteLibrary(CassetteLibrary):
         """Returns the mocked response object from the encoded file.
 
         If the cassette file is in the cache, then use it. Otherwise, read
-        from the disk to fetch the particular request."""
+        from the disk to fetch the particular request.
+        """
 
         filename = os.path.join(
             self.filename, self.generate_filename(cassette_name))

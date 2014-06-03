@@ -18,7 +18,8 @@ TEST_DATA = {
 
 class TestEncoder(TestCase):
 
-    def test_errors(self):
+    def test_implementation_errors(self):
+        """Verify that we cannot call dump/load since they are yet not implemented."""
         with self.assertRaises(NotImplementedError):
             Encoder().dump({})
 
