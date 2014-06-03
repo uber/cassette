@@ -8,7 +8,6 @@ import json
 import yaml
 
 TEXT_ENCODING = 'ISO-8859-1'
-SUPPORTED_FORMATS = ('json', 'yaml', '')
 
 
 class Encoder(object):
@@ -23,7 +22,7 @@ class Encoder(object):
 
         :param str file_format:
         """
-        return file_format in SUPPORTED_FORMATS
+        return file_format in SUPPORTED_FORMATS.keys() or file_format == ''
 
     @staticmethod
     def get_encoder_from_file_format(file_format):
@@ -31,13 +30,8 @@ class Encoder(object):
 
         :param str file_format:
         """
-        if file_format == 'json':
-            return JsonEncoder()
-        elif file_format == 'yaml':
-            return YamlEncoder()
-        else:
-            # Default to YAML for legacy code
-            return YamlEncoder()
+        return SUPPORTED_FORMATS.get(
+            file_format.lower(), DEFAULT_COMPATIBLE_ENCODER)
 
     @staticmethod
     def get_encoder_from_extension(extension):
@@ -124,3 +118,12 @@ class YamlEncoder(Encoder):
     def load(self, encoded_str):
         """Return an object from the encoded JSON string."""
         return yaml.load(encoded_str)
+
+
+SUPPORTED_FORMATS = {
+    'json': JsonEncoder(),
+    'yaml': YamlEncoder()
+}
+
+DEFAULT_COMPATIBLE_ENCODER = SUPPORTED_FORMATS['yaml']
+DEFAULT_ENCODER = SUPPORTED_FORMATS['json']

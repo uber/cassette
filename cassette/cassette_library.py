@@ -6,7 +6,7 @@ import os
 from urlparse import urlparse
 
 from cassette.http_response import MockedHTTPResponse
-from cassette.utils import Encoder, JsonEncoder
+from cassette.utils import Encoder, DEFAULT_ENCODER
 
 log = logging.getLogger("cassette")
 
@@ -199,7 +199,7 @@ class CassetteLibrary(object):
                     '{f}'".format(f=filename))
 
         if not file_format:
-            encoder = JsonEncoder()  # default new directories to json
+            encoder = DEFAULT_ENCODER  # default new directories to json
         else:
             encoder = Encoder.get_encoder_from_file_format(file_format)
 
