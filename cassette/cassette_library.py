@@ -218,12 +218,8 @@ class FileCassetteLibrary(CassetteLibrary):
         encoded_str = self.encoder.dump(data)
 
         # Save the changes to file
-        try:
-            with open(self.filename, "w+") as f:
-                f.write(encoded_str)
-        except:
-            raise IOError("Directory containing file '{f}' does not \
-                    exist.".format(f=self.filename))
+        with open(self.filename, "w+") as f:
+            f.write(encoded_str)
 
         # Update our hash
         self.save_to_cache(file_hash=_hash(encoded_str), data=self.data)
@@ -301,6 +297,11 @@ class DirectoryCassetteLibrary(CassetteLibrary):
 
         return cassette_name + self.encoder.file_ext
 
+    def generate_path_from_cassette_name(self, cassette_name):
+        """Generate the full path to cassette file."""
+        return os.path.join(
+            self.filename, self.generate_filename(cassette_name))
+
     def write_to_file(self):
         """Write mocked response to a directory of files."""
         if not os.path.exists(self.filename):
@@ -310,14 +311,8 @@ class DirectoryCassetteLibrary(CassetteLibrary):
             filename = self.generate_filename(cassette_name)
             encoded_str = self.encoder.dump(response.to_dict())
 
-            try:
-                with open(os.path.join(self.filename, filename), 'w') as f:
-                    f.write(encoded_str)
-            except:
-                # this should never happen since the directory must be there
-                # since it defaults to single file when the dir is not there
-                raise IOError("Directory containing file '{f}' does not \
-                        exist.".format(f=self.filename))
+            with open(os.path.join(self.filename, filename), 'w') as f:
+                f.write(encoded_str)
 
             # Update our hash
             self.save_to_cache(file_hash=_hash(encoded_str), data=response)
@@ -334,8 +329,7 @@ class DirectoryCassetteLibrary(CassetteLibrary):
 
         if not contains:
             # Check file directory if it exists
-            filename = os.path.join(
-                self.filename, self.generate_filename(cassette_name))
+            filename = self.generate_path_from_cassette_name(cassette_name)
 
             contains = os.path.exists(filename)
 
@@ -369,15 +363,14 @@ class DirectoryCassetteLibrary(CassetteLibrary):
         from the disk to fetch the particular request.
         """
 
-        filename = os.path.join(
-            self.filename, self.generate_filename(cassette_name))
+        filename = self.generate_path_from_cassette_name(cassette_name)
 
-        if not os.path.exists(filename):
-            log.info("File '{f}' does not exist.".format(f=filename))
+        try:
+            with open(filename) as f:
+                encoded_str = f.read()
+        except:
             return None
 
-        with open(filename) as f:
-            encoded_str = f.read()
         encoded_hash = _hash(encoded_str)
 
         # If the contents are cached, return them
