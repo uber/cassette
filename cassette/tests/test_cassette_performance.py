@@ -11,6 +11,7 @@ CASSETTE_DIRECTORY = './cassette/tests/data/performancedir/'
 
 
 class TestCassettePerformanceSingleFile(TestCase):
+    """Benchmark performance of a single file cassette."""
 
     def setUp(self):
         self.filename = CASSETTE_FILE
@@ -133,6 +134,7 @@ class TestCassettePerformanceSingleFile(TestCase):
 
 
 class TestCassettePerformanceDirectory(TestCassettePerformanceSingleFile):
+    """Perform the same tests but with a cassette backed by a directory."""
 
     def setUp(self):
         self.filename = CASSETTE_DIRECTORY

@@ -91,6 +91,7 @@ class TestCassetteLibrary(TestCase):
         self.assertTrue(isinstance(lib.encoder, JsonEncoder))
 
     def test_create_new_cassette_library_errors(self):
+        """Verify correct errors are raised."""
         self.create_bad_files()
 
         # Check to see that proper error handling is occuring for malformed file
