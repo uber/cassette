@@ -66,7 +66,7 @@ class CassetteLibrary(object):
     values as a dictionary in the property `self.data`
 
     :param str filename: filename to use when storing and replaying requests.
-    :param str file_format: the file format to use for storing the responses.
+    :param Encoder encoder: the instantiated encodeder to use
     """
 
     cache = {}
@@ -136,7 +136,7 @@ class CassetteLibrary(object):
     # Static methods
     @staticmethod
     def create_new_cassette_library(filename, file_format):
-        """Returns an instantiated CassetteLibrary.
+        """Return an instantiated CassetteLibrary.
 
         Use this method to create new a CassetteLibrary. It will automatically
         determine if it should use a file or directory to back the cassette
@@ -147,7 +147,7 @@ class CassetteLibrary(object):
         :param str filename: filename of file or directory for storing requests
         :param str file_format: the file_format to use for storing requests
         """
-        if file_format not in ('json', 'yaml', ''):
+        if not Encoder.is_supported_format(file_format):
             raise KeyError("'{e}' is not a supported file_format.\
                     ".format(e=file_format))
 
@@ -326,7 +326,7 @@ class DirectoryCassetteLibrary(CassetteLibrary):
         self.is_dirty = False
 
     def __contains__(self, cassette_name):
-        """Returns whether or not the cassette already exists.
+        """Return whether or not the cassette already exists.
 
         The method first checks if it is already stored in memory. If not, it
         will check if a file supporting the cassette name exists.
@@ -364,7 +364,7 @@ class DirectoryCassetteLibrary(CassetteLibrary):
         return req
 
     def _load_request_from_file(self, cassette_name):
-        """Returns the mocked response object from the encoded file.
+        """Return the mocked response object from the encoded file.
 
         If the cassette file is in the cache, then use it. Otherwise, read
         from the disk to fetch the particular request.

@@ -77,7 +77,7 @@ class JsonEncoder(Encoder):
 
     @staticmethod
     def json_str_decode_list(data):
-        """Helper function to decode the list portion of a JSON blob."""
+        """Decode the list portion of a JSON blob as a string."""
 
         rv = []
         for item in data:
@@ -92,16 +92,16 @@ class JsonEncoder(Encoder):
 
     @staticmethod
     def json_str_decode_dict(data):
-        """Helper function to decode the dictionary portion of a JSON blob.
+        """Decode the dictionary portion of a JSON blob as a string.
 
         This helper function is necessary to decode the data as an ASCII string
         instead of a unicode string, which is required in order to be consumed
         by the mock HTTP response.
-
-        Original code is from stackoverflow:
-        http://stackoverflow.com/questions/956867/how-to-get-string-objects-ins
-        tead-of-unicode-ones-from-json-in-python
         """
+        # Original code is from stackoverflow:
+        # http://stackoverflow.com/questions/956867/how-to-get-string-objects-i
+        # nstead-of-unicode-ones-from-json-in-python
+
         rv = {}
         for key, value in data.iteritems():
             if isinstance(key, unicode):

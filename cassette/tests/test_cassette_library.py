@@ -35,14 +35,14 @@ class TestCassetteLibrary(TestCase):
         self.clean_up()
 
     def clean_up(self):
-        """Helper function to clean up bad temporary files and directories."""
+        """Clean up bad temporary files and directories."""
         if os.path.isdir(BAD_DIRECTORY):
             os.rmdir(BAD_DIRECTORY)
         elif os.path.isfile(BAD_FILE):
             os.remove(BAD_FILE)
 
     def create_bad_files(self):
-        """Helper function to generate a directory and file.
+        """Generate bad examples of a directory and file.
 
         This will generate a directory and file that will not be able to be used
         by CassetteLibrary.
