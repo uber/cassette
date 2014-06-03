@@ -45,13 +45,8 @@ class Encoder(object):
 
         :param str extension:
         """
-        if extension.lower() == JsonEncoder.file_ext:
-            return JsonEncoder()
-        elif extension.lower() == YamlEncoder.file_ext:
-            return YamlEncoder()
-        else:
-            # Default to YAML for legacy code
-            return YamlEncoder()
+        file_format = extension.replace('.', '')
+        return Encoder.get_encoder_from_file_format(file_format)
 
     def dump(self, data):
         """Abstract method for dumping objects into an encoded form."""

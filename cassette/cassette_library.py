@@ -121,6 +121,14 @@ class CassetteLibrary(object):
         return CassetteName.from_httplib_connection(
             host, port, method, url, body, headers)
 
+    def _log_contains(self, cassette_name, contains):
+        """Logging for checking access to cassettes."""
+        if contains:
+            self._had_response()  # For testing purposes
+            log.info("Library has '{n}'".format(n=cassette_name))
+        else:
+            log.warning("Library does not have '{n}'".format(n=cassette_name))
+
     # Methods that need to be implemented by subclasses
     def write_to_file(self):
         """Write the response data to file."""
@@ -261,12 +269,7 @@ class FileCassetteLibrary(CassetteLibrary):
 
     def __contains__(self, cassette_name):
         contains = cassette_name in self.data
-
-        if contains:
-            self._had_response()  # For testing purposes
-            log.info("Library has '{n}'".format(n=cassette_name))
-        else:
-            log.warning("Library does not have '{n}'".format(n=cassette_name))
+        self._log_contains(cassette_name, contains)
 
         return contains
 
@@ -333,11 +336,7 @@ class DirectoryCassetteLibrary(CassetteLibrary):
 
             contains = os.path.exists(filename)
 
-        if contains:
-            self._had_response()  # For testing purposes
-            log.info("Library has '{n}'".format(n=cassette_name))
-        else:
-            log.warning("Library does not have '{n}'".format(n=cassette_name))
+        self._log_contains(cassette_name, contains)
 
         return contains
 
