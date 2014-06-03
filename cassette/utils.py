@@ -19,7 +19,7 @@ class Encoder(object):
 
     @staticmethod
     def is_supported_format(file_format):
-        """Returns whether the file format is supported.
+        """Return whether the file format is supported.
 
         :param str file_format:
         """
@@ -68,11 +68,11 @@ class JsonEncoder(Encoder):
     file_ext = '.json'
 
     def dump(self, data):
-        """Returns a YAML encoded string of the data."""
+        """Return a YAML encoded string of the data."""
         return json.dumps(data, ensure_ascii=False)
 
     def load(self, encoded_str):
-        """Returns an object from the encoded JSON string."""
+        """Return an object from the encoded JSON string."""
         return json.loads(encoded_str, TEXT_ENCODING,
                           object_hook=JsonEncoder.json_str_decode_dict)
 
@@ -123,9 +123,9 @@ class YamlEncoder(Encoder):
     file_ext = '.yaml'
 
     def dump(self, data):
-        """Returns a YAML encoded string of the data."""
+        """Return a YAML encoded string of the data."""
         return yaml.dump(data)
 
     def load(self, encoded_str):
-        """Returns an object from the encoded JSON string."""
+        """Return an object from the encoded JSON string."""
         return yaml.load(encoded_str)
