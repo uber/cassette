@@ -60,17 +60,6 @@ def docs():
 
 
 @task
-def push_docs():
-    """Generate and push the docs."""
-
-    docs()
-    with lcd("../cassette-docs/html"):
-        local("git add .")
-        local("git commit -am 'Update documentation'")
-        local("git push")
-
-
-@task
 def release():
     """Prepare a release."""
 
@@ -83,7 +72,6 @@ def release():
     local("release")
     local("git push --tags")
     local("git push")
-    push_docs()
 
 
 @task
