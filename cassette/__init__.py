@@ -9,14 +9,15 @@ cassette_library = None
 logging.getLogger("cassette").addHandler(logging.NullHandler())
 
 
-def insert(filename):
+def insert(filename, file_format=''):
     """Setup cassette.
 
-    :param filename: path to .yaml where requests and responses will be stored.
+    :param filename: path to where requests and responses will be stored.
     """
     global cassette_library
 
-    cassette_library = CassetteLibrary(filename)
+    cassette_library = CassetteLibrary.create_new_cassette_library(
+        filename, file_format)
     patch(cassette_library)
 
 
@@ -32,8 +33,8 @@ def eject():
 
 
 @contextlib.contextmanager
-def play(filename):
+def play(filename, file_format=''):
     """Use cassette."""
-    insert(filename)
+    insert(filename, file_format=file_format)
     yield
     eject()

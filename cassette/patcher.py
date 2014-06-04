@@ -1,7 +1,9 @@
 from __future__ import absolute_import
+
 import httplib
 
-from cassette.http_connection import CassetteHTTPConnection, CassetteHTTPSConnection
+from cassette.http_connection import (CassetteHTTPConnection,
+                                      CassetteHTTPSConnection)
 
 unpatched_HTTPConnection = httplib.HTTPConnection
 unpatched_HTTPSConnection = httplib.HTTPSConnection

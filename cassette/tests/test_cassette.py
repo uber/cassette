@@ -6,16 +6,16 @@ Test the cassette behavior.
 import httplib
 import json
 import os
+import shutil
 import urllib
 import urllib2
 
 import mock
 
 import cassette
-from cassette.tests.base import TestCase
-from cassette.tests.base import TEMPORARY_RESPONSES_FILENAME
 from cassette.cassette_library import CassetteLibrary
-
+from cassette.tests.base import (TEMPORARY_RESPONSES_DIRECTORY,
+                                 TEMPORARY_RESPONSES_FILENAME, TestCase)
 
 RESPONSES_FILENAME = "./cassette/tests/data/responses.yaml"
 IMAGE_FILENAME = "./cassette/tests/server/image.png"
@@ -86,14 +86,13 @@ def url_for(endpoint):
     """Return full URL for endpoint."""
     return TEST_HOST + endpoint
 
-#
-# Testing the whole flow with a temporary response file.
-#
-
 
 class TestCassette(TestCase):
+    """Testing the whole flow with a temporary response file."""
 
     def setUp(self):
+        self.filename = TEMPORARY_RESPONSES_FILENAME
+        self.file_format = 'yaml'
 
         # This is a dummy method that we use to check if cassette had
         # the response.
@@ -101,13 +100,12 @@ class TestCassette(TestCase):
         self.had_response = patcher.start()
         self.addCleanup(patcher.stop)
 
-        if os.path.exists(TEMPORARY_RESPONSES_FILENAME):
-            os.remove(TEMPORARY_RESPONSES_FILENAME)
+        if os.path.exists(self.filename):
+            os.remove(self.filename)
 
     def tearDown(self):
-
-        if os.path.exists(TEMPORARY_RESPONSES_FILENAME):
-            os.remove(TEMPORARY_RESPONSES_FILENAME)
+        if os.path.exists(self.filename):
+            os.remove(self.filename)
 
     def check_urllib2_flow(self, url, expected_content=None,
                            allow_incomplete_match=False,
@@ -118,7 +116,7 @@ class TestCassette(TestCase):
             url = url_for(url)
 
         # First run
-        with cassette.play(TEMPORARY_RESPONSES_FILENAME):
+        with cassette.play(self.filename, file_format=self.file_format):
             r = urllib2.urlopen(url, data)  # 1st run
 
         self.assertEqual(self.had_response.called, False)
@@ -132,7 +130,7 @@ class TestCassette(TestCase):
         self.had_response.reset_mock()
 
         # Second run
-        with cassette.play(TEMPORARY_RESPONSES_FILENAME):
+        with cassette.play(self.filename, file_format=self.file_format):
             r = urllib2.urlopen(url, data)  # 2nd run
 
         self.assertEqual(self.had_response.called, True)
@@ -163,7 +161,7 @@ class TestCassette(TestCase):
         """Verify that cassette works when using httplib directly."""
 
         # First run
-        with cassette.play(TEMPORARY_RESPONSES_FILENAME):
+        with cassette.play(self.filename, file_format=self.file_format):
             conn = httplib.HTTPConnection("127.0.0.1", 5000)
             conn.request("GET", "/index")
             r = conn.getresponse()
@@ -176,7 +174,7 @@ class TestCassette(TestCase):
         self.had_response.reset_mock()
 
         # Second run
-        with cassette.play(TEMPORARY_RESPONSES_FILENAME):
+        with cassette.play(self.filename, file_format=self.file_format):
             conn = httplib.HTTPConnection("127.0.0.1", 5000)
             conn.request("GET", "/index")
             r = conn.getresponse()
@@ -195,7 +193,7 @@ class TestCassette(TestCase):
         """Verify the cassette behavior when setting up the context."""
 
         # First run
-        cassette.insert(TEMPORARY_RESPONSES_FILENAME)
+        cassette.insert(self.filename, file_format=self.file_format)
         r = urllib2.urlopen(TEST_URL + '?manual')
         cassette.eject()
 
@@ -205,7 +203,7 @@ class TestCassette(TestCase):
         self.had_response.reset_mock()
 
         # Second run
-        cassette.insert(TEMPORARY_RESPONSES_FILENAME)
+        cassette.insert(self.filename, file_format=self.file_format)
         r = urllib2.urlopen(TEST_URL + '?manual')
         cassette.eject()
 
@@ -243,7 +241,7 @@ class TestCassette(TestCase):
             expected_image = image_handle.read()
 
         # downloaded via urllib
-        cassette.insert(TEMPORARY_RESPONSES_FILENAME)
+        cassette.insert(self.filename, file_format=self.file_format)
         actual_image = urllib2.urlopen(TEST_URL_IMAGE).read()
         cassette.eject()
 
@@ -254,7 +252,7 @@ class TestCassette(TestCase):
         self.had_response.reset_mock()
 
         # downloaded again via urllib
-        cassette.insert(TEMPORARY_RESPONSES_FILENAME)
+        cassette.insert(self.filename, file_format=self.file_format)
         actual_image = urllib2.urlopen(TEST_URL_IMAGE).read()
         cassette.eject()
 
@@ -266,24 +264,75 @@ class TestCassette(TestCase):
         """Verify that cassette can returns 404 from file."""
 
         # First run
-        with cassette.play(TEMPORARY_RESPONSES_FILENAME):
+        with cassette.play(self.filename, file_format=self.file_format):
             self.assertRaises(urllib2.HTTPError, urllib2.urlopen, TEST_URL_404)
 
         self.assertEqual(self.had_response.called, False)
 
         # Second run, it has the response.
-        with cassette.play(TEMPORARY_RESPONSES_FILENAME):
+        with cassette.play(self.filename, file_format=self.file_format):
             self.assertRaises(urllib2.HTTPError, urllib2.urlopen, TEST_URL_404)
 
         self.assertEqual(self.had_response.called, True)
 
 
-#
-# Verify that cassette can read from an existing file.
-#
+class TestCassetteJson(TestCassette):
+    """Perform the same test but in JSON."""
+
+    def setUp(self):
+        self.filename = TEMPORARY_RESPONSES_FILENAME
+        self.file_format = 'json'
+
+        # This is a dummy method that we use to check if cassette had
+        # the response.
+        patcher = mock.patch.object(CassetteLibrary, "_had_response")
+        self.had_response = patcher.start()
+        self.addCleanup(patcher.stop)
+
+        if os.path.exists(self.filename):
+            os.remove(self.filename)
+
+
+class TestCassetteDirectory(TestCassette):
+    """Testing the whole flow with a temporary response directory in yaml."""
+
+    def setUp(self):
+        self.filename = TEMPORARY_RESPONSES_DIRECTORY
+        self.file_format = 'yaml'
+
+        # This is a dummy method that we use to check if cassette had
+        # the response.
+        patcher = mock.patch.object(CassetteLibrary, "_had_response")
+        self.had_response = patcher.start()
+        self.addCleanup(patcher.stop)
+
+        if os.path.exists(self.filename) and os.path.isdir(self.filename):
+            shutil.rmtree(self.filename)
+
+    def tearDown(self):
+        if os.path.exists(self.filename) and os.path.isdir(self.filename):
+            shutil.rmtree(self.filename)
+
+
+class TestCassetteDirectoryJson(TestCassetteDirectory):
+    """Testing the whole flow with a temporary response directory in json."""
+
+    def setUp(self):
+        self.filename = TEMPORARY_RESPONSES_DIRECTORY
+        self.file_format = 'json'
+
+        # This is a dummy method that we use to check if cassette had
+        # the response.
+        patcher = mock.patch.object(CassetteLibrary, "_had_response")
+        self.had_response = patcher.start()
+        self.addCleanup(patcher.stop)
+
+        if os.path.exists(self.filename) and os.path.isdir(self.filename):
+            shutil.rmtree(self.filename)
 
 
 class TestCassetteFile(TestCase):
+    """Verify that cassette can read from an existing file."""
 
     def setUp(self):
 
