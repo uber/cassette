@@ -13,7 +13,7 @@ def read_requirements(filename="requirements.txt"):
 
 setup(
     name="cassette",
-    version='0.3',
+    version='0.3.1',
     author="Charles-Axel Dein",
     author_email="charles@uber.com",
     url="http://cassette.readthedocs.org/",
