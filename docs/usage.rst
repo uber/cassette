@@ -19,3 +19,19 @@ You can also setup the context manually:
     cassette.insert("./data/responses.yaml")
     urllib2.urlopen("http://...")
     cassette.eject()
+
+Storage backend
+---------------
+
+cassette supports multiple storage backend:
+
+* File based (all the requests and responses are in the same file)
+* Directory based (each request/response is in a single file)
+
+Two formats are supported, JSON (faster) and YAML.
+
+To read from a directory, just provide the path:
+
+.. code:: python
+
+    cassette.insert("./data/", file_format="json")
