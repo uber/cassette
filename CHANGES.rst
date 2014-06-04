@@ -1,6 +1,12 @@
 Changelog for Cassette
 ======================
 
+0.3.1 (unreleased)
+------------------
+
+- Add the ability to read from a directory instead of from a single file
+  (thanks to @anthonysutardja)
+
 0.3 (2014-03-18)
 ----------------
 
