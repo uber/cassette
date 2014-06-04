@@ -23,6 +23,12 @@ You can also setup the context manually:
 Storage backend
 ---------------
 
+.. versionadded:: 0.3.1
+   Ability to read from a directory.
+
+.. versionadded:: 0.3.1
+   Ability to read from JSON files.
+
 cassette supports multiple storage backend:
 
 * File based (all the requests and responses are in the same file)
