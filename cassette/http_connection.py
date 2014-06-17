@@ -19,6 +19,16 @@ class CassetteConnectionMixin(object):
             body=body,
             headers=headers,
         )
+        if lib.new_hash_function is not None:
+            self._cassette_name_alt = lib.new_hash_function(
+                host=self.host,
+                port=self.port,
+                method=method,
+                url=url,
+                body=body,
+                headers=headers,
+            )
+
         if self._cassette_name in lib:
             self._response = lib[self._cassette_name]
             return
@@ -41,7 +51,11 @@ class CassetteConnectionMixin(object):
         # If we were just returning the response here, the file
         # descriptor would be at the end of the file, and read() would
         # return nothing.
-        response = lib.add_response(self._cassette_name, response)
+        response = lib.add_response(
+            self._cassette_name,
+            response,
+            getattr(self, '_cassette_name_alt')
+        )
 
         return response
 

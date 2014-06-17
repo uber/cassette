@@ -70,13 +70,20 @@ class CassetteLibrary(object):
 
     cache = {}
 
-    def __init__(self, filename, encoder):
+    def __init__(self, filename, encoder, copy_on_write_filename, new_hash_function):
         self.filename = os.path.abspath(filename)
+        self.copy_on_write_filename = (
+            os.path.abspath(copy_on_write_filename)
+            if copy_on_write_filename
+            else None
+        )
+        self.new_hash_function = new_hash_function
+
         self.is_dirty = False
 
         self.encoder = encoder
 
-    def add_response(self, cassette_name, response):
+    def add_response(self, cassette_name, response, cassette_name_alt):
         """Add a new response to the mocked response.
 
         :param str cassette_name:
@@ -89,6 +96,9 @@ class CassetteLibrary(object):
         mock_response_class = MockedHTTPResponse
         mocked = mock_response_class.from_response(response)
         self.data[cassette_name] = mocked
+
+        if cassette_name_alt:
+            self.data_alt[cassette_name_alt] = mocked
 
         # Mark the cassette changes as dirty for ejection
         self.is_dirty = True
@@ -142,7 +152,8 @@ class CassetteLibrary(object):
 
     # Static methods
     @staticmethod
-    def create_new_cassette_library(filename, file_format):
+    def create_new_cassette_library(
+            filename, file_format, copy_on_write_filename=None, new_hash_function=None):
         """Return an instantiated CassetteLibrary.
 
         Use this method to create new a CassetteLibrary. It will automatically
@@ -163,13 +174,24 @@ class CassetteLibrary(object):
         # Check if file has extension
         if extension:
             # If it has an extension, we assume filename is a file
-            return CassetteLibrary._process_file(filename, file_format, extension)
+            return CassetteLibrary._process_file(
+                filename,
+                file_format,
+                extension,
+                copy_on_write_filename,
+                new_hash_function
+            )
         else:
             # Otherwise, we assume filename is a directory
-            return CassetteLibrary._process_directory(filename, file_format)
+            return CassetteLibrary._process_directory(
+                filename,
+                file_format,
+                copy_on_write_filename,
+                new_hash_function
+            )
 
     @staticmethod
-    def _process_file(filename, file_format, extension):
+    def _process_file(filename, file_format, extension, copy_on_write_filename, new_hash_function):
         """Return an instantiated FileCassetteLibrary with the correct encoder.
 
         :param str file_format:
@@ -185,10 +207,10 @@ class CassetteLibrary(object):
         else:
             encoder = Encoder.get_encoder_from_file_format(file_format)
 
-        return FileCassetteLibrary(filename, encoder)
+        return FileCassetteLibrary(filename, encoder, copy_on_write_filename, new_hash_function)
 
     @staticmethod
-    def _process_directory(filename, file_format):
+    def _process_directory(filename, file_format, copy_on_write_filename):
         """Return an instantiated DirectoryCassetteLibrary with the correct
         encoder.
 
@@ -203,7 +225,7 @@ class CassetteLibrary(object):
         else:
             encoder = Encoder.get_encoder_from_file_format(file_format)
 
-        return DirectoryCassetteLibrary(filename, encoder)
+        return DirectoryCassetteLibrary(filename, encoder, copy_on_write_filename)
 
 
 class FileCassetteLibrary(CassetteLibrary):
@@ -218,6 +240,12 @@ class FileCassetteLibrary(CassetteLibrary):
 
         return self._data
 
+    @property
+    def data_alt(self):
+        if not hasattr(self, "_data_alt"):
+            self._data_alt = {}
+        return self._data_alt
+
     def write_to_file(self):
         """Write mocked responses to file."""
 
@@ -228,6 +256,16 @@ class FileCassetteLibrary(CassetteLibrary):
         # Save the changes to file
         with open(self.filename, "w+") as f:
             f.write(encoded_str)
+
+        if self.copy_on_write_filename is not None:
+            encoded_str_alt = encoded_str
+            if self.data_alt != {}:
+                encoded_str_alt = self.encoder.dump(
+                    {k: v.to_dict() for k, v in self.data_alt.items()}
+                )
+
+            with open(self.copy_on_write_filename, "w+") as f:
+                f.write(encoded_str_alt)
 
         # Update our hash
         self.save_to_cache(file_hash=_hash(encoded_str), data=self.data)
