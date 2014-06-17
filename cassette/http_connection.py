@@ -42,10 +42,16 @@ class CassetteConnectionMixin(object):
         if buffering:
             raise NotImplemented("buffering not supported by cassette.")
 
+        lib = self._cassette_library
+
         if hasattr(self, "_response"):
+            if hasattr(self, "_cassette_name_alt"):
+                lib.add_alt_response(
+                    self._cassette_name_alt,
+                    self._response
+                )
             return self._response
 
-        lib = self._cassette_library
         response = HTTPConnection.getresponse(self)
 
         # If we were just returning the response here, the file
