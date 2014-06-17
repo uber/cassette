@@ -54,8 +54,13 @@ class CassetteConnectionMixin(object):
         response = lib.add_response(
             self._cassette_name,
             response,
-            getattr(self, '_cassette_name_alt')
         )
+
+        if hasattr(self, "_cassette_name_alt"):
+            lib.add_alt_response(
+                self._cassette_name_alt,
+                response
+            )
 
         return response
 

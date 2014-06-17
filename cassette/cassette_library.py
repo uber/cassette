@@ -83,7 +83,7 @@ class CassetteLibrary(object):
 
         self.encoder = encoder
 
-    def add_response(self, cassette_name, response, cassette_name_alt):
+    def add_response(self, cassette_name, response):
         """Add a new response to the mocked response.
 
         :param str cassette_name:
@@ -97,13 +97,19 @@ class CassetteLibrary(object):
         mocked = mock_response_class.from_response(response)
         self.data[cassette_name] = mocked
 
-        if cassette_name_alt:
-            self.data_alt[cassette_name_alt] = mocked
-
         # Mark the cassette changes as dirty for ejection
         self.is_dirty = True
 
         return mocked
+
+    def add_alt_response(self, cassette_alt_name, response):
+        if not cassette_alt_name:
+            raise TypeError("No cassette name provided.")
+
+        self.data_alt[cassette_alt_name] = response
+
+        # Mark the cassette changes as dirty for ejection
+        self.is_dirty = True
 
     def save_to_cache(self, file_hash, data):
         """Save a decoded data object into cache."""
