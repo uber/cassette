@@ -9,7 +9,7 @@ cassette_library = None
 logging.getLogger("cassette").addHandler(logging.NullHandler())
 
 
-def insert(filename, file_format='', copy_on_write_filename=None):
+def insert(filename, file_format='', copy_on_write_filename=None, new_hash_function=None):
     """Setup cassette.
 
     :param filename: path to where requests and responses will be stored.
@@ -17,7 +17,7 @@ def insert(filename, file_format='', copy_on_write_filename=None):
     global cassette_library
 
     cassette_library = CassetteLibrary.create_new_cassette_library(
-        filename, file_format)
+        filename, file_format, copy_on_write_filename, new_hash_function)
     patch(cassette_library)
 
 
