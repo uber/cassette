@@ -30,6 +30,11 @@ class CassetteName(unicode):
         """Create an object from an httplib request."""
 
         if headers:
+            if 'Host' in headers:
+                # 'Host' is already covered explicitly below, remove from the
+                # hash so hostname/post are easy to change and sed the file
+                del headers['Host']
+
             headers = hashlib.md5(repr(sorted(headers.items()))).hexdigest()
 
         if will_hash_body:
