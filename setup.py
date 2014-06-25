@@ -23,6 +23,11 @@ setup(
     description="Cassette stores and replays HTTP requests made in your Python app.",
     long_description=read_long_description(),
     install_requires=read_requirements(),
+    tests_require=[
+        'nose',
+        'mock',
+        'flask',
+    ],
     zip_safe=False,
     test_suite="nose.collector",
     classifiers=[

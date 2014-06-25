@@ -7,6 +7,7 @@ import httplib
 import json
 import os
 import shutil
+import threading
 import urllib
 import urllib2
 
@@ -16,6 +17,7 @@ import cassette
 from cassette.cassette_library import CassetteLibrary
 from cassette.tests.base import (TEMPORARY_RESPONSES_DIRECTORY,
                                  TEMPORARY_RESPONSES_FILENAME, TestCase)
+from cassette.tests.server.run import app
 
 RESPONSES_FILENAME = "./cassette/tests/data/responses.yaml"
 IMAGE_FILENAME = "./cassette/tests/server/image.png"
@@ -90,6 +92,10 @@ def url_for(endpoint):
 class TestCassette(TestCase):
     """Testing the whole flow with a temporary response file."""
 
+    # Keep track of a single HTTP server instance here so base classes don't
+    # try to re-use the address.
+    server_thread = None
+
     def setUp(self):
         self.filename = TEMPORARY_RESPONSES_FILENAME
         self.file_format = 'yaml'
@@ -102,6 +108,16 @@ class TestCassette(TestCase):
 
         if os.path.exists(self.filename):
             os.remove(self.filename)
+
+    @classmethod
+    def setUpClass(cls):
+        if cls.server_thread is None:
+            cls.server_thread = threading.Thread(
+                target=app.run,
+            )
+            # Daemonizing will kill the thread when python exits.
+            cls.server_thread.daemon = True
+            cls.server_thread.start()
 
     def tearDown(self):
         if os.path.exists(self.filename):
