@@ -377,6 +377,22 @@ class TestCassetteFile(TestCase):
         self.assertEqual(r.read(), "hello world")
         self.assertEqual(self.had_response.called, True)
 
+    def test_httplib_getheader_with_present_header(self):
+        with cassette.play(RESPONSES_FILENAME):
+            conn = httplib.HTTPConnection("127.0.0.1", 5000)
+            conn.request("GET", "/index")
+            r = conn.getresponse()
+
+        assert r.getheader('content-length')
+
+    def test_httplib_getheader_with_absent_header(self):
+        with cassette.play(RESPONSES_FILENAME):
+            conn = httplib.HTTPConnection("127.0.0.1", 5000)
+            conn.request("GET", "/index")
+            r = conn.getresponse()
+
+        assert r.getheader('X-FOOBAR') is None
+
     def test_read_twice(self):
         """Verify that response are not empty."""
 
