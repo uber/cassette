@@ -1,6 +1,11 @@
 Changelog for Cassette
 ======================
 
+0.3.2 (unreleased)
+------------------
+
+- Handle absent headers with httplib (thanks to @blampe)
+
 0.3.1 (2014-06-04)
 ------------------
 
