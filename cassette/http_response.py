@@ -55,7 +55,7 @@ class MockedHTTPResponse(MockedResponse):
         return self.headers.items()
 
     def getheader(self, name):
-        return self.headers[name]
+        return self.headers.get(name)
 
     def rewind(self):
         self.fp = self.create_file_descriptor(self.content)
