@@ -1,4 +1,6 @@
 import io
+import traceback
+
 from httplib import HTTPMessage
 
 from cassette.mocked_response import MockedResponse
@@ -6,11 +8,13 @@ from cassette.mocked_response import MockedResponse
 
 class MockedHTTPResponse(MockedResponse):
 
-    attrs = ("headers", "content", "status", "reason", "raw_headers")
+    attrs = ("headers", "content", "status", "reason", "raw_headers",
+             "backtrace")
 
     @classmethod
     def from_response(cls, response):
         """Create object from true response."""
+        backtrace = traceback.extract_stack()
 
         d = {
             "headers": dict(response.getheaders()),
@@ -18,7 +22,9 @@ class MockedHTTPResponse(MockedResponse):
             "status": response.status,
             "reason": response.reason,
             "raw_headers": response.msg.headers,
+            "backtrace": backtrace
         }
+
         return cls.from_dict(d)
 
     @classmethod
@@ -28,7 +34,8 @@ class MockedHTTPResponse(MockedResponse):
         obj = cls()
 
         for k in cls.attrs:
-            setattr(obj, k, data[k])
+            if k in data:
+                setattr(obj, k, data[k])
 
         obj.fp = cls.create_file_descriptor(obj.content)
 
