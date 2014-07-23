@@ -9,18 +9,34 @@ unpatched_HTTPConnection = httplib.HTTPConnection
 unpatched_HTTPSConnection = httplib.HTTPSConnection
 
 
-def patch(cassette_library):
+class AttemptedConnection(Exception):
+    pass
+
+
+def patch(cassette_library, backfire=False):
     """Replace standard library."""
 
     # Inspired by vcrpy
 
+    connection = CassetteHTTPConnection
+
+    if backfire:
+        def nonetwork(*args, **kwargs):
+            print (
+                "Attempt to create HTTPConnection({}, {})"
+                .format(args, kwargs)
+            )
+            raise AttemptedConnection()
+
+        connection = nonetwork
+
     CassetteHTTPConnection._cassette_library = cassette_library
     CassetteHTTPSConnection._cassette_library = cassette_library
 
-    httplib.HTTPConnection = CassetteHTTPConnection
-    httplib.HTTP._connection_class = CassetteHTTPConnection
-    httplib.HTTPSConnection = CassetteHTTPSConnection
-    httplib.HTTPS._connection_class = CassetteHTTPSConnection
+    httplib.HTTPConnection = connection
+    httplib.HTTP._connection_class = connection
+    httplib.HTTPSConnection = connection
+    httplib.HTTPS._connection_class = connection
 
 
 def unpatch():
