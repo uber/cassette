@@ -18,6 +18,7 @@ from cassette.cassette_library import CassetteLibrary
 from cassette.tests.base import (TEMPORARY_RESPONSES_DIRECTORY,
                                  TEMPORARY_RESPONSES_FILENAME, TestCase)
 from cassette.tests.server.run import app
+from cassette.patcher import AttemptedConnectionException
 
 RESPONSES_FILENAME = "./cassette/tests/data/responses.yaml"
 IMAGE_FILENAME = "./cassette/tests/server/image.png"
@@ -292,6 +293,21 @@ class TestCassette(TestCase):
         self.assertEqual(self.had_response.called, True)
 
 
+class TestCassetteEnsureNoHTTPRequests(TestCassette):
+    def test_ensure_no_http_requests(self):
+        with cassette.ensure_no_http_requests():
+            try:
+                request = urllib2.Request('http://example.com/', headers={})
+                urllib2.urlopen(request)
+            except AttemptedConnectionException:
+                return
+            except Exception, e:
+                print e
+                pass
+
+        self.assertEqual(False, True)
+
+
 class TestCassetteJson(TestCassette):
     """Perform the same test but in JSON."""
 
@@ -428,7 +444,8 @@ class TestCassetteFile(TestCase):
 
     def test_redirects(self):
         """Verify that cassette can handle a redirect."""
-        self.check_read_from_file_flow(TEST_URL_REDIRECT, "hello world redirected")
+        self.check_read_from_file_flow(TEST_URL_REDIRECT,
+                                       "hello world redirected")
 
     def test_non_ascii_content(self):
         """Verify that cassette can handle non-ascii content."""

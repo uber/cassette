@@ -78,3 +78,14 @@ httplib:GET httpbin.org:443/ip c2585c6aafb8fa06dc8bb6de88f9de0b None:
     "Content-Length: 30\r\n", "Connection: Close\r\n"]
   reason: OK
   status: 200
+httplib:GET httpbin.org:80/ip c2585c6aafb8fa06dc8bb6de88f9de0b None:
+  content: "{\n  \"origin\": \"173.13.150.22\"\n}"
+  headers: {access-control-allow-credentials: 'true', access-control-allow-origin: '*',
+    connection: Close, content-length: '31', content-type: application/json, date: 'Thu,
+      24 Jul 2014 18:08:55 GMT', server: gunicorn/18.0}
+  raw_headers: ["Access-Control-Allow-Credentials: true\r\n", "Access-Control-Allow-Origin:\
+      \ *\r\n", "Content-Type: application/json\r\n", "Date: Thu, 24 Jul 2014 18:08:55\
+      \ GMT\r\n", "Server: gunicorn/18.0\r\n", "Content-Length: 31\r\n", "Connection:\
+      \ Close\r\n"]
+  reason: OK
+  status: 200

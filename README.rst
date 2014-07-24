@@ -22,6 +22,13 @@ Cassette stores and replays HTTP requests made in your Python app.
 
     assert "A.ROOT-SERVERS.NET" in r.read(10000)
 
+    # Similarly, you can use cassette to prevent HTTP requests from being made
+    # from your code.
+    with cassette.ensure_no_http_requests():
+        # The next line will cause an AttemptedConnectionException to be thrown
+        r = urllib2.urlopen("http://www.internic.net/domain/named.root")
+
+
 Installation
 ------------
 

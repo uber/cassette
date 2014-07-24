@@ -12,7 +12,7 @@ def test(args=""):
 
     print green("\nRunning tests")
 
-    local("flake8 --ignore=E501,E702 .")
+    local("flake8 --ignore=E501,E702 --exclude=env .")
     local("nosetests %s" % args)
 
 
