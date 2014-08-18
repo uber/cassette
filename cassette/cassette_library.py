@@ -49,7 +49,9 @@ class CassetteName(unicode):
                 url = parsed_url.path
                 query = hashlib.md5(parsed_url.query + '#' + parsed_url.fragment).hexdigest()
             else:
-                url = ''
+                # requests/urllib3 defaults to '/' while urllib2 is ''. So this
+                # value should be '/' to ensure compatability.
+                url = '/'
                 query = ''
             name = "httplib:{method} {host}:{port}{url} {query} {headers} {body}".format(**locals())
         else:

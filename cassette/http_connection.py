@@ -21,6 +21,11 @@ class CassetteConnectionMixin(object):
         )
         if self._cassette_name in lib:
             self._response = lib[self._cassette_name]
+
+            # urllib3 does some additional weirdness to the `sock` attribute
+            # when the request method is called. Since we skip that method here,
+            # this is a hack to make it ignore this and not break.
+            del self.sock
             return
 
         log.warning("Making external HTTP request: %s" % self._cassette_name)
@@ -36,7 +41,7 @@ class CassetteConnectionMixin(object):
             return self._response
 
         lib = self._cassette_library
-        response = HTTPConnection.getresponse(self)
+        response = self._baseclass.getresponse(self)
 
         # If we were just returning the response here, the file
         # descriptor would be at the end of the file, and read() would
@@ -66,3 +71,23 @@ class CassetteHTTPSConnection(CassetteConnectionMixin, HTTPSConnection):
                                 source_address)
         self.key_file = key_file
         self.cert_file = cert_file
+
+# Although requests, urllib3 and urllib2 all use httplib, urllib3 subclasses
+# the HTTPConnection object that cassette relies on. So to make
+# requests work, we need to mock and patch this object.
+
+try:
+    from requests.packages import urllib3 as requests_urllib3
+except ImportError:
+    pass
+else:
+    class UL3CassetteHTTPConnection(CassetteConnectionMixin,
+                                    requests_urllib3.connection.HTTPConnection):
+
+        _baseclass = requests_urllib3.connection.HTTPConnection
+
+    class UL3CassetteHTTPSConnection(CassetteConnectionMixin,
+                                     requests_urllib3.connection.HTTPSConnection):
+
+        _baseclass = requests_urllib3.connection.HTTPSConnection
+

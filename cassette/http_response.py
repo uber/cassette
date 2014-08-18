@@ -6,7 +6,8 @@ from cassette.mocked_response import MockedResponse
 
 class MockedHTTPResponse(MockedResponse):
 
-    attrs = ("headers", "content", "status", "reason", "raw_headers")
+    attrs = ("headers", "content", "status", "reason", "raw_headers", "length",
+             "version")
 
     @classmethod
     def from_response(cls, response):
@@ -18,6 +19,8 @@ class MockedHTTPResponse(MockedResponse):
             "status": response.status,
             "reason": response.reason,
             "raw_headers": response.msg.headers,
+            "length": response.length,
+            "version": response.version
         }
         return cls.from_dict(d)
 
