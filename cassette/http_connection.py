@@ -25,7 +25,9 @@ class CassetteConnectionMixin(object):
             # urllib3 does some additional weirdness to the `sock` attribute
             # when the request method is called. Since we skip that method here,
             # this is a hack to make it ignore this and not break.
-            del self.sock
+            if hasattr(self, 'sock'):
+                del self.sock
+
             return
 
         log.warning("Making external HTTP request: %s" % self._cassette_name)
