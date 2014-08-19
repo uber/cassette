@@ -292,20 +292,32 @@ class TestCassette(TestCase):
 
         self.assertEqual(self.had_response.called, True)
 
-    def test_requestslib_http(self):
+    def helper_requestslib(self, url):
         with mock.patch.object(CassetteLibrary, '_had_response', autospec=True) as was_cached:
-            with cassette.play(self.filename, file_format='json'):
-                r = requests.get(TEST_URL)
+            with cassette.play(self.filename, file_format=self.file_format):
+                r0 = requests.get(url)
 
             assert not was_cached.called
-            assert r.text == 'hello world'
 
         with mock.patch.object(CassetteLibrary, '_had_response', autospec=True) as was_cached:
-            with cassette.play(self.filename, file_format='json'):
-                r = requests.get(TEST_URL)
-                assert was_cached.called
-                assert r.text == 'hello world'
+            with cassette.play(self.filename, file_format=self.file_format):
+                r1 = requests.get(url)
 
+                assert was_cached.called
+
+        assert r0.text == r1.text
+        return r1
+
+    def test_requestslib_http(self):
+        assert self.helper_requestslib(TEST_URL).text == 'hello world'
+
+    def test_requestslib_https(self):
+        assert 'origin' in self.helper_requestslib(TEST_URL_HTTPS).json()
+
+    def test_requestslib_redir(self):
+        assert self.helper_requestslib(TEST_URL_REDIRECT).text == 'hello world redirected'
+
+    # TODO: Write tests for cross compatability between libraries.
 
 class TestCassetteJson(TestCassette):
     """Perform the same test but in JSON."""
