@@ -60,10 +60,16 @@ class MockedHTTPResponse(MockedResponse):
     def getheader(self, name):
         return self.headers.get(name)
 
+    def stream(self, chunk_size, decode_content):
+        yield self.read()
+
     def rewind(self):
         self.fp = self.create_file_descriptor(self.content)
         self.read = self.fp.read
         return self
 
     def close(self):
-        pass
+        self.fp = None
+
+    def isclosed(self):
+        return True
