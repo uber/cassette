@@ -10,6 +10,7 @@ import shutil
 import threading
 import urllib
 import urllib2
+import requests
 
 import mock
 
@@ -291,6 +292,20 @@ class TestCassette(TestCase):
 
         self.assertEqual(self.had_response.called, True)
 
+    def test_requestslib_http(self):
+        with mock.patch.object(CassetteLibrary, '_had_response', autospec=True) as was_cached:
+            with cassette.play(self.filename, file_format='json'):
+                r = requests.get(TEST_URL)
+
+            assert not was_cached.called
+            assert r.text == 'hello world'
+
+        with mock.patch.object(CassetteLibrary, '_had_response', autospec=True) as was_cached:
+            with cassette.play(self.filename, file_format='json'):
+                r = requests.get(TEST_URL)
+                assert was_cached.called
+                assert r.text == 'hello world'
+
 
 class TestCassetteJson(TestCassette):
     """Perform the same test but in JSON."""
@@ -454,3 +469,5 @@ class TestCassetteFile(TestCase):
         self.check_read_from_file_flow(
             url=TEST_URL_HEADERS,
             expected_content="not json")
+
+
