@@ -3,9 +3,15 @@ from __future__ import absolute_import
 import httplib
 
 from cassette.http_connection import (CassetteHTTPConnection,
-                                      CassetteHTTPSConnection,
-                                      UL3CassetteHTTPConnection,
-                                      UL3CassetteHTTPSConnection)
+                                      CassetteHTTPSConnection)
+
+try:
+    import requests
+except ImportError:
+    pass
+else:
+    from cassette.http_connection import (UL3CassetteHTTPConnection,
+                                          UL3CassetteHTTPSConnection)
 
 try:
     import requests

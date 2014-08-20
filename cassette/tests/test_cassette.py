@@ -10,7 +10,13 @@ import shutil
 import threading
 import urllib
 import urllib2
-import requests
+import logging
+
+try:
+    import requests
+except ImportError:
+    logger = logging.getLogger(__name__)
+    logger.warning("requests module missing, requestslib tests will fail.")
 
 import mock
 
@@ -309,13 +315,22 @@ class TestCassette(TestCase):
         return r1
 
     def test_requestslib_http(self):
-        assert self.helper_requestslib(TEST_URL).text == 'hello world'
+        """Tests that normal HTTP requests work using requests."""
+        resp = self.helper_requestslib(TEST_URL)
+        assert resp.headers['content-length'] == '11'
+        assert resp.text == 'hello world'
 
     def test_requestslib_https(self):
-        assert 'origin' in self.helper_requestslib(TEST_URL_HTTPS).json()
+        """Tests that HTTPS requests work using requests."""
+        resp = self.helper_requestslib(TEST_URL_HTTPS)
+        assert resp.headers['content-length'] == '30'
+        assert 'origin' in resp.json()
 
     def test_requestslib_redir(self):
-        assert self.helper_requestslib(TEST_URL_REDIRECT).text == 'hello world redirected'
+        """Tests that redirect behavior works using requests."""
+        resp = self.helper_requestslib(TEST_URL_REDIRECT)
+        assert resp.headers['content-length'] == '22'
+        assert resp.text == 'hello world redirected'
 
     # TODO: Write tests for cross compatability between libraries.
 
