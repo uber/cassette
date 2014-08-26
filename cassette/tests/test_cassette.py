@@ -327,7 +327,6 @@ class TestCassette(TestCase):
         assert resp.headers['content-length'] == '22'
         assert resp.text == 'hello world redirected'
 
-    # TODO: Write tests for cross compatability between libraries.
 
 class TestCassetteJson(TestCassette):
     """Perform the same test but in JSON."""
