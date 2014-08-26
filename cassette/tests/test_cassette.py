@@ -10,6 +10,8 @@ import shutil
 import threading
 import urllib
 import urllib2
+import logging
+import requests
 
 import mock
 
@@ -290,6 +292,40 @@ class TestCassette(TestCase):
             self.assertRaises(urllib2.HTTPError, urllib2.urlopen, TEST_URL_404)
 
         self.assertEqual(self.had_response.called, True)
+
+    def helper_requestslib(self, url):
+        with mock.patch.object(CassetteLibrary, '_had_response', autospec=True) as was_cached:
+            with cassette.play(self.filename, file_format=self.file_format):
+                r0 = requests.get(url)
+
+            assert not was_cached.called
+
+        with mock.patch.object(CassetteLibrary, '_had_response', autospec=True) as was_cached:
+            with cassette.play(self.filename, file_format=self.file_format):
+                r1 = requests.get(url)
+
+                assert was_cached.called
+
+        assert r0.text == r1.text
+        return r1
+
+    def test_requestslib_http(self):
+        """Test that normal HTTP requests work using requests."""
+        resp = self.helper_requestslib(TEST_URL)
+        assert resp.headers['content-length'] == '11'
+        assert resp.text == 'hello world'
+
+    def test_requestslib_https(self):
+        """Test that HTTPS requests work using requests."""
+        resp = self.helper_requestslib(TEST_URL_HTTPS)
+        assert resp.headers['content-length'] == '30'
+        assert 'origin' in resp.json()
+
+    def test_requestslib_redir(self):
+        """Test that redirect behavior works using requests."""
+        resp = self.helper_requestslib(TEST_URL_REDIRECT)
+        assert resp.headers['content-length'] == '22'
+        assert resp.text == 'hello world redirected'
 
 
 class TestCassetteJson(TestCassette):

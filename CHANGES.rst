@@ -1,6 +1,13 @@
 Changelog for Cassette
 ======================
 
+0.3.3 (2014-08-26)
+------------------
+
+- Added support for `requests`. Note that libraries are not neccessarily
+  cross compatible-requests cached with `urllib2` may not work with `requests`
+  and vice versa.
+
 0.3.2 (2014-06-26)
 ------------------
 

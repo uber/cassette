@@ -6,7 +6,8 @@ from cassette.mocked_response import MockedResponse
 
 class MockedHTTPResponse(MockedResponse):
 
-    attrs = ("headers", "content", "status", "reason", "raw_headers")
+    attrs = ("headers", "content", "status", "reason", "raw_headers", "length",
+             "version")
 
     @classmethod
     def from_response(cls, response):
@@ -18,6 +19,8 @@ class MockedHTTPResponse(MockedResponse):
             "status": response.status,
             "reason": response.reason,
             "raw_headers": response.msg.headers,
+            "length": response.length,
+            "version": response.version,
         }
         return cls.from_dict(d)
 
@@ -57,10 +60,16 @@ class MockedHTTPResponse(MockedResponse):
     def getheader(self, name):
         return self.headers.get(name)
 
+    def stream(self, chunk_size, decode_content):
+        yield self.read()
+
     def rewind(self):
         self.fp = self.create_file_descriptor(self.content)
         self.read = self.fp.read
         return self
 
     def close(self):
-        pass
+        self.fp = None
+
+    def isclosed(self):
+        return True
