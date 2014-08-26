@@ -491,4 +491,3 @@ class TestCassetteFile(TestCase):
         self.check_read_from_file_flow(
             url=TEST_URL_HEADERS,
             expected_content="not json")
-
