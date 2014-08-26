@@ -22,6 +22,22 @@ Cassette stores and replays HTTP requests made in your Python app.
 
     assert "A.ROOT-SERVERS.NET" in r.read(10000)
 
+Cassette also supports the `requests <https://github.com/kennethreitz/requests>`
+library.
+
+.. code:: python
+
+    import requests
+
+    with cassete.play("data/responses.yaml"):
+        r = requests.get("http://www.internic.net/domain/named.root")
+
+Note that requests stored between different libraries may not be compatible with
+each other. That is, a request stored with urllib2 might still trigger an external
+request is the same URL is requested with `requests`.
+
+
+
 Installation
 ------------
 
