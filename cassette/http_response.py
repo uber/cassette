@@ -20,7 +20,7 @@ class MockedHTTPResponse(MockedResponse):
             "reason": response.reason,
             "raw_headers": response.msg.headers,
             "length": response.length,
-            "version": response.version
+            "version": response.version,
         }
         return cls.from_dict(d)
 

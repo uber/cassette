@@ -11,12 +11,7 @@ import threading
 import urllib
 import urllib2
 import logging
-
-try:
-    import requests
-except ImportError:
-    logger = logging.getLogger(__name__)
-    logger.warning("requests module missing, requestslib tests will fail.")
+import requests
 
 import mock
 
@@ -315,19 +310,19 @@ class TestCassette(TestCase):
         return r1
 
     def test_requestslib_http(self):
-        """Tests that normal HTTP requests work using requests."""
+        """Test that normal HTTP requests work using requests."""
         resp = self.helper_requestslib(TEST_URL)
         assert resp.headers['content-length'] == '11'
         assert resp.text == 'hello world'
 
     def test_requestslib_https(self):
-        """Tests that HTTPS requests work using requests."""
+        """Test that HTTPS requests work using requests."""
         resp = self.helper_requestslib(TEST_URL_HTTPS)
         assert resp.headers['content-length'] == '30'
         assert 'origin' in resp.json()
 
     def test_requestslib_redir(self):
-        """Tests that redirect behavior works using requests."""
+        """Test that redirect behavior works using requests."""
         resp = self.helper_requestslib(TEST_URL_REDIRECT)
         assert resp.headers['content-length'] == '22'
         assert resp.text == 'hello world redirected'
@@ -496,5 +491,4 @@ class TestCassetteFile(TestCase):
         self.check_read_from_file_flow(
             url=TEST_URL_HEADERS,
             expected_content="not json")
-
 

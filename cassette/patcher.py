@@ -2,21 +2,17 @@ from __future__ import absolute_import
 
 import httplib
 
-from cassette.http_connection import (CassetteHTTPConnection,
-                                      CassetteHTTPSConnection)
-
-try:
-    import requests
-except ImportError:
-    pass
-else:
-    from cassette.http_connection import (UL3CassetteHTTPConnection,
-                                          UL3CassetteHTTPSConnection)
-
 try:
     import requests
 except ImportError:
     requests = None
+else:
+    from cassette.http_connection import (UL3CassetteHTTPConnection,
+                                          UL3CassetteHTTPSConnection)
+
+from cassette.http_connection import (CassetteHTTPConnection,
+                                      CassetteHTTPSConnection)
+
 
 unpatched_HTTPConnection = httplib.HTTPConnection
 unpatched_HTTPSConnection = httplib.HTTPSConnection
