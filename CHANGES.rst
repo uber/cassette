@@ -1,7 +1,7 @@
 Changelog for Cassette
 ======================
 
-0.3.4 (unreleased)
+0.3.4 (2014-08-27)
 ------------------
 
 - Improve backward compatibility with 0.3.2
