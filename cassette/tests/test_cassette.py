@@ -10,7 +10,6 @@ import shutil
 import threading
 import urllib
 import urllib2
-import logging
 import requests
 
 import mock

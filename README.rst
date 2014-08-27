@@ -29,12 +29,12 @@ library.
 
     import requests
 
-    with cassete.play("data/responses.yaml"):
+    with cassette.play("data/responses.yaml"):
         r = requests.get("http://www.internic.net/domain/named.root")
 
 Note that requests stored between different libraries may not be compatible with
-each other. That is, a request stored with urllib2 might still trigger an external
-request is the same URL is requested with `requests`.
+each other. That is, a request stored with ``urllib2`` might still trigger an external
+request is the same URL is requested with ``requests``.
 
 
 

@@ -1,7 +1,7 @@
 Changelog for Cassette
 ======================
 
-0.3.3 (2014-08-26)
+0.3.3 (2014-08-27)
 ------------------
 
 - Added support for `requests`. Note that libraries are not neccessarily

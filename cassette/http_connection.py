@@ -96,4 +96,3 @@ else:
                                      requests_urllib3.connection.HTTPSConnection):
 
         _baseclass = requests_urllib3.connection.HTTPSConnection
-
