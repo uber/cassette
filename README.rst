@@ -22,7 +22,7 @@ Cassette stores and replays HTTP requests made in your Python app.
 
     assert "A.ROOT-SERVERS.NET" in r.read(10000)
 
-Cassette also supports the `requests <https://github.com/kennethreitz/requests>`
+Cassette also supports the `requests <https://github.com/kennethreitz/requests>`_
 library.
 
 .. code:: python
