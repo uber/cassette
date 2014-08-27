@@ -28,6 +28,11 @@ class MockedHTTPResponse(MockedResponse):
     def from_dict(cls, data):
         """Create object from dict."""
 
+        # Hack to ensure backwards compatibility with older versions of the
+        # that did not have the length and version attributes.
+        data.setdefault('length', len(data['content']))
+        data.setdefault('version', 10)
+
         obj = cls()
 
         for k in cls.attrs:
