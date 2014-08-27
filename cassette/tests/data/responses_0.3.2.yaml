@@ -1,0 +1,80 @@
+httplib:GET 127.0.0.1:5000/headers 917ed38bcb583a67c891f9fa59792bc0 None:
+  content: "{\n  \"json\": true\n}"
+  headers: {content-length: '18', content-type: application/json, date: 'Mon, 16 Jun
+      2014 18:55:54 GMT', server: Werkzeug/0.9.6 Python/2.7.2}
+  raw_headers: ["Content-Type: application/json\r\n", "Content-Length: 18\r\n", "Server:\
+      \ Werkzeug/0.9.6 Python/2.7.2\r\n", "Date: Mon, 16 Jun 2014 18:55:54 GMT\r\n"]
+  reason: OK
+  status: 200
+httplib:GET 127.0.0.1:5000/headers c2585c6aafb8fa06dc8bb6de88f9de0b None:
+  content: not json
+  headers: {content-length: '8', content-type: text/html; charset=utf-8, date: 'Mon,
+      16 Jun 2014 18:55:54 GMT', server: Werkzeug/0.9.6 Python/2.7.2}
+  raw_headers: ["Content-Type: text/html; charset=utf-8\r\n", "Content-Length: 8\r\
+      \n", "Server: Werkzeug/0.9.6 Python/2.7.2\r\n", "Date: Mon, 16 Jun 2014 18:55:54\
+      \ GMT\r\n"]
+  reason: OK
+  status: 200
+httplib:GET 127.0.0.1:5000/index None None:
+  content: hello world
+  headers: {content-length: '11', content-type: text/html; charset=utf-8, date: 'Mon,
+      16 Jun 2014 18:55:53 GMT', server: Werkzeug/0.9.6 Python/2.7.2}
+  raw_headers: ["Content-Type: text/html; charset=utf-8\r\n", "Content-Length: 11\r\
+      \n", "Server: Werkzeug/0.9.6 Python/2.7.2\r\n", "Date: Mon, 16 Jun 2014 18:55:53\
+      \ GMT\r\n"]
+  reason: OK
+  status: 200
+httplib:GET 127.0.0.1:5000/index c2585c6aafb8fa06dc8bb6de88f9de0b None:
+  content: hello world
+  headers: {content-length: '11', content-type: text/html; charset=utf-8, date: 'Mon,
+      16 Jun 2014 18:55:54 GMT', server: Werkzeug/0.9.6 Python/2.7.2}
+  raw_headers: ["Content-Type: text/html; charset=utf-8\r\n", "Content-Length: 11\r\
+      \n", "Server: Werkzeug/0.9.6 Python/2.7.2\r\n", "Date: Mon, 16 Jun 2014 18:55:54\
+      \ GMT\r\n"]
+  reason: OK
+  status: 200
+httplib:GET 127.0.0.1:5000/non-ascii-content c2585c6aafb8fa06dc8bb6de88f9de0b None:
+  content: !!python/str "Le Mexicain l'avait achet\xE9e en viager \xE0 un procureur\
+    \ \xE0 la retraite. Apr\xE8s trois mois, l'accident b\xEAte. Une affaire."
+  headers: {content-length: '120', content-type: text/html; charset=utf-8, date: 'Mon,
+      16 Jun 2014 18:55:54 GMT', server: Werkzeug/0.9.6 Python/2.7.2}
+  raw_headers: ["Content-Type: text/html; charset=utf-8\r\n", "Content-Length: 120\r\
+      \n", "Server: Werkzeug/0.9.6 Python/2.7.2\r\n", "Date: Mon, 16 Jun 2014 18:55:54\
+      \ GMT\r\n"]
+  reason: OK
+  status: 200
+httplib:GET 127.0.0.1:5000/redirected c2585c6aafb8fa06dc8bb6de88f9de0b None:
+  content: hello world redirected
+  headers: {content-length: '22', content-type: text/html; charset=utf-8, date: 'Mon,
+      16 Jun 2014 18:55:54 GMT', server: Werkzeug/0.9.6 Python/2.7.2}
+  raw_headers: ["Content-Type: text/html; charset=utf-8\r\n", "Content-Length: 22\r\
+      \n", "Server: Werkzeug/0.9.6 Python/2.7.2\r\n", "Date: Mon, 16 Jun 2014 18:55:54\
+      \ GMT\r\n"]
+  reason: OK
+  status: 200
+httplib:GET 127.0.0.1:5000/will_redirect c2585c6aafb8fa06dc8bb6de88f9de0b None:
+  content: '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+    <title>Redirecting...</title>
+
+    <h1>Redirecting...</h1>
+
+    <p>You should be redirected automatically to target URL: <a href="/redirected">/redirected</a>.  If
+    not click the link.'
+  headers: {content-length: '229', content-type: text/html; charset=utf-8, date: 'Mon,
+      16 Jun 2014 18:55:54 GMT', location: 'http://127.0.0.1:5000/redirected', server: Werkzeug/0.9.6
+      Python/2.7.2}
+  raw_headers: ["Content-Type: text/html; charset=utf-8\r\n", "Content-Length: 229\r\
+      \n", "Location: http://127.0.0.1:5000/redirected\r\n", "Server: Werkzeug/0.9.6\
+      \ Python/2.7.2\r\n", "Date: Mon, 16 Jun 2014 18:55:54 GMT\r\n"]
+  reason: FOUND
+  status: 302
+httplib:GET httpbin.org:443/ip c2585c6aafb8fa06dc8bb6de88f9de0b None:
+  content: "{\n  \"origin\": \"8.26.157.128\"\n}"
+  headers: {access-control-allow-origin: '*', connection: Close, content-length: '30',
+    content-type: application/json, date: 'Mon, 16 Jun 2014 18:55:50 GMT', server: gunicorn/18.0}
+  raw_headers: ["Access-Control-Allow-Origin: *\r\n", "Content-Type: application/json\r\
+      \n", "Date: Mon, 16 Jun 2014 18:55:50 GMT\r\n", "Server: gunicorn/18.0\r\n",
+    "Content-Length: 30\r\n", "Connection: Close\r\n"]
+  reason: OK
+  status: 200

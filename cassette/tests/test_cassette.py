@@ -20,7 +20,6 @@ from cassette.tests.base import (TEMPORARY_RESPONSES_DIRECTORY,
                                  TEMPORARY_RESPONSES_FILENAME, TestCase)
 from cassette.tests.server.run import app
 
-RESPONSES_FILENAME = "./cassette/tests/data/responses.yaml"
 IMAGE_FILENAME = "./cassette/tests/server/image.png"
 TEST_HOST = "http://127.0.0.1:5000/"
 TEST_URL = "http://127.0.0.1:5000/index"
@@ -383,7 +382,14 @@ class TestCassetteDirectoryJson(TestCassetteDirectory):
 
 
 class TestCassetteFile(TestCase):
-    """Verify that cassette can read from an existing file."""
+    """Verify that cassette can read from an existing file. This is also
+    the base test case for regression testing older versions of the schema.
+    To avoid breaking test suites, new versions of cassette should always
+    work with older schemas.
+    """
+
+    # The base class tests the most up to date schema.
+    responses_filename = './cassette/tests/data/responses.yaml'
 
     def setUp(self):
 
@@ -398,7 +404,7 @@ class TestCassetteFile(TestCase):
                                   request_headers=None):
         """Verify the flow when reading from an existing file."""
 
-        with cassette.play(RESPONSES_FILENAME):
+        with cassette.play(self.responses_filename):
             request = urllib2.Request(url, headers=request_headers or {})
             r = urllib2.urlopen(request)
 
@@ -418,7 +424,7 @@ class TestCassetteFile(TestCase):
     def test_flow_httplib(self):
         """Verify that cassette can read a file when using httplib."""
 
-        with cassette.play(RESPONSES_FILENAME):
+        with cassette.play(self.responses_filename):
             conn = httplib.HTTPConnection("127.0.0.1", 5000)
             conn.request("GET", "/index")
             r = conn.getresponse()
@@ -429,7 +435,7 @@ class TestCassetteFile(TestCase):
         self.assertEqual(self.had_response.called, True)
 
     def test_httplib_getheader_with_present_header(self):
-        with cassette.play(RESPONSES_FILENAME):
+        with cassette.play(self.responses_filename):
             conn = httplib.HTTPConnection("127.0.0.1", 5000)
             conn.request("GET", "/index")
             r = conn.getresponse()
@@ -437,7 +443,7 @@ class TestCassetteFile(TestCase):
         assert r.getheader('content-length')
 
     def test_httplib_getheader_with_absent_header(self):
-        with cassette.play(RESPONSES_FILENAME):
+        with cassette.play(self.responses_filename):
             conn = httplib.HTTPConnection("127.0.0.1", 5000)
             conn.request("GET", "/index")
             r = conn.getresponse()
@@ -450,7 +456,7 @@ class TestCassetteFile(TestCase):
         url = TEST_URL
         expected_content = "hello world"
 
-        with cassette.play(RESPONSES_FILENAME):
+        with cassette.play(self.responses_filename):
             r = urllib2.urlopen(url)
             self.assertEqual(r.read(), expected_content)
             r = urllib2.urlopen(url)
@@ -489,3 +495,7 @@ class TestCassetteFile(TestCase):
         self.check_read_from_file_flow(
             url=TEST_URL_HEADERS,
             expected_content="not json")
+
+
+class TestCassetteFile_0_3_2(TestCassetteFile):
+    responses_filename = './cassette/tests/data/responses_0.3.2.yaml'
