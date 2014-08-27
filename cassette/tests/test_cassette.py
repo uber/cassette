@@ -496,5 +496,6 @@ class TestCassetteFile(TestCase):
             url=TEST_URL_HEADERS,
             expected_content="not json")
 
+
 class TestCassetteFile_0_3_2(TestCassetteFile):
     responses_filename = './cassette/tests/data/responses_0.3.2.yaml'
