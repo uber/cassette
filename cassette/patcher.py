@@ -17,6 +17,7 @@ from cassette.http_connection import (CassetteHTTPConnection,
 unpatched_HTTPConnection = httplib.HTTPConnection
 unpatched_HTTPSConnection = httplib.HTTPSConnection
 
+
 def patch(cassette_library):
     """Replace standard library."""
 
@@ -38,6 +39,7 @@ def patch(cassette_library):
             UL3CassetteHTTPConnection
         requests.packages.urllib3.connectionpool.HTTPSConnectionPool.ConnectionCls = \
             UL3CassetteHTTPSConnection
+
 
 def unpatch():
     """Unpatch standard library."""
