@@ -181,6 +181,7 @@ class TestCassette(TestCase):
             conn = httplib.HTTPConnection("127.0.0.1", 5000)
             conn.request("GET", "/index")
             r = conn.getresponse()
+            conn.close()
 
         self.assertEqual(r.status, 200)
         self.assertEqual(r.reason, "OK")
@@ -194,6 +195,7 @@ class TestCassette(TestCase):
             conn = httplib.HTTPConnection("127.0.0.1", 5000)
             conn.request("GET", "/index")
             r = conn.getresponse()
+            conn.close()
 
         self.assertEqual(r.status, 200)
         self.assertEqual(r.reason, "OK")

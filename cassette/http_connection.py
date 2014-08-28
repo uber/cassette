@@ -33,7 +33,11 @@ class CassetteConnectionMixin(object):
             # urllib3 does some additional weirdness to the `sock` attribute
             # when the request method is called. Since we skip that method here,
             # this is a hack to make it ignore this and not break.
-            if hasattr(self, 'sock'):
+            #
+            # TODO: If we're going to add more adaptors to this module, this
+            # class shouldn't know anything about its parent classes.
+            if (isinstance(self, UL3CassetteHTTPConnection) and
+                    hasattr(self, 'sock')):
                 del self.sock
 
             return
@@ -92,7 +96,8 @@ else:
 
         _baseclass = requests_urllib3.connection.HTTPConnection
 
-    class UL3CassetteHTTPSConnection(CassetteConnectionMixin,
+    class UL3CassetteHTTPSConnection(UL3CassetteHTTPConnection,
+                                     CassetteConnectionMixin,
                                      requests_urllib3.connection.HTTPSConnection):
 
         _baseclass = requests_urllib3.connection.HTTPSConnection
