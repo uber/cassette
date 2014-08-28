@@ -1,7 +1,7 @@
 Changelog for Cassette
 ======================
 
-0.3.5 (unreleased)
+0.3.5 (2014-08-28)
 ------------------
 
 - Fix error closing HTTPConnections directly
