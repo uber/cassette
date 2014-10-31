@@ -1,3 +1,4 @@
+import cStringIO
 import io
 from httplib import HTTPMessage
 
@@ -52,7 +53,7 @@ class MockedHTTPResponse(MockedResponse):
     def create_file_descriptor(content):
         """Create a file descriptor for content."""
 
-        fp = io.BytesIO(content)
+        fp = cStringIO.StringIO(content)
 
         return fp
 
