@@ -1,7 +1,7 @@
 Changelog for Cassette
 ======================
 
-0.3.6 (unreleased)
+0.3.6 (2014-10-31)
 ------------------
 
 - Fix NameError when using UL3CassetteHTTPConnection (thanks to @carolinevdh)
