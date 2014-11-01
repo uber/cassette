@@ -1,6 +1,13 @@
 Changelog for Cassette
 ======================
 
+0.3.6 (unreleased)
+------------------
+
+- Fix NameError when using UL3CassetteHTTPConnection (thanks to @carolinevdh)
+- Fix HTTP Response to use cStringIO, adding Unicode support (thanks to
+  @carolinevdh)
+
 0.3.5 (2014-08-28)
 ------------------
 
