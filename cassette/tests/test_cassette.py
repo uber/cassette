@@ -318,7 +318,10 @@ class TestCassette(TestCase):
     def test_requestslib_https(self):
         """Test that HTTPS requests work using requests."""
         resp = self.helper_requestslib(TEST_URL_HTTPS)
-        assert resp.headers['content-length'] == '30'
+        # len('{\n  "origin":"0.0.0.0"\n}')  # 24
+        assert int(resp.headers['content-length']) >= 24
+        # len('{\n  "origin":  "255.255.255.255"\n}')  # 34
+        assert int(resp.headers['content-length']) <= 34
         assert 'origin' in resp.json()
 
     def test_requestslib_redir(self):
