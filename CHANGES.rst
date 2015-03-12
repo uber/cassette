@@ -1,6 +1,12 @@
 Changelog for Cassette
 ======================
 
+0.3.7 (unreleased)
+------------------
+
+- Add ability to report on unused cassette.
+
+
 0.3.6 (2014-10-31)
 ------------------
 

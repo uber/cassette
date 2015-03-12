@@ -20,16 +20,15 @@ setup(
     license="MIT",
     packages=find_packages(),
     keywords=["http", "tests", "mock"],
-    description="Cassette stores and replays HTTP requests made in your Python app.",
+    description="Cassette stores and replays HTTP requests.",
     long_description=read_long_description(),
     install_requires=read_requirements(),
     tests_require=[
-        'nose',
+        'pytest',
         'mock',
         'flask',
     ],
     zip_safe=False,
-    test_suite="nose.collector",
     classifiers=[
         "Development Status :: 3 - Alpha",
         "Environment :: Web Environment",
