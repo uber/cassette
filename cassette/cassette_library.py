@@ -1,12 +1,13 @@
 from __future__ import absolute_import
-
 import hashlib
 import logging
 import os
+import sys
 from urlparse import urlparse
 
+from cassette.config import Config
 from cassette.http_response import MockedHTTPResponse
-from cassette.utils import Encoder, DEFAULT_ENCODER
+from cassette.utils import Encoder
 
 log = logging.getLogger("cassette")
 
@@ -47,17 +48,20 @@ class CassetteName(unicode):
                 # instantiated to 0.0.0.0 so we can parse
                 parsed_url = urlparse('http://0.0.0.0' + url)
                 url = parsed_url.path
-                query = hashlib.md5(parsed_url.query + '#' + parsed_url.fragment).hexdigest()
+                query = hashlib.md5(parsed_url.query + '#' +
+                                    parsed_url.fragment).hexdigest()
             else:
                 # requests/urllib3 defaults to '/' while urllib2 is ''. So this
                 # value should be '/' to ensure compatability.
                 url = '/'
                 query = ''
-            name = "httplib:{method} {host}:{port}{url} {query} {headers} {body}".format(**locals())
+            name = ("httplib:{method} {host}:{port}{url} {query} "
+                    "{headers} {body}").format(**locals())
         else:
             # note that old yaml files will not contain the correct matching
             # query and body
-            name = "httplib:{method} {host}:{port}{url} {headers} {body}".format(**locals())
+            name = ("httplib:{method} {host}:{port}{url} "
+                    "{headers} {body}").format(**locals())
 
         name = name.strip()
         return name
@@ -77,11 +81,16 @@ class CassetteLibrary(object):
 
     cache = {}
 
-    def __init__(self, filename, encoder):
+    def __init__(self, filename, encoder, config=None):
         self.filename = os.path.abspath(filename)
         self.is_dirty = False
+        self.used = set()
+        self.config = config or self.get_default_config()
 
         self.encoder = encoder
+
+    def get_default_config(self):
+        return Config()
 
     def add_response(self, cassette_name, response):
         """Add a new response to the mocked response.
@@ -132,9 +141,22 @@ class CassetteLibrary(object):
         """Logging for checking access to cassettes."""
         if contains:
             self._had_response()  # For testing purposes
-            log.info("Library has '{n}'".format(n=cassette_name))
+            log.info('Library has %s', cassette_name)
         else:
-            log.warning("Library does not have '{n}'".format(n=cassette_name))
+            log.info('Library does not have %s', cassette_name)
+
+    def log_cassette_used(self, path):
+        """Log that a path was used."""
+        if self.config['log_cassette_used']:
+            self.used.add(path)
+
+    def report_unused_cassettes(self, output=sys.stdout):
+        """Report unused path to a file."""
+        if not self.config['log_cassette_used']:
+            raise ValueError('Need to activate log_cassette_used first.')
+        available = set(self.get_all_available())
+        unused = available.difference(self.used)
+        output.write('\n'.join(unused))
 
     # Methods that need to be implemented by subclasses
     def write_to_file(self):
@@ -147,79 +169,51 @@ class CassetteLibrary(object):
     def __getitem__(self, cassette_name):
         raise NotImplementedError('CassetteLibrary not implemented.')
 
-    # Static methods
-    @staticmethod
-    def create_new_cassette_library(filename, file_format):
+    @classmethod
+    def create_new_cassette_library(cls, path, file_format, config=None):
         """Return an instantiated CassetteLibrary.
 
-        Use this method to create new a CassetteLibrary. It will automatically
-        determine if it should use a file or directory to back the cassette
-        based on the filename. The method assumes that all file names with an
-        extension (e.g. /file.json) are files, and all file names without
-        extensions are directories (e.g. /testdir).
+        Use this method to create new a CassetteLibrary. It will
+        automatically determine if it should use a file or directory to
+        back the cassette based on the filename. The method assumes that
+        all file names with an extension (e.g. ``/file.json``) are files,
+        and all file names without extensions are directories (e.g.
+        ``/requests``).
 
-        :param str filename: filename of file or directory for storing requests
+        :param str path: filename of file or directory for storing requests
         :param str file_format: the file_format to use for storing requests
+        :param dict config: configuration
         """
         if not Encoder.is_supported_format(file_format):
-            raise KeyError("'{e}' is not a supported file_format.\
-                    ".format(e=file_format))
+            raise KeyError('%r is not a supported file_format.' % file_format)
 
-        _, extension = os.path.splitext(filename)
+        _, extension = os.path.splitext(path)
+        if file_format:
+            encoder = Encoder.get_encoder_from_file_format(file_format)
+        else:
+            encoder = Encoder.get_encoder_from_extension(extension)
 
         # Check if file has extension
         if extension:
-            # If it has an extension, we assume filename is a file
-            return CassetteLibrary._process_file(filename, file_format, extension)
+            if os.path.isdir(path):
+                raise IOError('Expected a file, but found a directory at %s'
+                              % path)
+            klass = FileCassetteLibrary
         else:
-            # Otherwise, we assume filename is a directory
-            return CassetteLibrary._process_directory(filename, file_format)
+            if os.path.isfile(path):
+                raise IOError('Expected a directory, but found a file at %r' %
+                              path)
+            klass = DirectoryCassetteLibrary
 
-    @staticmethod
-    def _process_file(filename, file_format, extension):
-        """Return an instantiated FileCassetteLibrary with the correct encoder.
-
-        :param str file_format:
-        :param str extension:
-        """
-        if os.path.isdir(filename):
-            raise IOError("Expected a file, but found a directory at \
-                    '{f}'".format(f=filename))
-
-        # Parse encoding type
-        if not file_format:
-            encoder = Encoder.get_encoder_from_extension(extension)
-        else:
-            encoder = Encoder.get_encoder_from_file_format(file_format)
-
-        return FileCassetteLibrary(filename, encoder)
-
-    @staticmethod
-    def _process_directory(filename, file_format):
-        """Return an instantiated DirectoryCassetteLibrary with the correct
-        encoder.
-
-        :param str file_format:
-        """
-        if os.path.isfile(filename):
-            raise IOError("Expected a directory, but found a file at \
-                    '{f}'".format(f=filename))
-
-        if not file_format:
-            encoder = DEFAULT_ENCODER  # default new directories to json
-        else:
-            encoder = Encoder.get_encoder_from_file_format(file_format)
-
-        return DirectoryCassetteLibrary(filename, encoder)
+        return klass(path, encoder, config)
 
 
 class FileCassetteLibrary(CassetteLibrary):
-    """A CassetteLibrary that stores and manages requests with a single file."""
+    """Store and manage requests with a single file."""
 
     @property
     def data(self):
         """Lazily loaded data."""
-
         if not hasattr(self, "_data"):
             self._data = self.load_file()
 
@@ -227,7 +221,6 @@ class FileCassetteLibrary(CassetteLibrary):
 
     def write_to_file(self):
         """Write mocked responses to file."""
-
         # Serialize the items via YAML
         data = {k: v.to_dict() for k, v in self.data.items()}
         encoded_str = self.encoder.dump(data)
@@ -243,7 +236,6 @@ class FileCassetteLibrary(CassetteLibrary):
 
     def load_file(self):
         """Load MockedResponses from YAML file."""
-
         data = {}
         filename = self.filename
 
@@ -291,6 +283,10 @@ class FileCassetteLibrary(CassetteLibrary):
         req.rewind()
         return req
 
+    def get_all_available(self):
+        """Return all available cassette."""
+        return self.data.keys()
+
 
 class DirectoryCassetteLibrary(CassetteLibrary):
     """A CassetteLibrary that stores and manages requests with directory."""
@@ -336,11 +332,9 @@ class DirectoryCassetteLibrary(CassetteLibrary):
         will check if a file supporting the cassette name exists.
         """
         contains = cassette_name in self.data
-
         if not contains:
             # Check file directory if it exists
             filename = self.generate_path_from_cassette_name(cassette_name)
-
             contains = os.path.exists(filename)
 
         self._log_contains(cassette_name, contains)
@@ -356,8 +350,8 @@ class DirectoryCassetteLibrary(CassetteLibrary):
             req = self._load_request_from_file(cassette_name)
 
         if not req:
-            raise KeyError("Cassette '{c}' does not exist in \
-                    library.".format(c=cassette_name))
+            raise KeyError('Cassette %s does not exist in library.' %
+                           cassette_name)
 
         req.rewind()
         return req
@@ -368,15 +362,12 @@ class DirectoryCassetteLibrary(CassetteLibrary):
         If the cassette file is in the cache, then use it. Otherwise, read
         from the disk to fetch the particular request.
         """
-
         filename = self.generate_path_from_cassette_name(cassette_name)
 
-        try:
-            with open(filename) as f:
-                encoded_str = f.read()
-        except:
-            return None
+        with open(filename) as f:
+            encoded_str = f.read()
 
+        self.log_cassette_used(self.generate_filename(cassette_name))
         encoded_hash = _hash(encoded_str)
 
         # If the contents are cached, return them
@@ -401,3 +392,7 @@ class DirectoryCassetteLibrary(CassetteLibrary):
         """Create a cassette name from an httplib request."""
         return CassetteName.from_httplib_connection(
             host, port, method, url, body, headers, will_hash_body=True)
+
+    def get_all_available(self):
+        """Return all available cassette."""
+        return os.listdir(self.filename)

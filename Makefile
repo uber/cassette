@@ -8,7 +8,7 @@ develop:
 	python setup.py develop
 
 test: clean develop lint
-	nosetests
+	py.test
 
 lint:
 	flake8 --ignore=E501,E702 .

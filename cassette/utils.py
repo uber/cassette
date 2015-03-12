@@ -39,6 +39,10 @@ class Encoder(object):
 
         :param str extension:
         """
+        if not extension:
+            # It's a dir.
+            return DEFAULT_ENCODER
+
         file_format = extension.replace('.', '')
         return Encoder.get_encoder_from_file_format(file_format)
 
