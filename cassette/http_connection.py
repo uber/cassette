@@ -8,6 +8,7 @@ we need to mock and patch this object.
 """
 import logging
 import socket
+import ssl
 from httplib import HTTPConnection, HTTPSConnection
 
 log = logging.getLogger("cassette")
@@ -76,7 +77,7 @@ class CassetteHTTPConnection(CassetteConnectionMixin, HTTPConnection):
         HTTPConnection.__init__(self, *args, **kwargs)
 
 
-class CassetteHTTPSConnection(CassetteConnectionMixin, HTTPSConnection):
+class CassetteHTTPSConnectionPre279(CassetteConnectionMixin, HTTPSConnection):
 
     _baseclass = HTTPSConnection
 
@@ -88,6 +89,25 @@ class CassetteHTTPSConnection(CassetteConnectionMixin, HTTPSConnection):
                                 source_address)
         self.key_file = key_file
         self.cert_file = cert_file
+
+
+class CassetteHTTPSConnectionPost279(CassetteConnectionMixin, HTTPSConnection):
+
+    _baseclass = HTTPSConnection
+
+    def __init__(self, host, port=None, key_file=None, cert_file=None,
+                 strict=None, timeout=socket._GLOBAL_DEFAULT_TIMEOUT,
+                 source_address=None, context=None):
+        # Directly taken from httplib.
+        HTTPConnection.__init__(self, host, port, strict, timeout,
+                                source_address)
+        self.key_file = key_file
+        self.cert_file = cert_file
+
+if hasattr(ssl, 'SSLContext'):
+    CassetteHTTPSConnection = CassetteHTTPSConnectionPost279
+else:
+    CassetteHTTPSConnection = CassetteHTTPSConnectionPre279
 
 try:
     from requests.packages import urllib3 as requests_urllib3
