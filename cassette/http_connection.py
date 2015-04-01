@@ -31,19 +31,6 @@ class CassetteConnectionMixin(object):
         if self._cassette_name in lib:
             self._response = lib[self._cassette_name]
 
-            # urllib3 does some additional weirdness to the `sock` attribute
-            # when the request method is called. Since we skip that method here,
-            # this is a hack to make it ignore this and not break.
-            #
-            # TODO: If we're going to add more adaptors to this module, this
-            # class shouldn't know anything about its parent classes.
-            try:
-                if (isinstance(self, UL3CassetteHTTPConnection) and
-                        hasattr(self, 'sock')):
-                    del self.sock
-            except NameError:
-                pass
-
             return
 
         log.warning("Making external HTTP request: %s" % self._cassette_name)
@@ -103,6 +90,25 @@ class CassetteHTTPSConnectionPost279(CassetteConnectionMixin, HTTPSConnection):
                                 source_address)
         self.key_file = key_file
         self.cert_file = cert_file
+        if context is None:
+            context = ssl._create_default_https_context()
+        if key_file or cert_file:
+            context.load_cert_chain(cert_file, key_file)
+        self._context = context
+
+    def connect(self):
+        "Connect to a host on a given (SSL) port."
+
+        HTTPConnection.connect(self)
+
+        if self._tunnel_host:
+            server_hostname = self._tunnel_host
+        else:
+            server_hostname = self.host
+
+        self.sock = self._context.wrap_socket(self.sock,
+                                              server_hostname=server_hostname)
+
 
 if hasattr(ssl, 'SSLContext'):
     CassetteHTTPSConnection = CassetteHTTPSConnectionPost279

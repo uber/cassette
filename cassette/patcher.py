@@ -16,6 +16,9 @@ from cassette.http_connection import (CassetteHTTPConnection,
 
 unpatched_HTTPConnection = httplib.HTTPConnection
 unpatched_HTTPSConnection = httplib.HTTPSConnection
+if requests:
+    unpatched_requests_HTTPConnection = requests.packages.urllib3.connection.HTTPConnection
+    unpatched_requests_HTTPSConnection = requests.packages.urllib3.connection.HTTPSConnection
 
 
 def patch(cassette_library):
@@ -53,6 +56,6 @@ def unpatch():
 
     if requests:
         requests.packages.urllib3.connection.HTTPConnection = \
-            unpatched_HTTPConnection
+            unpatched_requests_HTTPConnection
         requests.packages.urllib3.connection.HTTPSConnection = \
-            unpatched_HTTPSConnection
+            unpatched_requests_HTTPSConnection
