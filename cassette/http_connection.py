@@ -11,10 +11,13 @@ import socket
 import ssl
 from httplib import HTTPConnection, HTTPSConnection
 
+import semver
+
 log = logging.getLogger("cassette")
 
 
 class CassetteConnectionMixin(object):
+    _delete_sock_when_returning_from_library = False
 
     def request(self, method, url, body=None, headers=None):
         """Send HTTP request."""
@@ -30,6 +33,10 @@ class CassetteConnectionMixin(object):
         )
         if self._cassette_name in lib:
             self._response = lib[self._cassette_name]
+
+            if self._delete_sock_when_returning_from_library:
+                if hasattr(self, 'sock') and self.sock is None:
+                    delattr(self, 'sock')
 
             return
 
@@ -117,6 +124,7 @@ else:
 
 try:
     from requests.packages import urllib3 as requests_urllib3
+    import requests
 except ImportError:
     pass
 else:
@@ -124,6 +132,12 @@ else:
                                     requests_urllib3.connection.HTTPConnection):
 
         _baseclass = requests_urllib3.connection.HTTPConnection
+        # requests 2.3.0 and below have an issue where they get confused if
+        # the HTTPConnection has a "sock" attribute which is set to None at
+        # the end of a request/response cycle. So we delete the attribute in
+        # those cases
+        _delete_sock_when_returning_from_library = True if \
+            semver.compare(requests.__version__, '2.4.0') == -1 else False
 
     class UL3CassetteHTTPSConnection(UL3CassetteHTTPConnection,
                                      CassetteConnectionMixin,
