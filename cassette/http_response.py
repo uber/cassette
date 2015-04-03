@@ -1,4 +1,3 @@
-import cStringIO
 import io
 from httplib import HTTPMessage
 
@@ -28,8 +27,7 @@ class MockedHTTPResponse(MockedResponse):
     @classmethod
     def from_dict(cls, data):
         """Create object from dict."""
-
-        # Hack to ensure backwards compatibility with older versions of the
+        # Hack to ensure backwards compatibility with older versions
         # that did not have the length and version attributes.
         data.setdefault('length', len(data['content']))
         data.setdefault('version', 10)
@@ -41,7 +39,7 @@ class MockedHTTPResponse(MockedResponse):
 
         obj.fp = cls.create_file_descriptor(obj.content)
 
-        obj.msg = HTTPMessage(io.StringIO(unicode()), 0)
+        obj.msg = HTTPMessage(cls.create_file_descriptor(), 0)
         for k, v in obj.headers.iteritems():
             obj.msg.addheader(k, v)
 
@@ -50,11 +48,10 @@ class MockedHTTPResponse(MockedResponse):
         return obj
 
     @staticmethod
-    def create_file_descriptor(content):
+    def create_file_descriptor(content=None):
         """Create a file descriptor for content."""
-
-        fp = cStringIO.StringIO(content)
-
+        content = content or str()
+        fp = io.BytesIO(content)
         return fp
 
     def read(self, chunked=None):

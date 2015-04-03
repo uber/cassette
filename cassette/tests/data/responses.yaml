@@ -84,7 +84,7 @@ httplib:GET 127.0.0.1:5000/will_redirect c2585c6aafb8fa06dc8bb6de88f9de0b None:
   status: 302
   version: 10
 httplib:GET httpbin.org:443/ip c2585c6aafb8fa06dc8bb6de88f9de0b None:
-  content: "{\n  \"origin\": \"8.26.157.128\"\n}"
+  content: "{\n  \"origin\": \"1.11.111.111\"\n}"
   headers: {access-control-allow-credentials: 'true', access-control-allow-origin: '*',
     connection: Close, content-length: '30', content-type: application/json, date: 'Mon,
       18 Aug 2014 23:27:09 GMT', server: gunicorn/18.0}

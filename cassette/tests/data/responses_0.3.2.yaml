@@ -70,7 +70,7 @@ httplib:GET 127.0.0.1:5000/will_redirect c2585c6aafb8fa06dc8bb6de88f9de0b None:
   reason: FOUND
   status: 302
 httplib:GET httpbin.org:443/ip c2585c6aafb8fa06dc8bb6de88f9de0b None:
-  content: "{\n  \"origin\": \"8.26.157.128\"\n}"
+  content: "{\n  \"origin\": \"1.11.111.111\"\n}"
   headers: {access-control-allow-origin: '*', connection: Close, content-length: '30',
     content-type: application/json, date: 'Mon, 16 Jun 2014 18:55:50 GMT', server: gunicorn/18.0}
   raw_headers: ["Access-Control-Allow-Origin: *\r\n", "Content-Type: application/json\r\

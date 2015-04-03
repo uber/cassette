@@ -127,7 +127,6 @@ class TestCassette(TestCase):
                            allow_incomplete_match=False,
                            data=None):
         """Verify the urllib2 flow."""
-
         if not url.startswith("http"):
             url = url_for(url)
 
@@ -137,7 +136,8 @@ class TestCassette(TestCase):
 
         self.assertEqual(self.had_response.called, False)
         if expected_content:
-            content = unicode(r.read(), "utf-8")
+            read = r.read()
+            content = unicode(read, "utf-8")
             if allow_incomplete_match:
                 self.assertIn(expected_content, content)
             else:
@@ -151,7 +151,8 @@ class TestCassette(TestCase):
 
         self.assertEqual(self.had_response.called, True)
         if expected_content:
-            content = unicode(r.read(), "utf-8")
+            read = r.read()
+            content = unicode(read, "utf-8")
             if allow_incomplete_match:
                 self.assertIn(expected_content, content)
             else:

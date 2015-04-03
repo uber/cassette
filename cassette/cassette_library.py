@@ -6,16 +6,17 @@ import sys
 from urlparse import urlparse
 
 from cassette.config import Config
+from cassette.exceptions import NotInLibraryError
 from cassette.http_response import MockedHTTPResponse
 from cassette.utils import Encoder
 
-log = logging.getLogger("cassette")
+logger = logging.getLogger("cassette.library")
 
 
-def _hash(content):
-    m = hashlib.md5()
-    m.update(content)
-    return m.digest()
+def hash_(content):
+    if isinstance(content, unicode):
+        content = content.encode('utf-8')
+    return hashlib.md5(content).hexdigest()
 
 
 class CassetteName(unicode):
@@ -27,20 +28,25 @@ class CassetteName(unicode):
 
     @classmethod
     def from_httplib_connection(cls, host, port, method, url, body,
-                                headers, will_hash_body=False):
+                                headers,
+                                version=3,
+                                will_hash_body=False,
+                                include_headers=True
+                                ):
         """Create an object from an httplib request."""
-
+        if not include_headers:
+            headers = ''
         if headers:
             if 'Host' in headers:
                 # 'Host' is already covered explicitly below, remove from the
                 # hash so hostname/post are easy to change and sed the file
                 del headers['Host']
 
-            headers = hashlib.md5(repr(sorted(headers.items()))).hexdigest()
+            headers = hash_(repr(sorted(headers.items())))
 
         if will_hash_body:
             if body:
-                body = hashlib.md5(body).hexdigest()
+                body = hash_(body)
             else:
                 body = ''
 
@@ -48,8 +54,8 @@ class CassetteName(unicode):
                 # instantiated to 0.0.0.0 so we can parse
                 parsed_url = urlparse('http://0.0.0.0' + url)
                 url = parsed_url.path
-                query = hashlib.md5(parsed_url.query + '#' +
-                                    parsed_url.fragment).hexdigest()
+                query = hash_(parsed_url.query + '#' +
+                              parsed_url.fragment)
             else:
                 # requests/urllib3 defaults to '/' while urllib2 is ''. So this
                 # value should be '/' to ensure compatability.
@@ -58,6 +64,8 @@ class CassetteName(unicode):
             name = ("httplib:{method} {host}:{port}{url} {query} "
                     "{headers} {body}").format(**locals())
         else:
+            if version > 3 and not body:
+                body = ''
             # note that old yaml files will not contain the correct matching
             # query and body
             name = ("httplib:{method} {host}:{port}{url} "
@@ -68,6 +76,7 @@ class CassetteName(unicode):
 
 
 class CassetteLibrary(object):
+
     """
     The CassetteLibrary holds the stored requests and manage them.
 
@@ -85,12 +94,16 @@ class CassetteLibrary(object):
         self.filename = os.path.abspath(filename)
         self.is_dirty = False
         self.used = set()
-        self.config = config or self.get_default_config()
+        self.config = self.get_config(config)
 
         self.encoder = encoder
 
-    def get_default_config(self):
-        return Config()
+    def get_config(self, overrides):
+        """Return a config object."""
+        overrides = overrides or {}
+        config = Config()
+        config.update(overrides)
+        return config
 
     def add_response(self, cassette_name, response):
         """Add a new response to the mocked response.
@@ -141,9 +154,12 @@ class CassetteLibrary(object):
         """Logging for checking access to cassettes."""
         if contains:
             self._had_response()  # For testing purposes
-            log.info('Library has %s', cassette_name)
+            logger.info('Library has %s', cassette_name)
         else:
-            log.info('Library does not have %s', cassette_name)
+            logger.info('Library does not have %s', cassette_name)
+            if self.config['only_recorded']:
+                raise NotInLibraryError('Cassette %s is not in library' %
+                                        cassette_name)
 
     def log_cassette_used(self, path):
         """Log that a path was used."""
@@ -230,7 +246,7 @@ class FileCassetteLibrary(CassetteLibrary):
             f.write(encoded_str)
 
         # Update our hash
-        self.save_to_cache(file_hash=_hash(encoded_str), data=self.data)
+        self.save_to_cache(file_hash=hash_(encoded_str), data=self.data)
 
         self.is_dirty = False
 
@@ -240,13 +256,13 @@ class FileCassetteLibrary(CassetteLibrary):
         filename = self.filename
 
         if not os.path.exists(filename):
-            log.info("File '{f}' does not exist.".format(f=filename))
+            logger.info("File '{f}' does not exist.".format(f=filename))
             return data
 
         # Open and read in the file
         with open(filename) as f:
             encoded_str = f.read()
-        encoded_hash = _hash(encoded_str)
+        encoded_hash = hash_(encoded_str)
 
         # If the contents are cached, return them
         cached_result = CassetteLibrary.cache.get(filename, None)
@@ -317,11 +333,13 @@ class DirectoryCassetteLibrary(CassetteLibrary):
             filename = self.generate_filename(cassette_name)
             encoded_str = self.encoder.dump(response.to_dict())
 
-            with open(os.path.join(self.filename, filename), 'w') as f:
+            abs_path = os.path.join(self.filename, filename)
+            with open(abs_path, 'w') as f:
                 f.write(encoded_str)
 
             # Update our hash
-            self.save_to_cache(file_hash=_hash(encoded_str), data=response)
+            self.save_to_cache(file_hash=hash_(encoded_str), data=response)
+            logger.debug('Wrote file %s', filename)
 
         self.is_dirty = False
 
@@ -336,6 +354,7 @@ class DirectoryCassetteLibrary(CassetteLibrary):
             # Check file directory if it exists
             filename = self.generate_path_from_cassette_name(cassette_name)
             contains = os.path.exists(filename)
+            logger.debug('Filename %s exists: %s', filename, contains)
 
         self._log_contains(cassette_name, contains)
 
@@ -368,7 +387,7 @@ class DirectoryCassetteLibrary(CassetteLibrary):
             encoded_str = f.read()
 
         self.log_cassette_used(self.generate_filename(cassette_name))
-        encoded_hash = _hash(encoded_str)
+        encoded_hash = hash_(encoded_str)
 
         # If the contents are cached, return them
         cached_result = CassetteLibrary.cache.get(filename, None)
@@ -390,8 +409,13 @@ class DirectoryCassetteLibrary(CassetteLibrary):
     def cassette_name_for_httplib_connection(self, host, port, method,
                                              url, body, headers):
         """Create a cassette name from an httplib request."""
+        hash_body = self.config['hash_body']
+        include_headers = self.config['hash_include_headers']
         return CassetteName.from_httplib_connection(
-            host, port, method, url, body, headers, will_hash_body=True)
+            host, port, method, url, body, headers,
+            will_hash_body=hash_body,
+            include_headers=include_headers,
+        )
 
     def get_all_available(self):
         """Return all available cassette."""

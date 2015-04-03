@@ -1,5 +1,3 @@
-
-
 class MockedResponse(object):
 
     def to_dict(self):

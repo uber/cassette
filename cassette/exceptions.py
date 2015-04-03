@@ -1,0 +1,2 @@
+class NotInLibraryError(Exception):
+    pass

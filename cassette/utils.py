@@ -1,13 +1,10 @@
-"""
-    utils.py
-
-    Helper functions.
-"""
 import json
+import logging
 
 import yaml
 
 TEXT_ENCODING = 'ISO-8859-1'
+logger = logging.getLogger('cassette')
 
 
 class Encoder(object):
@@ -72,7 +69,6 @@ class JsonEncoder(Encoder):
     @staticmethod
     def json_str_decode_list(data):
         """Decode the list portion of a JSON blob as a string."""
-
         rv = []
         for item in data:
             if isinstance(item, unicode):

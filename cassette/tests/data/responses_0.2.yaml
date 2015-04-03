@@ -1,0 +1,69 @@
+httplib:GET httpbin.org:80/get?toaster=1 None:
+  content: "{\n  \"args\": {\n    \"toaster\": \"1\"\n  }, \n  \"headers\": {\n  \
+    \  \"Accept-Encoding\": \"identity\", \n    \"Host\": \"httpbin.org\", \n    \"\
+    User-Agent\": \"Python-urllib/2.7\"\n  }, \n  \"origin\": \"1.11.111.111\", \n\
+    \  \"url\": \"http://httpbin.org/get?toaster=1\"\n}\n"
+  headers: {access-control-allow-credentials: 'true', access-control-allow-origin: '*',
+    connection: close, content-length: '237', content-type: application/json, date: 'Fri,
+      03 Apr 2015 20:04:50 GMT', server: nginx}
+  raw_headers: ["Server: nginx\r\n", "Date: Fri, 03 Apr 2015 20:04:50 GMT\r\n", "Content-Type:\
+      \ application/json\r\n", "Content-Length: 237\r\n", "Connection: close\r\n",
+    "Access-Control-Allow-Origin: *\r\n", "Access-Control-Allow-Credentials: true\r\
+      \n"]
+  reason: OK
+  status: 200
+httplib:GET httpbin.org:80/status/200 None:
+  content: ''
+  headers: {access-control-allow-credentials: 'true', access-control-allow-origin: '*',
+    connection: close, content-length: '0', content-type: text/html; charset=utf-8,
+    date: 'Fri, 03 Apr 2015 20:04:30 GMT', server: nginx}
+  raw_headers: ["Server: nginx\r\n", "Date: Fri, 03 Apr 2015 20:04:30 GMT\r\n", "Content-Type:\
+      \ text/html; charset=utf-8\r\n", "Content-Length: 0\r\n", "Connection: close\r\
+      \n", "Access-Control-Allow-Origin: *\r\n", "Access-Control-Allow-Credentials:\
+      \ true\r\n"]
+  reason: OK
+  status: 200
+httplib:GET httpbin.org:80/status/201 None:
+  content: ''
+  headers: {access-control-allow-credentials: 'true', access-control-allow-origin: '*',
+    connection: close, content-length: '0', content-type: text/html; charset=utf-8,
+    date: 'Fri, 03 Apr 2015 20:04:36 GMT', server: nginx}
+  raw_headers: ["Server: nginx\r\n", "Date: Fri, 03 Apr 2015 20:04:36 GMT\r\n", "Content-Type:\
+      \ text/html; charset=utf-8\r\n", "Content-Length: 0\r\n", "Connection: close\r\
+      \n", "Access-Control-Allow-Origin: *\r\n", "Access-Control-Allow-Credentials:\
+      \ true\r\n"]
+  reason: CREATED
+  status: 201
+httplib:GET httpbin.org:80/status/get?toaster=1 None:
+  content: '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+    <title>500 Internal Server Error</title>
+
+    <h1>Internal Sérver Error</h1>
+
+    <p>The server encountered an internal error and was unable to complete your request.  Either
+    the server is overloaded or there is an error in the application.</p>
+
+    '
+  headers: {connection: close, content-length: '291', content-type: text/html, date: 'Fri,
+      03 Apr 2015 20:04:44 GMT', server: nginx}
+  raw_headers: ["Server: nginx\r\n", "Date: Fri, 03 Apr 2015 20:04:44 GMT\r\n", "Content-Type:\
+      \ text/html\r\n", "Content-Length: 291\r\n", "Connection: close\r\n"]
+  reason: INTERNAL SERVER ERROR
+  status: 500
+httplib:POST httpbin.org:80/post toaster:
+  content: "{\n  \"args\": {}, \n  \"data\": \"\", \n  \"files\": {}, \n  \"form\"\
+    : {\n    \"toaster\": \"\"\n  }, \n  \"headers\": {\n    \"Accept-Encoding\":\
+    \ \"identity\", \n    \"Content-Length\": \"7\", \n    \"Content-Type\": \"application/x-www-form-urlencoded\"\
+    , \n    \"Host\": \"httpbin.org\", \n    \"User-Agent\": \"Python-urllib/2.7\"\
+    \n  }, \n  \"json\": null, \n  \"origin\": \"1.11.111.111\", \n  \"url\": \"http://httpbin.org/post\"\
+    \n}\n"
+  headers: {access-control-allow-credentials: 'true', access-control-allow-origin: '*',
+    connection: close, content-length: '376', content-type: application/json, date: 'Fri,
+      03 Apr 2015 20:04:58 GMT', server: nginx}
+  raw_headers: ["Server: nginx\r\n", "Date: Fri, 03 Apr 2015 20:04:58 GMT\r\n", "Content-Type:\
+      \ application/json\r\n", "Content-Length: 376\r\n", "Connection: close\r\n",
+    "Access-Control-Allow-Origin: *\r\n", "Access-Control-Allow-Credentials: true\r\
+      \n"]
+  reason: OK
+  status: 200
