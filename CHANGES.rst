@@ -1,11 +1,15 @@
 Changelog for Cassette
 ======================
 
+0.3.8 (unreleased)
+------------------
+
+- Add compatibility with Python 2.7.9
+
 0.3.7 (2015-03-12)
 ------------------
 
 - Add ability to report on unused cassette.
-
 
 0.3.6 (2014-10-31)
 ------------------
