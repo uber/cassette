@@ -1,7 +1,7 @@
 Changelog for Cassette
 ======================
 
-0.3.8 (unreleased)
+0.3.8 (2015-04-03)
 ------------------
 
 - Add compatibility with Python 2.7.9
