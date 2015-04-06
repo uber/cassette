@@ -56,7 +56,8 @@ def load(path):
 
 
 def main(old_path, new_path):
-    encoder = Encoder.get_encoder_from_file_format('json')
+    # We prefer to use yaml because we might be encoding binary.
+    encoder = Encoder.get_encoder_from_file_format('yaml')
     library = DirectoryCassetteLibrary(new_path, encoder)
     for key, value in load(old_path):
         logger.info('Creating record for %s', key)

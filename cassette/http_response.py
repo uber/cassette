@@ -51,6 +51,8 @@ class MockedHTTPResponse(MockedResponse):
     def create_file_descriptor(content=None):
         """Create a file descriptor for content."""
         content = content or str()
+        if isinstance(content, unicode):
+            content = content.encode('utf-8')
         fp = io.BytesIO(content)
         return fp
 
