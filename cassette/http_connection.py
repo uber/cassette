@@ -13,7 +13,16 @@ from httplib import HTTPConnection, HTTPSConnection
 
 import semver
 
+from cassette import exceptions
+
 log = logging.getLogger("cassette")
+
+
+class CassetteEnsureNoHTTPConnection(object):
+
+    def __init__(self, *args, **kwargs):
+        raise exceptions.AttemptedConnectionException(
+            'A connection was attempted while running in no connection mode')
 
 
 class CassetteConnectionMixin(object):

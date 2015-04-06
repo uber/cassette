@@ -16,12 +16,12 @@ def insert(filename, file_format=''):
     global player
 
     player = Player(filename, file_format)
-    player.__enter__()
+    player.insert()
 
 
 def eject(exc_type=None, exc_value=None, tb=None):
     """Remove cassette, unpatching HTTP requests."""
-    player.__exit__(exc_type, exc_value, tb)
+    player.eject(exc_type, exc_value, tb)
 
 
 @contextlib.contextmanager

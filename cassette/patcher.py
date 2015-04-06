@@ -10,29 +10,36 @@ else:
     from cassette.http_connection import (UL3CassetteHTTPConnection,
                                           UL3CassetteHTTPSConnection)
 
-from cassette.http_connection import (CassetteHTTPConnection,
-                                      CassetteHTTPSConnection)
+from cassette import http_connection
 
 
 unpatched_HTTPConnection = httplib.HTTPConnection
 unpatched_HTTPSConnection = httplib.HTTPSConnection
 if requests:
-    unpatched_requests_HTTPConnection = requests.packages.urllib3.connection.HTTPConnection
-    unpatched_requests_HTTPSConnection = requests.packages.urllib3.connection.HTTPSConnection
+    unpatched_requests_HTTPConnection = (requests.packages
+                                         .urllib3.connection.HTTPConnection)
+    unpatched_requests_HTTPSConnection = (requests.packages
+                                          .urllib3.connection.HTTPSConnection)
 
 
-def patch(cassette_library):
+def patch(cassette_library, ensure_no_http_requests=False):
     """Replace standard library."""
+    # This part is inspired by vcrpy
 
-    # Inspired by vcrpy
+    http_connection.CassetteHTTPConnection._cassette_library = cassette_library
+    http_connection.CassetteHTTPSConnection._cassette_library = cassette_library  # noqa
 
-    CassetteHTTPConnection._cassette_library = cassette_library
-    CassetteHTTPSConnection._cassette_library = cassette_library
+    if ensure_no_http_requests:
+        http_klass = http_connection.CassetteEnsureNoHTTPConnection
+        https_klass = http_connection.CassetteEnsureNoHTTPConnection
+    else:
+        http_klass = http_connection.CassetteHTTPConnection
+        https_klass = http_connection.CassetteHTTPSConnection
 
-    httplib.HTTPConnection = CassetteHTTPConnection
-    httplib.HTTP._connection_class = CassetteHTTPConnection
-    httplib.HTTPSConnection = CassetteHTTPSConnection
-    httplib.HTTPS._connection_class = CassetteHTTPSConnection
+    httplib.HTTPConnection = http_klass
+    httplib.HTTP._connection_class = http_klass
+    httplib.HTTPSConnection = https_klass
+    httplib.HTTPS._connection_class = https_klass
 
     if requests:
         UL3CassetteHTTPConnection._cassette_library = cassette_library
@@ -46,8 +53,7 @@ def patch(cassette_library):
 
 def unpatch():
     """Unpatch standard library."""
-
-    # Inspired by vcrpy
+    # This part is inspired by vcrpy
 
     httplib.HTTPConnection = unpatched_HTTPConnection
     httplib.HTTP._connection_class = unpatched_HTTPConnection
@@ -55,7 +61,5 @@ def unpatch():
     httplib.HTTPS._connection_class = unpatched_HTTPSConnection
 
     if requests:
-        requests.packages.urllib3.connection.HTTPConnection = \
-            unpatched_requests_HTTPConnection
-        requests.packages.urllib3.connection.HTTPSConnection = \
-            unpatched_requests_HTTPSConnection
+        requests.packages.urllib3.connection.HTTPConnection = unpatched_requests_HTTPConnection  # noqa
+        requests.packages.urllib3.connection.HTTPSConnection = unpatched_requests_HTTPSConnection  # noqa
