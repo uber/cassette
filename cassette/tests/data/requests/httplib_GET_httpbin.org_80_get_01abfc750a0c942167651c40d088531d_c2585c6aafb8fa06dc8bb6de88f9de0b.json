@@ -1,1 +1,25 @@
-{"status": 200, "raw_headers": ["Server: nginx\r\n", "Date: Thu, 12 Mar 2015 18:43:47 GMT\r\n", "Content-Type: application/json\r\n", "Content-Length: 205\r\n", "Connection: close\r\n", "Access-Control-Allow-Origin: *\r\n", "Access-Control-Allow-Credentials: true\r\n"], "content": "{\n  \"args\": {}, \n  \"headers\": {\n    \"Accept-Encoding\": \"identity\", \n    \"Host\": \"httpbin.org\", \n    \"User-Agent\": \"Python-urllib/2.7\"\n  }, \n  \"origin\": \"8.26.157.128\", \n  \"url\": \"http://httpbin.org/get\"\n}\n", "headers": {"content-length": "205", "server": "nginx", "connection": "close", "access-control-allow-credentials": "true", "date": "Thu, 12 Mar 2015 18:43:47 GMT", "access-control-allow-origin": "*", "content-type": "application/json"}, "reason": "OK", "version": 11, "length": 0}
+{
+    "status": 200, 
+    "raw_headers": [
+        "Server: nginx\r\n", 
+        "Date: Sat, 06 Jun 2015 00:30:37 GMT\r\n", 
+        "Content-Type: application/json\r\n", 
+        "Content-Length: 207\r\n", 
+        "Connection: close\r\n", 
+        "Access-Control-Allow-Origin: *\r\n", 
+        "Access-Control-Allow-Credentials: true\r\n"
+    ], 
+    "content": "{\n  \"args\": {}, \n  \"headers\": {\n    \"Accept-Encoding\": \"identity\", \n    \"Host\": \"httpbin.org\", \n    \"User-Agent\": \"Python-urllib/2.7\"\n  }, \n  \"origin\": \"67.165.177.180\", \n  \"url\": \"http://httpbin.org/get\"\n}\n", 
+    "headers": {
+        "content-length": "207", 
+        "server": "nginx", 
+        "connection": "close", 
+        "access-control-allow-credentials": "true", 
+        "date": "Sat, 06 Jun 2015 00:30:37 GMT", 
+        "access-control-allow-origin": "*", 
+        "content-type": "application/json"
+    }, 
+    "reason": "OK", 
+    "version": 11, 
+    "length": 0
+}

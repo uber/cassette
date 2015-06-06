@@ -62,7 +62,7 @@ class JsonEncoder(Encoder):
 
     def dump(self, data):
         """Return a YAML encoded string of the data."""
-        return json.dumps(data, ensure_ascii=False)
+        return json.dumps(data, indent=4, ensure_ascii=False)
 
     def load(self, encoded_str):
         """Return an object from the encoded JSON string."""
