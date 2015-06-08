@@ -1,6 +1,8 @@
 Cassette
 ========
 
+.. image::  https://img.shields.io/pypi/v/cassette.svg
+
 Cassette stores and replays HTTP requests made in your Python app.
 
 .. code:: python
