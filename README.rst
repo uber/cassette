@@ -1,6 +1,8 @@
 Cassette
 ========
 
+**Deprecation Warning**: cassette has some known limitations and is not maintained anymore, we recommend using `vcrpy <https://github.com/kevin1024/vcrpy>`_ instead.
+
 .. image::  https://img.shields.io/pypi/v/cassette.svg
 
 Cassette stores and replays HTTP requests made in your Python app.
@@ -39,13 +41,13 @@ each other. That is, a request stored with ``urllib2`` might still trigger an ex
 request is the same URL is requested with ``requests``.
 
 
-
 Installation
 ------------
 
 .. code-block:: sh
 
     $ pip install cassette
+
 
 Documentation
 -------------
