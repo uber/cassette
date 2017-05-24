@@ -21,18 +21,37 @@ if requests:
     unpatched_requests_HTTPSConnection = requests.packages.urllib3.connection.HTTPSConnection
 
 
-def patch(cassette_library):
+class AttemptedConnection(Exception):
+    pass
+
+
+def _raise_attempted_connection(*args, **kwargs):
+    # If you are seeing this exception, one of your colleagues has kindly
+    # requested that you do not attempt to utilize HTTP requests during the
+    # running of this area of your tests.  Consider refactoring the code you
+    # want to test so that the logic can be tested independently from the I/O,
+    # in a unit level test.
+
+    raise AttemptedConnection()
+
+
+def patch(cassette_library, backfire=False):
     """Replace standard library."""
 
     # Inspired by vcrpy
 
+    connection = CassetteHTTPConnection
+
+    if backfire:
+        connection = _raise_attempted_connection
+
     CassetteHTTPConnection._cassette_library = cassette_library
     CassetteHTTPSConnection._cassette_library = cassette_library
 
-    httplib.HTTPConnection = CassetteHTTPConnection
-    httplib.HTTP._connection_class = CassetteHTTPConnection
-    httplib.HTTPSConnection = CassetteHTTPSConnection
-    httplib.HTTPS._connection_class = CassetteHTTPSConnection
+    httplib.HTTPConnection = connection
+    httplib.HTTP._connection_class = connection
+    httplib.HTTPSConnection = connection
+    httplib.HTTPS._connection_class = connection
 
     if requests:
         UL3CassetteHTTPConnection._cassette_library = cassette_library
