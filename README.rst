@@ -40,7 +40,6 @@ Note that requests stored between different libraries may not be compatible with
 each other. That is, a request stored with ``urllib2`` might still trigger an external
 request is the same URL is requested with ``requests``.
 
-
 Installation
 ------------
 
@@ -48,12 +47,10 @@ Installation
 
     $ pip install cassette
 
-
 Documentation
 -------------
 
 Latest documentation: `cassette.readthedocs.org <http://cassette.readthedocs.org/>`_
-
 
 License
 -------
